@@ -34,7 +34,7 @@ fun TodoManagementScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Demo") },
+                title = { },
                 actions = {
                     Button(onClick = { viewModel.addTodo() }) {
                         Text("Add Todo")
