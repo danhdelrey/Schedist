@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brighttorchstudio.schedist.data.todo.repository.LocalTodoRepository
 import com.brighttorchstudio.schedist.data.todo.model.Todo
+import com.brighttorchstudio.schedist.data.todo.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -13,10 +14,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class TodoManagementViewModel @Inject constructor(
-    private val localRepository: LocalTodoRepository
+   @Named("local_todo_repository") private val localRepository: TodoRepository,
+    @Named("remote_todo_repository") private val remoteRepository: TodoRepository,
 ) : ViewModel() {
 
     sealed class UiState {
@@ -48,6 +51,7 @@ class TodoManagementViewModel @Inject constructor(
                     title = "New Todo"
                 )
                 localRepository.addTodo(newTodo)
+                remoteRepository.addTodo(newTodo) //just for testing
             }catch (e: Exception){
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }
