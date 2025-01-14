@@ -12,10 +12,6 @@ import javax.inject.Named
 abstract class TodoRepositoryModule {
 
     @Binds
-    @Named("local_todo_repository")
     abstract fun bindLocalTodoRepository(localTodoRepository: LocalTodoRepository): TodoRepository
 
-    @Binds
-    @Named("remote_todo_repository")
-    abstract fun bindRemoteTodoRepository(remoteTodoRepository: RemoteTodoRepository): TodoRepository
 }

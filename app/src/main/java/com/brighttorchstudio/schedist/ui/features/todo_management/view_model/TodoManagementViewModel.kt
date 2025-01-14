@@ -13,13 +13,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
 class TodoManagementViewModel @Inject constructor(
-   @Named("local_todo_repository") private val localRepository: TodoRepository,
-    @Named("remote_todo_repository") private val remoteRepository: TodoRepository,
+   private val localTodoRepository: TodoRepository,
 ) : ViewModel() {
 
     sealed class UiState {
@@ -35,7 +36,7 @@ class TodoManagementViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             try {
-                localRepository.getTodos().collect { todos ->
+                localTodoRepository.getTodos().collect { todos ->
                     _uiState.value = UiState.Success(todos)
                 }
             } catch (e: Exception) {
@@ -48,20 +49,24 @@ class TodoManagementViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val newTodo = Todo(
-                    title = "New Todo"
+                    id = UUID.randomUUID().toString(),
+                    title = "Mua đồ ăn",
+                    description = "Mua sữa, trứng, bánh mì",
+                    priority = 1,
+                    dateTime = LocalDateTime.now().plusDays(1),
+                    reminderEnabled = false,
                 )
-                localRepository.addTodo(newTodo)
-                remoteRepository.addTodo(newTodo) //just for testing
+                localTodoRepository.addTodo(newTodo)
             }catch (e: Exception){
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }
         }
     }
 
-    fun deleteAll() {
+    fun deleteAllTodos() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                localRepository.deleteAll()
+                localTodoRepository.deleteAllTodos()
             }catch (e: Exception){
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }
