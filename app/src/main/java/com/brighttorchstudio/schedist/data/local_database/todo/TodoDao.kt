@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TodoDao {
-    @Query("SELECT * FROM TodoEntity")
+    @Query("SELECT * FROM TodoEntity ORDER BY dateTime")
     fun getTodos(): Flow<List<TodoEntity>>
 
     @Insert
