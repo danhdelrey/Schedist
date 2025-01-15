@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodoManagementViewModel @Inject constructor(
-   private val localTodoRepository: TodoRepository,
+    private val localTodoRepository: TodoRepository,
 ) : ViewModel() {
 
     sealed class UiState {
@@ -46,14 +46,14 @@ class TodoManagementViewModel @Inject constructor(
             try {
                 val newTodo = Todo(
                     id = UUID.randomUUID().toString(),
-                    title = "Mua đồ ăn",
-                    description = "Mua sữa, trứng, bánh mì",
-                    priority = 1,
-                    dateTime = LocalDateTime.now().plusDays(1),
+                    title = "Đem đồ ăn cho chồng đáng yêu ❤️",
+                    description = "Ở tòa nhà abc, hm 45, nhớ hỏi mật khẩu két sắt",
+                    priority = (1..4).random(),
+                    dateTime = LocalDateTime.now().plusDays((1..10).random().toLong()),
                     reminderEnabled = false,
                 )
                 localTodoRepository.addTodo(newTodo)
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }
         }
@@ -63,7 +63,7 @@ class TodoManagementViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 localTodoRepository.deleteTodo(todo)
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }
         }
@@ -73,7 +73,7 @@ class TodoManagementViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 localTodoRepository.deleteAllTodos()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }
         }
