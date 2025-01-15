@@ -45,13 +45,23 @@ class TodoManagementViewModel @Inject constructor(
         }
     }
 
-    fun toggleSelectingTodos() {
-        _isSelectingTodos.value = !_isSelectingTodos.value
+    fun cancelSelectingTodos() {
+        _isSelectingTodos.value = false
+        _selectedTodos.clear()
+    }
+
+    fun startSelectingTodos() {
+        _isSelectingTodos.value = true
     }
 
     fun selectTodos(todo: Todo) {
         _selectedTodos.add(todo)
     }
+
+    fun unselectTodos(todo: Todo) {
+        _selectedTodos.remove(todo)
+    }
+
 
     fun deleteSelectedTodos() {
         viewModelScope.launch(Dispatchers.IO) {

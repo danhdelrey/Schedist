@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
@@ -43,9 +44,24 @@ import java.time.LocalDateTime
 fun TodoItem(
     todo: Todo,
     onPress: () -> Unit,
+    isSelectingTodos: Boolean,
+    onSelect: (todo: Todo) -> Unit,
+    onUnselect: (todo: Todo) -> Unit,
 ) {
     var showTodoDetails by remember { mutableStateOf(false) }
     var isDue = DateTimeHelper.isDue(todo.dateTime)
+    var isSelected by remember { mutableStateOf(false) }
+
+    if (!isSelectingTodos) {
+        isSelected = false
+    }
+
+    if (isSelected) {
+        onSelect(todo)
+    } else {
+        onUnselect(todo)
+    }
+
     Box(
         modifier =
         if (isDue) {
@@ -61,8 +77,15 @@ fun TodoItem(
                     shape = MaterialTheme.shapes.small
                 )
                 .combinedClickable(
-                    onClick = {},
-                    onLongClick = { onPress() },
+                    onClick = {
+                        if (isSelectingTodos) {
+                            isSelected = true
+                        }
+                    },
+                    onLongClick = {
+                        isSelected = true
+                        onPress()
+                    },
                 )
         } else {
             Modifier
@@ -72,8 +95,15 @@ fun TodoItem(
                     MaterialTheme.shapes.small
                 )
                 .combinedClickable(
-                    onClick = {},
-                    onLongClick = { onPress() },
+                    onClick = {
+                        if (isSelectingTodos) {
+                            isSelected = true
+                        }
+                    },
+                    onLongClick = {
+                        isSelected = true
+                        onPress()
+                    },
                 )
         }
 
@@ -86,7 +116,17 @@ fun TodoItem(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                RadioButton(selected = false, onClick = { /*TODO*/ })
+                if (isSelectingTodos) {
+                    Checkbox(
+                        checked = isSelected,
+                        onCheckedChange = {
+                            isSelected = it
+                        }
+
+                    )
+                } else {
+                    RadioButton(selected = false, onClick = { /*TODO*/ })
+                }
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -183,6 +223,6 @@ fun TodoItemPreview() {
             dateTime = LocalDateTime.now(),
             reminderEnabled = false,
         )
-        TodoItem(todo, {})
+        TodoItem(todo, {}, false, {}, {})
     }
 }

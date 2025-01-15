@@ -1,6 +1,7 @@
 package com.brighttorchstudio.schedist.ui.features.todo_management.view
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -9,6 +10,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,8 +36,20 @@ fun TodoManagementScreen(
                 TopAppBar(
                     title = { },
                     actions = {
-                        Button(onClick = { viewModel.toggleSelectingTodos() }) {
-                            Text("Cancel")
+                        TextButton(
+                            onClick = {
+                                viewModel.cancelSelectingTodos()
+                            }
+                        ) {
+                            Text("Quay lại")
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        TextButton(
+                            onClick = {
+
+                            }
+                        ) {
+                            Text("Chọn tất cả")
                         }
                     }
                 )
@@ -69,7 +83,10 @@ fun TodoManagementScreen(
                     itemsIndexed((uiState as TodoManagementViewModel.UiState.Success).todoList) { index, todo ->
                         TodoItem(
                             todo = todo,
-                            onPress = { viewModel.toggleSelectingTodos() }
+                            onPress = { viewModel.startSelectingTodos() },
+                            isSelectingTodos = isSelectingTodos,
+                            onSelect = { viewModel.selectTodos(todo) },
+                            onUnselect = { viewModel.unselectTodos(todo) }
                         )
                     }
                 }
