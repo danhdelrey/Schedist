@@ -2,21 +2,17 @@ package com.brighttorchstudio.schedist.ui.features.todo_management.view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.brighttorchstudio.schedist.data.todo.repository.LocalTodoRepository
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.data.todo.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.inject.Inject
-import javax.inject.Named
 
 @HiltViewModel
 class TodoManagementViewModel @Inject constructor(
@@ -57,6 +53,16 @@ class TodoManagementViewModel @Inject constructor(
                     reminderEnabled = false,
                 )
                 localTodoRepository.addTodo(newTodo)
+            }catch (e: Exception){
+                _uiState.value = UiState.Error("Error: ${e.message}")
+            }
+        }
+    }
+
+    fun deleteTodo(todo: Todo) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                localTodoRepository.deleteTodo(todo)
             }catch (e: Exception){
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }
