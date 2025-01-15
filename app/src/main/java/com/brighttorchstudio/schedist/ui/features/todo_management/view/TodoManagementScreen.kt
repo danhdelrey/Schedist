@@ -26,23 +26,35 @@ fun TodoManagementScreen(
     innerPadding: PaddingValues
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val isSelectingTodos by viewModel.isSelectingTodos.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { },
-                actions = {
-                    Button(onClick = { viewModel.addTodo() }) {
-                        Text("Add Todo")
+            if (isSelectingTodos) {
+                TopAppBar(
+                    title = { },
+                    actions = {
+                        Button(onClick = { viewModel.toggleSelectingTodos() }) {
+                            Text("Cancel")
+                        }
                     }
-                    Button(onClick = { viewModel.deleteAllTodos() }) {
-                        Text("Delete All")
+                )
+            } else {
+                TopAppBar(
+                    title = { },
+                    actions = {
+                        Button(onClick = { viewModel.addTodo() }) {
+                            Text("Add Todo")
+                        }
+                        Button(onClick = { viewModel.deleteAllTodos() }) {
+                            Text("Delete All")
+                        }
+                        Button(onClick = { navController.navigate("screen1") }) {
+                            Text("Screen1")
+                        }
                     }
-                    Button(onClick = { navController.navigate("screen1") }) {
-                        Text("Screen1")
-                    }
-                }
-            )
+                )
+            }
         }
     ) { innerPadding ->
         when (uiState) {
@@ -55,7 +67,10 @@ fun TodoManagementScreen(
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     itemsIndexed((uiState as TodoManagementViewModel.UiState.Success).todoList) { index, todo ->
-                        TodoItem(todo)
+                        TodoItem(
+                            todo = todo,
+                            onPress = { viewModel.toggleSelectingTodos() }
+                        )
                     }
                 }
             }

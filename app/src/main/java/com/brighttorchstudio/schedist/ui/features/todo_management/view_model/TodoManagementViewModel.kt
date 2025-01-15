@@ -29,12 +29,34 @@ class TodoManagementViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
+    private val _isSelectingTodos = MutableStateFlow<Boolean>(false)
+    val isSelectingTodos: StateFlow<Boolean> = _isSelectingTodos.asStateFlow()
+    var _selectedTodos = mutableListOf<Todo>()
+
     init {
         viewModelScope.launch {
             try {
                 localTodoRepository.getTodos().collect { todos ->
                     _uiState.value = UiState.Success(todos)
                 }
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Error: ${e.message}")
+            }
+        }
+    }
+
+    fun toggleSelectingTodos() {
+        _isSelectingTodos.value = !_isSelectingTodos.value
+    }
+
+    fun selectTodos(todo: Todo) {
+        _selectedTodos.add(todo)
+    }
+
+    fun deleteSelectedTodos() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                localTodoRepository.deleteTodo(_selectedTodos)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }

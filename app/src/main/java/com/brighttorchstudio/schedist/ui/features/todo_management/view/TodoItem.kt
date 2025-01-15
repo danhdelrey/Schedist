@@ -1,8 +1,10 @@
 package com.brighttorchstudio.schedist.ui.features.todo_management.view
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,25 +38,43 @@ import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.helpers.DateTimeHelper
 import java.time.LocalDateTime
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TodoItem(todo: Todo) {
+fun TodoItem(
+    todo: Todo,
+    onPress: () -> Unit,
+) {
     var showTodoDetails by remember { mutableStateOf(false) }
     var isDue = DateTimeHelper.isDue(todo.dateTime)
     Box(
         modifier =
-        if(isDue){
+        if (isDue) {
             Modifier
                 .padding(horizontal = 15.dp, vertical = 5.dp)
-                .background(MaterialTheme.colorScheme.surfaceContainerLow, MaterialTheme.shapes.small)
+                .background(
+                    MaterialTheme.colorScheme.surfaceContainerLow,
+                    MaterialTheme.shapes.small
+                )
                 .border(
                     width = 2.dp,
                     color = MaterialTheme.colorScheme.primary,
                     shape = MaterialTheme.shapes.small
                 )
-        }else{
+                .combinedClickable(
+                    onClick = {},
+                    onLongClick = { onPress() },
+                )
+        } else {
             Modifier
                 .padding(horizontal = 15.dp, vertical = 5.dp)
-                .background(MaterialTheme.colorScheme.surfaceContainerLow, MaterialTheme.shapes.small)
+                .background(
+                    MaterialTheme.colorScheme.surfaceContainerLow,
+                    MaterialTheme.shapes.small
+                )
+                .combinedClickable(
+                    onClick = {},
+                    onLongClick = { onPress() },
+                )
         }
 
     ) {
@@ -87,7 +107,7 @@ fun TodoItem(todo: Todo) {
                             imageVector = Icons.Default.DateRange,
                             contentDescription = "Calendar",
                             modifier = Modifier.size(20.dp),
-                            tint = when(todo.priority){
+                            tint = when (todo.priority) {
                                 1 -> veryImportantTask
                                 2 -> importantTask
                                 3 -> normalTask
@@ -97,7 +117,7 @@ fun TodoItem(todo: Todo) {
                         Text(
                             text = DateTimeHelper.formatLocalDateTime(todo.dateTime),
                             style = MaterialTheme.typography.labelLarge,
-                            color = when(todo.priority){
+                            color = when (todo.priority) {
                                 1 -> veryImportantTask
                                 2 -> importantTask
                                 3 -> normalTask
@@ -110,13 +130,13 @@ fun TodoItem(todo: Todo) {
                     checked = showTodoDetails,
                     onCheckedChange = { showTodoDetails = it }
                 ) {
-                    if(showTodoDetails){
+                    if (showTodoDetails) {
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowUp,
                             contentDescription = "Calendar",
                             tint = MaterialTheme.colorScheme.outlineVariant
                         )
-                    }else{
+                    } else {
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowDown,
                             contentDescription = "Calendar",
@@ -163,6 +183,6 @@ fun TodoItemPreview() {
             dateTime = LocalDateTime.now(),
             reminderEnabled = false,
         )
-        TodoItem(todo)
+        TodoItem(todo, {})
     }
 }
