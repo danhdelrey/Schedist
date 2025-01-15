@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.utils.IMPLEMENTATION
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -73,8 +71,6 @@ dependencies {
 
     val nav_version = "2.8.5"
     implementation("androidx.navigation:navigation-compose:$nav_version")
-
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.7.6")
 
 }
 

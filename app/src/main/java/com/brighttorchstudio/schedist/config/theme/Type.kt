@@ -1,68 +1,67 @@
 package com.brighttorchstudio.schedist.config.theme
 
-import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.googlefonts.Font
-import androidx.compose.ui.text.googlefonts.GoogleFont
-import androidx.compose.ui.unit.sp
 import com.brighttorchstudio.schedist.R
 
-val provider = GoogleFont.Provider(
-    providerAuthority = "com.google.android.gms.fonts",
-    providerPackage = "com.google.android.gms",
-    certificates = R.array.com_google_android_gms_fonts_certs
-)
-val fontName = GoogleFont("Lexend Deca")
 
-val fontFamily = FontFamily(
-    Font(googleFont = fontName, fontProvider = provider)
+val lexendDecaFamily = FontFamily(
+    Font(R.font.lexenddeca_regular, FontWeight.Normal),
+    Font(R.font.lexenddeca_bold, FontWeight.Bold),
+    Font(R.font.lexenddeca_black, FontWeight.Black),
+    Font(R.font.lexenddeca_extrabold, FontWeight.ExtraBold),
+    Font(R.font.lexenddeca_extralight, FontWeight.ExtraLight),
+    Font(R.font.lexenddeca_light, FontWeight.Light),
+    Font(R.font.lexenddeca_medium, FontWeight.Medium),
+    Font(R.font.lexenddeca_semibold, FontWeight.SemiBold),
+    Font(R.font.lexenddeca_thin, FontWeight.Thin),
 )
-val AppTypography = Typography(
+val AppTypography = Typography().copy(
     displayLarge = Typography().displayLarge.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     displayMedium = Typography().displayMedium.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     displaySmall = Typography().displaySmall.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     headlineLarge = Typography().headlineLarge.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     headlineMedium = Typography().headlineMedium.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     headlineSmall = Typography().headlineSmall.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     titleLarge = Typography().titleLarge.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     titleMedium = Typography().titleMedium.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     titleSmall = Typography().titleSmall.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     bodyLarge = Typography().bodyLarge.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     bodyMedium = Typography().bodyMedium.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     bodySmall = Typography().bodySmall.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     labelLarge = Typography().labelLarge.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     labelMedium = Typography().labelMedium.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
     labelSmall = Typography().labelSmall.copy(
-        fontFamily = fontFamily,
+        fontFamily = lexendDecaFamily,
     ),
 )
