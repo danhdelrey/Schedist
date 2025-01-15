@@ -9,6 +9,8 @@ class DateTimeHelper {
             val formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")
             return dateTime.format(formatter)
         }
-        //other static functions
+        fun isDue(dateTime: LocalDateTime): Boolean {
+            return dateTime.isBefore(LocalDateTime.now())
+        }
     }
 }

@@ -39,15 +39,24 @@ import java.time.LocalDateTime
 @Composable
 fun TodoItem(todo: Todo) {
     var showTodoDetails by remember { mutableStateOf(false) }
+    var isDue = DateTimeHelper.isDue(todo.dateTime)
     Box(
-        modifier = Modifier
-            .padding(horizontal = 15.dp, vertical = 5.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainerLow, MaterialTheme.shapes.small)
-            .border(
-                width = 2.dp,
-                color = MaterialTheme.colorScheme.primary,
-                shape = MaterialTheme.shapes.small
-            )
+        modifier =
+        if(isDue){
+            Modifier
+                .padding(horizontal = 15.dp, vertical = 5.dp)
+                .background(MaterialTheme.colorScheme.surfaceContainerLow, MaterialTheme.shapes.small)
+                .border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = MaterialTheme.shapes.small
+                )
+        }else{
+            Modifier
+                .padding(horizontal = 15.dp, vertical = 5.dp)
+                .background(MaterialTheme.colorScheme.surfaceContainerLow, MaterialTheme.shapes.small)
+        }
+
     ) {
         Column(
             modifier = Modifier
