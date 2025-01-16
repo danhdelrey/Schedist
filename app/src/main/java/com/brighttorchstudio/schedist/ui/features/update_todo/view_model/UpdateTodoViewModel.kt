@@ -19,9 +19,11 @@ class UpdateTodoViewModel @Inject constructor(
     private val localTodoRepository: TodoRepository
 ) : ViewModel() {
 
-    var todosAdded = mutableListOf<Todo>()
+    var todoAdded: Todo? = null
 
-    fun addTodo() {
+    fun addTodo(
+        todo: Todo
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             val newTodo = Todo(
                 id = UUID.randomUUID().toString(),
@@ -32,15 +34,15 @@ class UpdateTodoViewModel @Inject constructor(
                 reminderEnabled = false,
             )
             localTodoRepository.addTodo(newTodo)
-            todosAdded.add(newTodo)
+            todoAdded = newTodo
         }
     }
 
     fun undoAddTodo() {
-        if (todosAdded.isNotEmpty()) {
+        if (todoAdded != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                localTodoRepository.deleteTodo(todosAdded)
-                todosAdded.clear()
+                localTodoRepository.deleteTodo(todoAdded!!)
+                todoAdded = null
             }
         }
     }
