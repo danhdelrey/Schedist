@@ -1,10 +1,11 @@
 package com.brighttorchstudio.schedist.ui.features.todo_management.view
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -77,16 +78,16 @@ fun TodoManagementScreen(
             }
 
             is TodoManagementViewModel.UiState.Success -> {
-                LazyColumn(
-                    modifier = Modifier.padding(innerPadding)
+                val todoList = (uiState as TodoManagementViewModel.UiState.Success).todoList
+                Column(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    itemsIndexed((uiState as TodoManagementViewModel.UiState.Success).todoList) { index, todo ->
+                    todoList.forEach { todo ->
                         TodoItem(
                             todo = todo,
-                            onPress = { viewModel.startSelectingTodos() },
-                            isSelectingTodos = isSelectingTodos,
-                            onSelect = { viewModel.selectTodos(todo) },
-                            onUnselect = { viewModel.unselectTodos(todo) }
+                            viewModel = viewModel,
                         )
                     }
                 }
