@@ -56,49 +56,32 @@ fun TodoItem(
         if (isSelectingAllTodos) {
             isSelected = true
         }
+        if (isSelected) {
+            viewModel.selectTodos(todo)
+        } else {
+            viewModel.unselectTodos(todo)
+        }
         Box(
-            modifier =
-            if (isDue) {
-                Modifier
-                    .padding(horizontal = 15.dp, vertical = 5.dp)
-                    .background(
-                        MaterialTheme.colorScheme.surfaceContainerLow,
-                        MaterialTheme.shapes.small
-                    )
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = MaterialTheme.shapes.small
-                    )
-                    .combinedClickable(
-                        onClick = {
-                            isSelected = !isSelected
-                            if (isSelected) {
-                                viewModel.selectTodos(todo)
-                            } else {
-                                viewModel.unselectTodos(todo)
-                            }
-                        },
-                    )
-            } else {
-                Modifier
-                    .padding(horizontal = 15.dp, vertical = 5.dp)
-                    .background(
-                        MaterialTheme.colorScheme.surfaceContainerLow,
-                        MaterialTheme.shapes.small
-                    )
-                    .combinedClickable(
-                        onClick = {
-                            isSelected = !isSelected
-                            if (isSelected) {
-                                viewModel.selectTodos(todo)
-                            } else {
-                                viewModel.unselectTodos(todo)
-                            }
-                        },
-                    )
-            }
-
+            modifier = Modifier
+                .padding(horizontal = 15.dp, vertical = 5.dp)
+                .background(
+                    MaterialTheme.colorScheme.surfaceContainerLow,
+                    MaterialTheme.shapes.small
+                )
+                .border(
+                    width = if (isDue) {
+                        2.dp
+                    } else {
+                        0.dp
+                    },
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = MaterialTheme.shapes.small
+                )
+                .combinedClickable(
+                    onClick = {
+                        isSelected = !isSelected
+                    },
+                )
         ) {
             Column(
                 modifier = Modifier
