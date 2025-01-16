@@ -109,25 +109,6 @@ class TodoManagementViewModel @Inject constructor(
         }
     }
 
-    fun deleteTodo(todo: Todo) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                localTodoRepository.deleteTodo(todo)
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error("Error: ${e.message}")
-            }
-        }
-    }
-
-    fun deleteAllTodos() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                localTodoRepository.deleteAllTodos()
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error("Error: ${e.message}")
-            }
-        }
-    }
 
 }
 

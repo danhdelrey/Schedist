@@ -4,14 +4,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -62,15 +67,18 @@ fun TodoManagementScreen(
                 )
             } else {
                 TopAppBar(
-                    title = { },
-                    actions = {
-                        Button(onClick = { viewModel.addTodo() }) {
-                            Text("Add Todo")
-                        }
-                        Button(onClick = { viewModel.deleteAllTodos() }) {
-                            Text("Delete All")
+                    title = {
+                        Text("Danh sách nhiệm vụ")
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { /* do something */ }) {
+                            Icon(
+                                imageVector = Icons.Filled.Menu,
+                                contentDescription = "drawer"
+                            )
                         }
                     }
+
                 )
             }
         },
@@ -100,6 +108,18 @@ fun TodoManagementScreen(
                         label = { Text("Home") },
                         onClick = { }
                     )
+                }
+            }
+        },
+        floatingActionButton = {
+            if (!isSelectingTodos) {
+                FloatingActionButton(
+                    onClick = { viewModel.addTodo() },
+                    shape = CircleShape,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ) {
+                    Icon(Icons.Filled.Add, contentDescription = "Add Todo")
                 }
             }
         }
