@@ -4,18 +4,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -33,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.ui.features.todo_management.view_model.TodoManagementViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.BottomAppBarActions
+import com.brighttorchstudio.schedist.ui.shared_view.FAB
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,26 +115,7 @@ fun TodoManagementScreen(
         },
         floatingActionButton = {
             if (!isSelectionMode) {
-                FloatingActionButton(
-                    onClick = {
-                        showBottomSheet = true
-//                        viewModel.addTodo()
-//                        showSnackBar(
-//                            scope = scope,
-//                            snackbarHostState = snackbarHostState,
-//                            message = "Thêm nhiệm vụ mới thành công.",
-//                            actionLabel = "Hoàn tác",
-//                            onActionPerformed = {
-//                                viewModel.undoAddTodo()
-//                            },
-//                        )
-                    },
-                    shape = CircleShape,
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ) {
-                    Icon(Icons.Filled.Add, contentDescription = "Add Todo")
-                }
+                FAB { }
             }
         }
     ) { innerPadding ->
