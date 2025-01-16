@@ -3,6 +3,7 @@ package com.brighttorchstudio.schedist.ui.features.update_todo.view_model
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.data.todo.repository.TodoRepository
@@ -22,14 +23,14 @@ class UpdateTodoViewModel @Inject constructor(
     var todoAdded: Todo? = null
 
     fun addTodo(
-        todo: Todo
+
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             val newTodo = Todo(
                 id = UUID.randomUUID().toString(),
                 title = "Đem đồ ăn cho chồng đáng yêu ❤️",
                 description = "Ở tòa nhà abc, hm 45, nhớ hỏi mật khẩu két sắt",
-                priority = (1..4).random(),
+                importanceLevel = ImportanceLevel.IMPORTANT,
                 dateTime = LocalDateTime.now().plusDays((1..10).random().toLong()),
                 reminderEnabled = false,
             )
