@@ -25,66 +25,50 @@ class TodoManagementViewModel @Inject constructor(
         data class Error(val message: String) : UiState()
     }
 
-
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _isSelectingTodos = MutableStateFlow<Boolean>(false)
-    val isSelectingTodos: StateFlow<Boolean> = _isSelectingTodos.asStateFlow()
-    private val _isSelectingAllTodos = MutableStateFlow<Boolean>(false)
-    val isSelectingAllTodos: StateFlow<Boolean> = _isSelectingAllTodos.asStateFlow()
-    var _selectedTodos = mutableListOf<Todo>()
+    private val _isSelectionMode = MutableStateFlow(false)
+    val isSelectionMode: StateFlow<Boolean> = _isSelectionMode.asStateFlow()
+
+    private val _selectedTodos = MutableStateFlow<Set<Todo>>(emptySet())
+    val selectedTodos: StateFlow<Set<Todo>> = _selectedTodos.asStateFlow()
+
 
     init {
         viewModelScope.launch {
-            try {
-                localTodoRepository.getTodos().collect { todos ->
-                    _uiState.value = UiState.Success(todos)
-                }
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error("Error: ${e.message}")
+            localTodoRepository.getTodos().collect { todos ->
+                _uiState.value = UiState.Success(todos)
             }
         }
     }
 
-    fun cancelSelectingTodos() {
-        _isSelectingTodos.value = false
-        cancelSelectingAllTodos()
-        _selectedTodos.clear()
+    fun enterSelectionMode() {
+        _isSelectionMode.value = true
     }
 
-    fun startSelectingTodos() {
-        _isSelectingTodos.value = true
+    fun exitSelectionMode() {
+        _isSelectionMode.value = false
+        _selectedTodos.value = emptySet()
     }
 
-    fun selectTodo(todo: Todo) {
-        if (!_selectedTodos.contains(todo)) {
-            _selectedTodos.add(todo)
+    fun toggleTodoSelection(todo: Todo) {
+        _selectedTodos.value = if (todo in _selectedTodos.value) {
+            _selectedTodos.value - todo
+        } else {
+            _selectedTodos.value + todo
         }
     }
 
-    fun unselectTodo(todo: Todo) {
-        cancelSelectingAllTodos()
-        if (_selectedTodos.contains(todo)) {
-            _selectedTodos.remove(todo)
-        }
+    fun selectAllTodos(allTodos: List<Todo>) {
+        _selectedTodos.value = allTodos.toSet()
     }
-
-    fun startSelectingAllTodos() {
-        _isSelectingAllTodos.value = true
-    }
-
-    fun cancelSelectingAllTodos() {
-        _isSelectingAllTodos.value = false
-        _selectedTodos.clear()
-    }
-
 
     fun deleteSelectedTodos() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                localTodoRepository.deleteTodo(_selectedTodos)
-                cancelSelectingTodos()
+                localTodoRepository.deleteTodo(selectedTodos.value.toList())
+                exitSelectionMode()
             } catch (e: Exception) {
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }
@@ -108,8 +92,6 @@ class TodoManagementViewModel @Inject constructor(
             }
         }
     }
-
-
 }
 
 

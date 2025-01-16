@@ -35,30 +35,34 @@ import com.brighttorchstudio.schedist.ui.features.todo_management.view_model.Tod
 @Composable
 fun TodoManagementScreen(
     viewModel: TodoManagementViewModel = hiltViewModel(),
-    navController: NavHostController,
+    navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val isSelectingTodos by viewModel.isSelectingTodos.collectAsStateWithLifecycle()
-    val isSelectingAllTodos by viewModel.isSelectingAllTodos.collectAsStateWithLifecycle()
+    val isSelectionMode by viewModel.isSelectionMode.collectAsStateWithLifecycle()
+    val selectedTodos by viewModel.selectedTodos.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
-            if (isSelectingTodos) {
+            if (isSelectionMode) {
                 TopAppBar(
                     title = { },
                     actions = {
                         TextButton(
                             onClick = {
-                                viewModel.cancelSelectingTodos()
+                                viewModel.exitSelectionMode()
                             }
                         ) {
                             Text("Quay lại")
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         TextButton(
-                            enabled = !isSelectingAllTodos,
+                            enabled = selectedTodos.size < ((uiState as? TodoManagementViewModel.UiState.Success)?.todoList?.size
+                                ?: 0),
                             onClick = {
-                                viewModel.startSelectingAllTodos()
+                                viewModel.selectAllTodos(
+                                    (uiState as? TodoManagementViewModel.UiState.Success)?.todoList
+                                        ?: emptyList()
+                                )
                             }
                         ) {
                             Text("Chọn tất cả")
@@ -83,7 +87,7 @@ fun TodoManagementScreen(
             }
         },
         bottomBar = {
-            if (isSelectingTodos) {
+            if (isSelectionMode) {
                 BottomAppBar(
                     actions = {
                         TextButton(
@@ -112,7 +116,7 @@ fun TodoManagementScreen(
             }
         },
         floatingActionButton = {
-            if (!isSelectingTodos) {
+            if (!isSelectionMode) {
                 FloatingActionButton(
                     onClick = { viewModel.addTodo() },
                     shape = CircleShape,
@@ -140,6 +144,9 @@ fun TodoManagementScreen(
                         TodoItem(
                             todo = todo,
                             viewModel = viewModel,
+                            isSelected = todo in selectedTodos,
+                            onToggleSelection = { viewModel.toggleTodoSelection(todo) },
+                            onClick = {}
                         )
                     }
                 }
@@ -154,3 +161,4 @@ fun TodoManagementScreen(
         }
     }
 }
+

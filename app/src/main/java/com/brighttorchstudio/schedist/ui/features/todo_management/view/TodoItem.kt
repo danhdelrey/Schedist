@@ -44,272 +44,119 @@ import com.brighttorchstudio.schedist.ui.features.todo_management.view_model.Tod
 fun TodoItem(
     todo: Todo,
     viewModel: TodoManagementViewModel,
+    isSelected: Boolean,
+    onToggleSelection: () -> Unit,
+    onClick: () -> Unit
 ) {
-    val isSelectingTodos by viewModel.isSelectingTodos.collectAsStateWithLifecycle()
-    val isSelectingAllTodos by viewModel.isSelectingAllTodos.collectAsStateWithLifecycle()
-
+    val isSelectionMode by viewModel.isSelectionMode.collectAsStateWithLifecycle()
     var showTodoDetails by remember { mutableStateOf(false) }
     var isDue = DateTimeHelper.isDue(todo.dateTime)
-    var isSelected by remember { mutableStateOf(false) }
 
-
-    if (isSelectingTodos) {
-        if (isSelectingAllTodos) {
-            isSelected = true
-        }
-        if (isSelected) {
-            viewModel.selectTodo(todo)
-        } else {
-            viewModel.unselectTodo(todo)
-        }
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 15.dp, vertical = 5.dp)
-                .background(
-                    MaterialTheme.colorScheme.surfaceContainerLow,
-                    MaterialTheme.shapes.small
-                )
-                .border(
-                    width = if (isDue) {
-                        2.dp
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 15.dp, vertical = 5.dp)
+            .background(
+                MaterialTheme.colorScheme.surfaceContainerLow,
+                MaterialTheme.shapes.small
+            )
+            .border(
+                width = if (isDue) 2.dp else 0.dp,
+                color = if (isDue) MaterialTheme.colorScheme.primary else Color.Transparent,
+                shape = MaterialTheme.shapes.small
+            )
+            .combinedClickable(
+                onClick = {
+                    if (isSelectionMode) {
+                        onToggleSelection()
                     } else {
-                        0.dp
-                    },
-                    color = if (isDue) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        Color.Transparent
-                    },
-                    shape = MaterialTheme.shapes.small
-                )
-                .combinedClickable(
-                    onClick = {
-                        isSelected = !isSelected
-                    },
-                )
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(vertical = 10.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Checkbox(
-                        checked = isSelected,
-                        onCheckedChange = {
-                            isSelected = it
-                        }
-
-                    )
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-
-                    ) {
-                        Text(
-                            text = todo.title,
-                            style = MaterialTheme.typography.titleMedium,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier
-                                .fillMaxWidth()
-
-
-                        )
-                        Row {
-                            Icon(
-                                imageVector = Icons.Default.DateRange,
-                                contentDescription = "Calendar",
-                                modifier = Modifier.size(20.dp),
-                                tint = when (todo.priority) {
-                                    1 -> veryImportantTask
-                                    2 -> importantTask
-                                    3 -> normalTask
-                                    else -> trivialTask
-                                }
-                            )
-                            Text(
-                                text = DateTimeHelper.formatLocalDateTime(todo.dateTime),
-                                style = MaterialTheme.typography.labelLarge,
-                                color = when (todo.priority) {
-                                    1 -> veryImportantTask
-                                    2 -> importantTask
-                                    3 -> normalTask
-                                    else -> trivialTask
-                                }
-                            )
-                        }
+                        onClick()
                     }
-                    IconToggleButton(
-                        checked = showTodoDetails,
-                        onCheckedChange = { showTodoDetails = it }
-                    ) {
-                        if (showTodoDetails) {
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowUp,
-                                contentDescription = "Calendar",
-                                tint = MaterialTheme.colorScheme.outlineVariant
-                            )
-                        } else {
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowDown,
-                                contentDescription = "Calendar",
-                                tint = MaterialTheme.colorScheme.outlineVariant
-                            )
-                        }
+                },
+                onLongClick = {
+                    if (!isSelectionMode) {
+                        viewModel.enterSelectionMode()
+                        onToggleSelection()
                     }
                 }
-                AnimatedVisibility(showTodoDetails) {
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 14.dp)
-                    ) {
-                        Text(
-                            text = todo.title,
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        )
-                        if (!todo.description.isNullOrEmpty())
-                            Text(
-                                text = todo.description,
-                                style = MaterialTheme.typography.bodyLarge.copy(
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            )
+            )
 
+    ) {
+        Column(modifier = Modifier.padding(vertical = 10.dp)) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+
+                if (isSelectionMode) {
+                    Checkbox(checked = isSelected, onCheckedChange = { onToggleSelection() })
+                } else {
+                    RadioButton(selected = false, onClick = { /*TODO*/ })
+                }
+
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = todo.title,
+                        style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Row {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Calendar",
+                            modifier = Modifier.size(20.dp),
+                            tint = when (todo.priority) {
+                                1 -> veryImportantTask
+                                2 -> importantTask
+                                3 -> normalTask
+                                else -> trivialTask
+                            }
+                        )
+                        Text(
+                            text = DateTimeHelper.formatLocalDateTime(todo.dateTime),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = when (todo.priority) {
+                                1 -> veryImportantTask
+                                2 -> importantTask
+                                3 -> normalTask
+                                else -> trivialTask
+                            }
+                        )
                     }
+                }
+
+
+                IconToggleButton(
+                    checked = showTodoDetails,
+                    onCheckedChange = { showTodoDetails = it }
+                ) {
+                    Icon(
+                        imageVector = if (showTodoDetails) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                        contentDescription = "Expand details",
+                        tint = MaterialTheme.colorScheme.outlineVariant
+                    )
                 }
             }
-
-        }
-    } else {
-        isSelected = false
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 15.dp, vertical = 5.dp)
-                .background(
-                    MaterialTheme.colorScheme.surfaceContainerLow,
-                    MaterialTheme.shapes.small
-                )
-                .border(
-                    width = if (isDue) {
-                        2.dp
-                    } else {
-                        0.dp
-                    },
-                    color = if (isDue) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        Color.Transparent
-                    },
-                    shape = MaterialTheme.shapes.small
-                )
-                .combinedClickable(
-                    onClick = {},
-                    onLongClick = {
-                        viewModel.selectTodo(todo)
-                        isSelected = true
-                        viewModel.startSelectingTodos()
-                    }
-                )
-
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(vertical = 10.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    RadioButton(selected = false, onClick = { /*TODO*/ })
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-
-                    ) {
-                        Text(
-                            text = todo.title,
-                            style = MaterialTheme.typography.titleMedium,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier
-                                .fillMaxWidth()
-
-
+            AnimatedVisibility(visible = showTodoDetails) {
+                Column(modifier = Modifier.padding(horizontal = 14.dp)) {
+                    Text(
+                        text = todo.title,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        Row {
-                            Icon(
-                                imageVector = Icons.Default.DateRange,
-                                contentDescription = "Calendar",
-                                modifier = Modifier.size(20.dp),
-                                tint = when (todo.priority) {
-                                    1 -> veryImportantTask
-                                    2 -> importantTask
-                                    3 -> normalTask
-                                    else -> trivialTask
-                                }
-                            )
-                            Text(
-                                text = DateTimeHelper.formatLocalDateTime(todo.dateTime),
-                                style = MaterialTheme.typography.labelLarge,
-                                color = when (todo.priority) {
-                                    1 -> veryImportantTask
-                                    2 -> importantTask
-                                    3 -> normalTask
-                                    else -> trivialTask
-                                }
-                            )
-                        }
-                    }
-                    IconToggleButton(
-                        checked = showTodoDetails,
-                        onCheckedChange = { showTodoDetails = it }
-                    ) {
-                        if (showTodoDetails) {
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowUp,
-                                contentDescription = "Calendar",
-                                tint = MaterialTheme.colorScheme.outlineVariant
-                            )
-                        } else {
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowDown,
-                                contentDescription = "Calendar",
-                                tint = MaterialTheme.colorScheme.outlineVariant
-                            )
-                        }
-                    }
-                }
-                AnimatedVisibility(showTodoDetails) {
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 14.dp)
-                    ) {
+                    )
+                    if (!todo.description.isNullOrEmpty()) {
                         Text(
-                            text = todo.title,
-                            style = MaterialTheme.typography.titleMedium.copy(
+                            text = todo.description,
+                            style = MaterialTheme.typography.bodyLarge.copy(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         )
-                        if (!todo.description.isNullOrEmpty())
-                            Text(
-                                text = todo.description,
-                                style = MaterialTheme.typography.bodyLarge.copy(
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            )
-
                     }
                 }
             }
 
         }
     }
-
 }
 
 //@Preview(showBackground = true)
