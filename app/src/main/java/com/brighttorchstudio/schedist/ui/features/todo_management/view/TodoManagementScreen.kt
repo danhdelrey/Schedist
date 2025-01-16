@@ -2,6 +2,8 @@ package com.brighttorchstudio.schedist.ui.features.todo_management.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +19,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -26,12 +29,19 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -51,6 +61,38 @@ fun TodoManagementScreen(
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    var inputTodoTitle by remember { mutableStateOf("") }
+    val focusRequester = remember { FocusRequester() }
+
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = false,
+    )
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            modifier = Modifier.fillMaxHeight(),
+            sheetState = sheetState,
+            onDismissRequest = {
+                showBottomSheet = false
+            }
+        ) {
+            LaunchedEffect(showBottomSheet) { // Key là showBottomSheet
+                if (showBottomSheet) { // Chỉ requestFocus khi BottomSheet được hiển thị
+                    focusRequester.requestFocus()
+                }
+            }
+            TextField(
+                value = inputTodoTitle,
+                onValueChange = { inputTodoTitle = it },
+                label = { Text("Label") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+                    
+            )
+        }
+    }
 
     Scaffold(
         snackbarHost = {
@@ -142,16 +184,17 @@ fun TodoManagementScreen(
             if (!isSelectionMode) {
                 FloatingActionButton(
                     onClick = {
-                        viewModel.addTodo()
-                        showSnackBar(
-                            scope = scope,
-                            snackbarHostState = snackbarHostState,
-                            message = "Thêm nhiệm vụ mới thành công.",
-                            actionLabel = "Hoàn tác",
-                            onActionPerformed = {
-                                viewModel.undoAddTodo()
-                            },
-                        )
+                        showBottomSheet = true
+//                        viewModel.addTodo()
+//                        showSnackBar(
+//                            scope = scope,
+//                            snackbarHostState = snackbarHostState,
+//                            message = "Thêm nhiệm vụ mới thành công.",
+//                            actionLabel = "Hoàn tác",
+//                            onActionPerformed = {
+//                                viewModel.undoAddTodo()
+//                            },
+//                        )
                     },
                     shape = CircleShape,
                     containerColor = MaterialTheme.colorScheme.primary,
