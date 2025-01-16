@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.features.todo_management.view
+package com.brighttorchstudio.schedist.ui.features.manage_todo.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,15 +24,15 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.brighttorchstudio.schedist.ui.features.todo_management.view_model.TodoManagementViewModel
+import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.BottomAppBarActions
 import com.brighttorchstudio.schedist.ui.shared_view.BottomNavigationBar
 import com.brighttorchstudio.schedist.ui.shared_view.FAB
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoManagementScreen(
-    viewModel: TodoManagementViewModel = hiltViewModel(),
+fun ManageTodoScreen(
+    viewModel: ManageTodoViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -62,11 +62,11 @@ fun TodoManagementScreen(
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         TextButton(
-                            enabled = selectedTodos.size < ((uiState as? TodoManagementViewModel.UiState.Success)?.todoList?.size
+                            enabled = selectedTodos.size < ((uiState as? ManageTodoViewModel.UiState.Success)?.todoList?.size
                                 ?: 0),
                             onClick = {
                                 viewModel.selectAllTodos(
-                                    (uiState as? TodoManagementViewModel.UiState.Success)?.todoList
+                                    (uiState as? ManageTodoViewModel.UiState.Success)?.todoList
                                         ?: emptyList()
                                 )
                             }
@@ -97,7 +97,7 @@ fun TodoManagementScreen(
                 BottomAppBarActions { }
             } else {
                 BottomNavigationBar {
-                    
+
                 }
             }
         },
@@ -108,12 +108,12 @@ fun TodoManagementScreen(
         }
     ) { innerPadding ->
         when (uiState) {
-            is TodoManagementViewModel.UiState.Loading -> {
+            is ManageTodoViewModel.UiState.Loading -> {
                 CircularProgressIndicator(modifier = Modifier.padding(innerPadding))
             }
 
-            is TodoManagementViewModel.UiState.Success -> {
-                val todoList = (uiState as TodoManagementViewModel.UiState.Success).todoList
+            is ManageTodoViewModel.UiState.Success -> {
+                val todoList = (uiState as ManageTodoViewModel.UiState.Success).todoList
                 Column(
                     modifier = Modifier
                         .padding(innerPadding)
@@ -131,9 +131,9 @@ fun TodoManagementScreen(
                 }
             }
 
-            is TodoManagementViewModel.UiState.Error -> {
+            is ManageTodoViewModel.UiState.Error -> {
                 Text(
-                    "Error: ${(uiState as TodoManagementViewModel.UiState.Error).message}",
+                    "Error: ${(uiState as ManageTodoViewModel.UiState.Error).message}",
                     modifier = Modifier.padding(innerPadding)
                 )
             }

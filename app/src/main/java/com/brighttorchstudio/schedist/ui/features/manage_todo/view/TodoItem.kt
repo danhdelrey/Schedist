@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.features.todo_management.view
+package com.brighttorchstudio.schedist.ui.features.manage_todo.view
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -33,13 +33,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.todo.model.Todo
-import com.brighttorchstudio.schedist.ui.features.todo_management.view_model.TodoManagementViewModel
+import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TodoItem(
     todo: Todo,
-    viewModel: TodoManagementViewModel,
+    viewModel: ManageTodoViewModel,
     isSelected: Boolean,
     onToggleSelection: () -> Unit,
     onClick: () -> Unit

@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.features.todo_management.view_model
+package com.brighttorchstudio.schedist.ui.features.manage_todo.view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TodoManagementViewModel @Inject constructor(
+class ManageTodoViewModel @Inject constructor(
     private val localTodoRepository: TodoRepository,
 ) : ViewModel() {
 
