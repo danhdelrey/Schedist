@@ -3,8 +3,8 @@ package com.brighttorchstudio.schedist.ui.features.todo_management.view
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -73,15 +74,16 @@ fun TodoManagementScreen(
 
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false,
+        skipPartiallyExpanded = true,
     )
     if (showBottomSheet) {
         ModalBottomSheet(
-            modifier = Modifier.fillMaxHeight(),
+            modifier = Modifier.height(200.dp),
             sheetState = sheetState,
             onDismissRequest = {
                 showBottomSheet = false
-            }
+            },
+            dragHandle = {}
         ) {
             LaunchedEffect(showBottomSheet) { // Key là showBottomSheet
                 if (showBottomSheet) { // Chỉ requestFocus khi BottomSheet được hiển thị
