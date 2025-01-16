@@ -57,13 +57,13 @@ class TodoManagementViewModel @Inject constructor(
         _isSelectingTodos.value = true
     }
 
-    fun selectTodos(todo: Todo) {
+    fun selectTodo(todo: Todo) {
         if (!_selectedTodos.contains(todo)) {
             _selectedTodos.add(todo)
         }
     }
 
-    fun unselectTodos(todo: Todo) {
+    fun unselectTodo(todo: Todo) {
         cancelSelectingAllTodos()
         if (_selectedTodos.contains(todo)) {
             _selectedTodos.remove(todo)

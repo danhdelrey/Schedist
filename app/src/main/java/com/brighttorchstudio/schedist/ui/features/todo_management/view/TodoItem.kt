@@ -27,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -57,9 +58,9 @@ fun TodoItem(
             isSelected = true
         }
         if (isSelected) {
-            viewModel.selectTodos(todo)
+            viewModel.selectTodo(todo)
         } else {
-            viewModel.unselectTodos(todo)
+            viewModel.unselectTodo(todo)
         }
         Box(
             modifier = Modifier
@@ -74,7 +75,11 @@ fun TodoItem(
                     } else {
                         0.dp
                     },
-                    color = MaterialTheme.colorScheme.primary,
+                    color = if (isDue) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        Color.Transparent
+                    },
                     shape = MaterialTheme.shapes.small
                 )
                 .combinedClickable(
@@ -183,47 +188,33 @@ fun TodoItem(
     } else {
         isSelected = false
         Box(
-            modifier =
-            if (isDue) {
-                Modifier
-                    .padding(horizontal = 15.dp, vertical = 5.dp)
-                    .background(
-                        MaterialTheme.colorScheme.surfaceContainerLow,
-                        MaterialTheme.shapes.small
-                    )
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = MaterialTheme.shapes.small
-                    )
-                    .combinedClickable(
-                        onClick = {
-
-                        },
-                        onLongClick = {
-                            viewModel.startSelectingTodos()
-                            viewModel.selectTodos(todo)
-                            isSelected = true
-                        },
-                    )
-            } else {
-                Modifier
-                    .padding(horizontal = 15.dp, vertical = 5.dp)
-                    .background(
-                        MaterialTheme.colorScheme.surfaceContainerLow,
-                        MaterialTheme.shapes.small
-                    )
-                    .combinedClickable(
-                        onClick = {
-
-                        },
-                        onLongClick = {
-                            viewModel.startSelectingTodos()
-                            viewModel.selectTodos(todo)
-                            isSelected = true
-                        },
-                    )
-            }
+            modifier = Modifier
+                .padding(horizontal = 15.dp, vertical = 5.dp)
+                .background(
+                    MaterialTheme.colorScheme.surfaceContainerLow,
+                    MaterialTheme.shapes.small
+                )
+                .border(
+                    width = if (isDue) {
+                        2.dp
+                    } else {
+                        0.dp
+                    },
+                    color = if (isDue) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        Color.Transparent
+                    },
+                    shape = MaterialTheme.shapes.small
+                )
+                .combinedClickable(
+                    onClick = {},
+                    onLongClick = {
+                        viewModel.selectTodo(todo)
+                        isSelected = true
+                        viewModel.startSelectingTodos()
+                    }
+                )
 
         ) {
             Column(
