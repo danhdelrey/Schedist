@@ -30,10 +30,8 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -57,9 +55,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.helpers.DateTimeHelper
+import com.brighttorchstudio.schedist.helpers.UIComponentHelper.Companion.showSnackBar
 import com.brighttorchstudio.schedist.ui.features.todo_management.view_model.TodoManagementViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -362,29 +359,4 @@ fun TodoManagementScreen(
     }
 }
 
-fun showSnackBar(
-    scope: CoroutineScope,
-    snackbarHostState: SnackbarHostState,
-    message: String,
-    actionLabel: String,
-    onActionPerformed: () -> Unit,
-) {
-    scope.launch {
-        snackbarHostState.currentSnackbarData?.dismiss()
-        val result = snackbarHostState
-            .showSnackbar(
-                message = message,
-                actionLabel = actionLabel,
-                duration = SnackbarDuration.Short
-            )
-        when (result) {
-            SnackbarResult.ActionPerformed -> {
-                onActionPerformed()
-            }
 
-            SnackbarResult.Dismissed -> {
-                /* Handle snackbar dismissed */
-            }
-        }
-    }
-}
