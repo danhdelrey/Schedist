@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,7 +23,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import com.brighttorchstudio.schedist.data.todo.model.Todo
-import com.brighttorchstudio.schedist.helpers.DateTimeHelper
+import com.brighttorchstudio.schedist.ui.shared_view.FormattedTimeText
 import com.brighttorchstudio.schedist.ui.shared_view.StyledTextField
 import java.time.LocalDateTime
 
@@ -68,14 +67,7 @@ fun UpdateTodoBottomSheet(
                 Column(
 
                 ) {
-                    Text(
-                        text = DateTimeHelper.formatLocalDateTime(LocalDateTime.now()),
-                        style = MaterialTheme.typography.labelLarge.copy(
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        ),
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp)
-                    )
+                    FormattedTimeText(LocalDateTime.now())
                     StyledTextField(
                         value = inputTodoTitle,
                         onValueChange = { inputTodoTitle = it },
