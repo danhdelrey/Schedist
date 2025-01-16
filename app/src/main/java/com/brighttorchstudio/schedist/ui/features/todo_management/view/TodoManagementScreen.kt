@@ -6,14 +6,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -29,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.ui.features.todo_management.view_model.TodoManagementViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.BottomAppBarActions
+import com.brighttorchstudio.schedist.ui.shared_view.BottomNavigationBar
 import com.brighttorchstudio.schedist.ui.shared_view.FAB
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,18 +96,8 @@ fun TodoManagementScreen(
             if (isSelectionMode) {
                 BottomAppBarActions { }
             } else {
-                NavigationBar {
-                    NavigationBarItem(
-                        selected = true,
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Default.Home,
-                                contentDescription = "home"
-                            )
-                        },
-                        label = { Text("Home") },
-                        onClick = { }
-                    )
+                BottomNavigationBar {
+                    
                 }
             }
         },
