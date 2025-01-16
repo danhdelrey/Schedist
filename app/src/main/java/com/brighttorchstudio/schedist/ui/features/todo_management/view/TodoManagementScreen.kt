@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -55,8 +54,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.helpers.DateTimeHelper
-import com.brighttorchstudio.schedist.helpers.UIComponentHelper.Companion.showSnackBar
 import com.brighttorchstudio.schedist.ui.features.todo_management.view_model.TodoManagementViewModel
+import com.brighttorchstudio.schedist.ui.shared_view.BottomAppBarActions
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -264,26 +263,7 @@ fun TodoManagementScreen(
         },
         bottomBar = {
             if (isSelectionMode) {
-                BottomAppBar(
-                    actions = {
-                        TextButton(
-                            onClick = {
-                                viewModel.deleteSelectedTodos()
-                                showSnackBar(
-                                    scope = scope,
-                                    snackbarHostState = snackbarHostState,
-                                    message = "Đã xóa nhiệm vụ.",
-                                    actionLabel = "Hoàn tác",
-                                    onActionPerformed = {
-                                        viewModel.undoDeleteSelectedTodos()
-                                    },
-                                )
-                            }
-                        ) {
-                            Text("Delete")
-                        }
-                    }
-                )
+                BottomAppBarActions { }
             } else {
                 NavigationBar {
                     NavigationBarItem(
