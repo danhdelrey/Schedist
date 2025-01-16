@@ -31,6 +31,8 @@ class TodoManagementViewModel @Inject constructor(
 
     private val _isSelectingTodos = MutableStateFlow<Boolean>(false)
     val isSelectingTodos: StateFlow<Boolean> = _isSelectingTodos.asStateFlow()
+    private val _isSelectingAllTodos = MutableStateFlow<Boolean>(false)
+    val isSelectingAllTodos: StateFlow<Boolean> = _isSelectingAllTodos.asStateFlow()
     var _selectedTodos = mutableListOf<Todo>()
 
     init {
@@ -47,6 +49,7 @@ class TodoManagementViewModel @Inject constructor(
 
     fun cancelSelectingTodos() {
         _isSelectingTodos.value = false
+        cancelSelectingAllTodos()
         _selectedTodos.clear()
     }
 
@@ -55,11 +58,25 @@ class TodoManagementViewModel @Inject constructor(
     }
 
     fun selectTodos(todo: Todo) {
-        _selectedTodos.add(todo)
+        if (!_selectedTodos.contains(todo)) {
+            _selectedTodos.add(todo)
+        }
     }
 
     fun unselectTodos(todo: Todo) {
-        _selectedTodos.remove(todo)
+        cancelSelectingAllTodos()
+        if (_selectedTodos.contains(todo)) {
+            _selectedTodos.remove(todo)
+        }
+    }
+
+    fun startSelectingAllTodos() {
+        _isSelectingAllTodos.value = true
+    }
+
+    fun cancelSelectingAllTodos() {
+        _isSelectingAllTodos.value = false
+        _selectedTodos.clear()
     }
 
 

@@ -30,6 +30,7 @@ fun TodoManagementScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isSelectingTodos by viewModel.isSelectingTodos.collectAsStateWithLifecycle()
+    val isSelectingAllTodos by viewModel.isSelectingAllTodos.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -46,8 +47,9 @@ fun TodoManagementScreen(
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         TextButton(
+                            enabled = !isSelectingAllTodos,
                             onClick = {
-
+                                viewModel.startSelectingAllTodos()
                             }
                         ) {
                             Text("Chọn tất cả")

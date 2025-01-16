@@ -45,6 +45,7 @@ fun TodoItem(
     viewModel: TodoManagementViewModel,
 ) {
     val isSelectingTodos by viewModel.isSelectingTodos.collectAsStateWithLifecycle()
+    val isSelectingAllTodos by viewModel.isSelectingAllTodos.collectAsStateWithLifecycle()
 
     var showTodoDetails by remember { mutableStateOf(false) }
     var isDue = DateTimeHelper.isDue(todo.dateTime)
@@ -52,6 +53,9 @@ fun TodoItem(
 
 
     if (isSelectingTodos) {
+        if (isSelectingAllTodos) {
+            isSelected = true
+        }
         Box(
             modifier =
             if (isDue) {
