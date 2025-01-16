@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.data.todo.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,9 +30,6 @@ class TodoManagementViewModel @Inject constructor(
 
     private val _selectedTodos = MutableStateFlow<Set<Todo>>(emptySet())
     val selectedTodos: StateFlow<Set<Todo>> = _selectedTodos.asStateFlow()
-
-
-    var todosDeleted: List<Todo> = emptyList()
 
 
     init {
@@ -63,29 +59,6 @@ class TodoManagementViewModel @Inject constructor(
 
     fun selectAllTodos(allTodos: List<Todo>) {
         _selectedTodos.value = allTodos.toSet()
-    }
-
-    fun deleteSelectedTodos() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                localTodoRepository.deleteTodo(selectedTodos.value.toList())
-                todosDeleted = selectedTodos.value.toList()
-                exitSelectionMode()
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error("Error: ${e.message}")
-            }
-        }
-    }
-
-    fun undoDeleteSelectedTodos() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                localTodoRepository.addTodo(todosDeleted)
-                todosDeleted = emptyList()
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error("Error: ${e.message}")
-            }
-        }
     }
 
 
