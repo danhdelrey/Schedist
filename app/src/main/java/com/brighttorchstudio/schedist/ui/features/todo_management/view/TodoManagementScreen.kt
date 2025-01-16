@@ -1,6 +1,7 @@
 package com.brighttorchstudio.schedist.ui.features.todo_management.view
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -30,6 +32,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -42,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -63,6 +67,8 @@ fun TodoManagementScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     var inputTodoTitle by remember { mutableStateOf("") }
+    var inputTodoDescription by remember { mutableStateOf("") }
+
     val focusRequester = remember { FocusRequester() }
 
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -82,15 +88,58 @@ fun TodoManagementScreen(
                     focusRequester.requestFocus()
                 }
             }
-            TextField(
-                value = inputTodoTitle,
-                onValueChange = { inputTodoTitle = it },
-                label = { Text("Label") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester)
-                    
-            )
+            Column {
+                TextField(
+                    value = inputTodoTitle,
+                    textStyle = MaterialTheme.typography.titleLarge,
+                    placeholder = {
+                        Text(
+                            "Tên nhiệm vụ",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.outline
+                        )
+                    },
+                    onValueChange = { inputTodoTitle = it },
+                    colors = TextFieldDefaults.colors().copy(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester)
+
+                )
+                TextField(
+                    value = inputTodoDescription,
+                    textStyle = MaterialTheme.typography.bodyLarge,
+                    placeholder = {
+                        Text(
+                            "Nhập mô tả cho nhiệm vụ này...",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.outline
+                        )
+                    },
+                    onValueChange = { inputTodoDescription = it },
+                    colors = TextFieldDefaults.colors().copy(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+
+
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Row(
+
+                ) {
+                    Button(onClick = {}) { Text("Button") }
+                }
+            }
         }
     }
 
