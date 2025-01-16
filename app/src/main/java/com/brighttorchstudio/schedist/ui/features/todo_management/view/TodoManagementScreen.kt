@@ -1,5 +1,7 @@
 package com.brighttorchstudio.schedist.ui.features.todo_management.view
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -31,8 +34,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -46,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -78,10 +80,12 @@ fun TodoManagementScreen(
     )
     if (showBottomSheet) {
         ModalBottomSheet(
-            modifier = Modifier.height(200.dp),
+            modifier = Modifier.height(400.dp),
             sheetState = sheetState,
             onDismissRequest = {
                 showBottomSheet = false
+                inputTodoTitle = ""
+                inputTodoDescription = ""
             },
             dragHandle = {}
         ) {
@@ -91,50 +95,59 @@ fun TodoManagementScreen(
                 }
             }
             Column {
-                TextField(
+                Spacer(modifier = Modifier.height(10.dp))
+                BasicTextField(
                     value = inputTodoTitle,
-                    textStyle = MaterialTheme.typography.titleLarge,
-                    placeholder = {
-                        Text(
-                            "Tên nhiệm vụ",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-                    },
                     onValueChange = { inputTodoTitle = it },
-                    colors = TextFieldDefaults.colors().copy(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
+                    textStyle = MaterialTheme.typography.titleLarge.copy(
+                        color = MaterialTheme.colorScheme.onBackground
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .focusRequester(focusRequester)
-
+                        .padding(horizontal = 15.dp)
+                        .background(Color.Transparent)
+                        .focusRequester(focusRequester), // Đảm bảo nền trong suốt
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                    decorationBox = { innerTextField ->
+                        // Hiển thị nội dung của BasicTextField
+                        Box(Modifier.padding(0.dp)) { // Đảm bảo không có padding xung quanh Box
+                            if (inputTodoTitle.isEmpty()) {
+                                Text(
+                                    text = "Tên nhiệm vụ",
+                                    style = MaterialTheme.typography.titleLarge,
+                                    color = MaterialTheme.colorScheme.outline
+                                )
+                            }
+                            innerTextField() // Gọi innerTextField để hiển thị nội dung nhập liệu
+                        }
+                    }
                 )
-                TextField(
+                BasicTextField(
                     value = inputTodoDescription,
-                    textStyle = MaterialTheme.typography.bodyLarge,
-                    placeholder = {
-                        Text(
-                            "Nhập mô tả cho nhiệm vụ này...",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-                    },
                     onValueChange = { inputTodoDescription = it },
-                    colors = TextFieldDefaults.colors().copy(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.onBackground
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-
-
+                        .padding(horizontal = 15.dp)
+                        .background(Color.Transparent), // Đảm bảo nền trong suốt
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                    decorationBox = { innerTextField ->
+                        // Hiển thị nội dung của BasicTextField
+                        Box(Modifier.padding(0.dp)) { // Đảm bảo không có padding xung quanh Box
+                            if (inputTodoDescription.isEmpty()) {
+                                Text(
+                                    text = "Nhập mô tả cho nhệm vụ này...",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.outline
+                                )
+                            }
+                            innerTextField() // Gọi innerTextField để hiển thị nội dung nhập liệu
+                        }
+                    }
                 )
+
                 Spacer(modifier = Modifier.weight(1f))
                 Row(
 
