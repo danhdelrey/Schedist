@@ -107,6 +107,15 @@ fun TodoManagementScreen(
                         TextButton(
                             onClick = {
                                 viewModel.deleteSelectedTodos()
+                                showSnackBar(
+                                    scope = scope,
+                                    snackbarHostState = snackbarHostState,
+                                    message = "Đã xóa nhiệm vụ.",
+                                    actionLabel = "Hoàn tác",
+                                    onActionPerformed = {
+                                        viewModel.undoDeleteSelectedTodos()
+                                    },
+                                )
                             }
                         ) {
                             Text("Delete")
@@ -133,6 +142,7 @@ fun TodoManagementScreen(
             if (!isSelectionMode) {
                 FloatingActionButton(
                     onClick = {
+                        viewModel.addTodo()
                         showSnackBar(
                             scope = scope,
                             snackbarHostState = snackbarHostState,
@@ -142,7 +152,6 @@ fun TodoManagementScreen(
                                 viewModel.undoAddTodo()
                             },
                         )
-                        viewModel.addTodo()
                     },
                     shape = CircleShape,
                     containerColor = MaterialTheme.colorScheme.primary,

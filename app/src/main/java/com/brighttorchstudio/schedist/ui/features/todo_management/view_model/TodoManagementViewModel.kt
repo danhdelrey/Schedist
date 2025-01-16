@@ -35,6 +35,7 @@ class TodoManagementViewModel @Inject constructor(
     val selectedTodos: StateFlow<Set<Todo>> = _selectedTodos.asStateFlow()
 
     var todoAdded: Todo? = null
+    var todosDeleted: List<Todo> = emptyList()
 
 
     init {
@@ -70,7 +71,19 @@ class TodoManagementViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 localTodoRepository.deleteTodo(selectedTodos.value.toList())
+                todosDeleted = selectedTodos.value.toList()
                 exitSelectionMode()
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Error: ${e.message}")
+            }
+        }
+    }
+
+    fun undoDeleteSelectedTodos() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                localTodoRepository.addTodo(todosDeleted)
+                todosDeleted = emptyList()
             } catch (e: Exception) {
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }
