@@ -34,6 +34,8 @@ class TodoManagementViewModel @Inject constructor(
     private val _selectedTodos = MutableStateFlow<Set<Todo>>(emptySet())
     val selectedTodos: StateFlow<Set<Todo>> = _selectedTodos.asStateFlow()
 
+    var todoAdded: Todo? = null
+
 
     init {
         viewModelScope.launch {
@@ -87,11 +89,26 @@ class TodoManagementViewModel @Inject constructor(
                     reminderEnabled = false,
                 )
                 localTodoRepository.addTodo(newTodo)
+                todoAdded = newTodo
             } catch (e: Exception) {
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }
         }
     }
+
+    fun undoAddTodo() {
+        if (todoAdded != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    localTodoRepository.deleteTodo(todoAdded!!)
+                    todoAdded = null
+                } catch (e: Exception) {
+                    _uiState.value = UiState.Error("Error: ${e.message}")
+                }
+            }
+        }
+    }
+
 }
 
 

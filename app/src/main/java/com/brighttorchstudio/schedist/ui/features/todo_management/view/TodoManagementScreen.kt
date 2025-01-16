@@ -138,7 +138,9 @@ fun TodoManagementScreen(
                             snackbarHostState = snackbarHostState,
                             message = "Thêm nhiệm vụ mới thành công.",
                             actionLabel = "Hoàn tác",
-                            onActionPerformed = {},
+                            onActionPerformed = {
+                                viewModel.undoAddTodo()
+                            },
                         )
                         viewModel.addTodo()
                     },
