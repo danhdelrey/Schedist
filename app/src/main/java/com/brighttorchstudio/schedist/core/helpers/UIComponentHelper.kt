@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.helpers
+package com.brighttorchstudio.schedist.core.helpers
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState

@@ -2,10 +2,8 @@ package com.brighttorchstudio.schedist.data.local_database.todo
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.brighttorchstudio.schedist.data.todo.model.Todo
+import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 import java.time.LocalDateTime
-import java.util.Date
-import java.util.UUID
 
 @Entity
 data class TodoEntity(
@@ -13,10 +11,10 @@ data class TodoEntity(
     val id: String,
     val title: String,
     val description: String?,
-    val priority: Int,
+    val importanceLevel: ImportanceLevel,
     val dateTime: LocalDateTime,
     val reminderEnabled: Boolean,
-    )
+)
 
 
 

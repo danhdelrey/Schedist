@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.config.theme
+package com.brighttorchstudio.schedist.core.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.Font

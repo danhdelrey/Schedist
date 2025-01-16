@@ -3,9 +3,9 @@ package com.brighttorchstudio.schedist.ui.features.delete_todo.view_model
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.data.todo.repository.TodoRepository
-import com.brighttorchstudio.schedist.helpers.UIComponentHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

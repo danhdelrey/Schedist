@@ -31,12 +31,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.brighttorchstudio.schedist.config.custom_colors.importantTask
-import com.brighttorchstudio.schedist.config.custom_colors.normalTask
-import com.brighttorchstudio.schedist.config.custom_colors.trivialTask
-import com.brighttorchstudio.schedist.config.custom_colors.veryImportantTask
+import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.todo.model.Todo
-import com.brighttorchstudio.schedist.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.ui.features.todo_management.view_model.TodoManagementViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -104,22 +100,12 @@ fun TodoItem(
                             imageVector = Icons.Default.DateRange,
                             contentDescription = "Calendar",
                             modifier = Modifier.size(20.dp),
-                            tint = when (todo.priority) {
-                                1 -> veryImportantTask
-                                2 -> importantTask
-                                3 -> normalTask
-                                else -> trivialTask
-                            }
+                            tint = todo.importanceLevel.color
                         )
                         Text(
                             text = DateTimeHelper.formatLocalDateTime(todo.dateTime),
                             style = MaterialTheme.typography.labelLarge,
-                            color = when (todo.priority) {
-                                1 -> veryImportantTask
-                                2 -> importantTask
-                                3 -> normalTask
-                                else -> trivialTask
-                            }
+                            color = todo.importanceLevel.color
                         )
                     }
                 }
@@ -159,18 +145,3 @@ fun TodoItem(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun TodoItemPreview() {
-//    SchedistTheme {
-//        val todo = Todo(
-//            id = "1",
-//            title = "Đem đồ ăn cho chồng cute đáng yêu nhất thế giới",
-//            description = "ở toàn nhà ABC phía trái của hẻm 45, gửi xe tốn 5k, đưa cơm xong hỏi nó mật khẩu két sắt luôn",
-//            priority = 1,
-//            dateTime = LocalDateTime.now(),
-//            reminderEnabled = false,
-//        )
-//        TodoItem(todo, {}, false, {}, {})
-//    }
-//}

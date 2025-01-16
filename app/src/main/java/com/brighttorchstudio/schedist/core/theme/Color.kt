@@ -1,4 +1,5 @@
-package com.brighttorchstudio.schedist.config.theme
+package com.brighttorchstudio.schedist.core.theme
+
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF006A6A)

@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.config.custom_colors
+package com.brighttorchstudio.schedist.core.common
 
 import androidx.compose.ui.graphics.Color
 

@@ -14,26 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.brighttorchstudio.schedist.config.custom_colors.importantTask
-import com.brighttorchstudio.schedist.config.custom_colors.normalTask
-import com.brighttorchstudio.schedist.config.custom_colors.trivialTask
-import com.brighttorchstudio.schedist.config.custom_colors.veryImportantTask
-
-enum class ImportanceLevel(val color: Color) {
-    VERY_IMPORTANT(veryImportantTask),
-    IMPORTANT(importantTask),
-    NORMAL(normalTask),
-    NOT_IMPORTANT(trivialTask);
-
-    fun getDisplayName(): String {
-        return when (this) {
-            VERY_IMPORTANT -> "Rất quan trọng"
-            IMPORTANT -> "Quan trọng"
-            NORMAL -> "Bình thường"
-            NOT_IMPORTANT -> "Không quan trọng"
-        }
-    }
-}
+import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 
 
 @Composable

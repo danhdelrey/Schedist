@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.brighttorchstudio.schedist.helpers.DateTimeHelper
+import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import java.time.LocalDateTime
 
 @Composable
