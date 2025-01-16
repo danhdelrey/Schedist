@@ -84,6 +84,7 @@ class TodoManagementViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 localTodoRepository.deleteTodo(_selectedTodos)
+                cancelSelectingTodos()
             } catch (e: Exception) {
                 _uiState.value = UiState.Error("Error: ${e.message}")
             }
