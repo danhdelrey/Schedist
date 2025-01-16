@@ -36,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.ui.features.todo_management.view_model.TodoManagementViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -132,24 +133,13 @@ fun TodoManagementScreen(
             if (!isSelectionMode) {
                 FloatingActionButton(
                     onClick = {
-                        scope.launch {
-                            snackbarHostState.currentSnackbarData?.dismiss()
-                            val result = snackbarHostState
-                                .showSnackbar(
-                                    message = "Snackbar",
-                                    actionLabel = "Action",
-                                    duration = SnackbarDuration.Short
-                                )
-                            when (result) {
-                                SnackbarResult.ActionPerformed -> {
-                                    /* Handle snackbar action performed */
-                                }
-
-                                SnackbarResult.Dismissed -> {
-                                    /* Handle snackbar dismissed */
-                                }
-                            }
-                        }
+                        showSnackBar(
+                            scope = scope,
+                            snackbarHostState = snackbarHostState,
+                            message = "Thêm nhiệm vụ mới thành công.",
+                            actionLabel = "Hoàn tác",
+                            onActionPerformed = {},
+                        )
                         viewModel.addTodo()
                     },
                     shape = CircleShape,
@@ -195,3 +185,29 @@ fun TodoManagementScreen(
     }
 }
 
+fun showSnackBar(
+    scope: CoroutineScope,
+    snackbarHostState: SnackbarHostState,
+    message: String,
+    actionLabel: String,
+    onActionPerformed: () -> Unit,
+) {
+    scope.launch {
+        snackbarHostState.currentSnackbarData?.dismiss()
+        val result = snackbarHostState
+            .showSnackbar(
+                message = message,
+                actionLabel = actionLabel,
+                duration = SnackbarDuration.Short
+            )
+        when (result) {
+            SnackbarResult.ActionPerformed -> {
+                onActionPerformed()
+            }
+
+            SnackbarResult.Dismissed -> {
+                /* Handle snackbar dismissed */
+            }
+        }
+    }
+}
