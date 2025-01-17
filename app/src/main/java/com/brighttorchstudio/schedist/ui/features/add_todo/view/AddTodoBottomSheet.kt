@@ -2,7 +2,9 @@ package com.brighttorchstudio.schedist.ui.features.add_todo.view
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -10,11 +12,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 import com.brighttorchstudio.schedist.ui.shared_view.FormattedTimeText
@@ -28,7 +34,7 @@ fun AddTodoBottomSheet(
     showBottomSheet: Boolean,
     onDismiss: () -> Unit,
 ) {
-
+    var dateTime by remember { mutableStateOf(LocalDateTime.now()) }
     var inputTodoTitle by remember { mutableStateOf("") }
     var inputTodoDescription by remember { mutableStateOf("") }
     var selectedImportance by remember {
@@ -36,7 +42,7 @@ fun AddTodoBottomSheet(
     }
 
 
-    //val focusRequester = remember { FocusRequester() }
+    val focusRequester = remember { FocusRequester() }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     if (showBottomSheet) {
@@ -53,6 +59,11 @@ fun AddTodoBottomSheet(
             dragHandle = {},
         ) {
 
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
+                dateTime = LocalDateTime.now()
+            }
+
 
             Box(
                 modifier = Modifier
@@ -60,7 +71,7 @@ fun AddTodoBottomSheet(
                     .padding(top = 20.dp)
             ) {
                 Column {
-                    FormattedTimeText(LocalDateTime.now())
+                    FormattedTimeText(dateTime)
 
                     StyledTextField(
                         value = inputTodoTitle,
@@ -68,7 +79,7 @@ fun AddTodoBottomSheet(
                         placeholderText = "Tên nhiệm vụ",
                         textStyle = MaterialTheme.typography.titleLarge,
                         maxLines = 2,
-                        //modifier = Modifier.focusRequester(focusRequester)
+                        modifier = Modifier.focusRequester(focusRequester)
                     )
 
                     StyledTextField(
@@ -79,15 +90,19 @@ fun AddTodoBottomSheet(
                         maxLines = 3
                     )
 
-                    // Importance Dropdown
+
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                ) {
                     ImportanceDropdownButton(
                         initialSelectedItem = selectedImportance,
                         onSelectedOption = { newImportance ->
                             selectedImportance = newImportance
                         }
                     )
-
-
                 }
             }
         }
