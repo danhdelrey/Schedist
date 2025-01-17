@@ -24,8 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.brighttorchstudio.schedist.ui.features.add_todo.view.FABAddTodo
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
-import com.brighttorchstudio.schedist.ui.features.update_todo.view.FABAddTodo
 import com.brighttorchstudio.schedist.ui.shared_view.BottomAppBarActions
 import com.brighttorchstudio.schedist.ui.shared_view.BottomNavigationBar
 
