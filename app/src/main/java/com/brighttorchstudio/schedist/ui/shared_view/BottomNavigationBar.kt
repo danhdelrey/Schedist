@@ -7,20 +7,16 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.navigation.NavHostController
 
 
 @Composable
 fun BottomNavigationBar(
-    onChangedIndex: (Int) -> Unit
+    navController: NavHostController,
 ) {
-    var currentIndex by remember { mutableIntStateOf(0) }
     NavigationBar {
         NavigationBarItem(
-            selected = currentIndex == 0,
+            selected = navController.currentDestination?.route == "manage_todo_screen",
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
@@ -29,8 +25,9 @@ fun BottomNavigationBar(
             },
             label = { Text("Home") },
             onClick = {
-                currentIndex = 0
-                onChangedIndex(0)
+                if (navController.currentDestination?.route != "manage_todo_screen") {
+                    navController.navigate("manage_todo_screen")
+                }
             }
         )
     }
