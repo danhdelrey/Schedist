@@ -6,17 +6,22 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brighttorchstudio.schedist.ui.features.add_todo.view_model.AddTodoViewModel
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun FABAddTodo(
     viewModel: AddTodoViewModel = hiltViewModel(),
+    scope: CoroutineScope,
+    snackbarHostState: SnackbarHostState,
 ) {
     FloatingActionButton(
         onClick = {
             viewModel.addTodo()
+            viewModel.showAddedTodoSnackbar(scope, snackbarHostState)
         },
         shape = CircleShape,
         containerColor = MaterialTheme.colorScheme.primary,

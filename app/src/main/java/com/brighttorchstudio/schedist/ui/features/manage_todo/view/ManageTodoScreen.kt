@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,7 +41,7 @@ fun ManageTodoScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-
+    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     var isSelectionMode by remember { mutableStateOf(false) }
@@ -106,7 +107,10 @@ fun ManageTodoScreen(
         },
         floatingActionButton = {
             if (!isSelectionMode) {
-                FABAddTodo()
+                FABAddTodo(
+                    scope = scope,
+                    snackbarHostState = snackbarHostState
+                )
             }
         }
     ) { innerPadding ->
