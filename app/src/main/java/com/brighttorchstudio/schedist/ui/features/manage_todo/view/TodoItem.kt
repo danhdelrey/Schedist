@@ -30,21 +30,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.todo.model.Todo
-import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TodoItem(
     todo: Todo,
-    viewModel: ManageTodoViewModel,
+    isSelectionMode: Boolean,
     isSelected: Boolean,
     onToggleSelection: () -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onLongClick: () -> Unit
 ) {
-    val isSelectionMode by viewModel.isSelectionMode.collectAsStateWithLifecycle()
     var showTodoDetails by remember { mutableStateOf(false) }
     var isDue = DateTimeHelper.isDue(todo.dateTime)
 
@@ -61,16 +59,10 @@ fun TodoItem(
                 shape = MaterialTheme.shapes.small
             )
             .combinedClickable(
-                onClick = {
-                    if (isSelectionMode) {
-                        onToggleSelection()
-                    } else {
-                        onClick()
-                    }
-                },
+                onClick = onClick,
                 onLongClick = {
                     if (!isSelectionMode) {
-                        viewModel.enterSelectionMode()
+                        onLongClick()
                         onToggleSelection()
                     }
                 }

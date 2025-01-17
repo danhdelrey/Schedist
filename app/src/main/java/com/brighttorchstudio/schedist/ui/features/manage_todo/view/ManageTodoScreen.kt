@@ -1,7 +1,10 @@
 package com.brighttorchstudio.schedist.ui.features.manage_todo.view
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
@@ -16,12 +19,15 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.core.navigation.BottomNavigationBar
+import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.features.add_todo.view.FABAddTodo
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.BottomActionBar
@@ -33,11 +39,12 @@ fun ManageTodoScreen(
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val isSelectionMode by viewModel.isSelectionMode.collectAsStateWithLifecycle()
-    val selectedTodos by viewModel.selectedTodos.collectAsStateWithLifecycle()
 
 
     val snackbarHostState = remember { SnackbarHostState() }
+
+    var isSelectionMode by remember { mutableStateOf(false) }
+    var selectedTodos by remember { mutableStateOf(emptySet<Todo>()) }
 
 
 
@@ -52,7 +59,8 @@ fun ManageTodoScreen(
                     actions = {
                         TextButton(
                             onClick = {
-                                viewModel.exitSelectionMode()
+                                isSelectionMode = false
+                                selectedTodos = emptySet()
                             }
                         ) {
                             Text("Quay lại")
@@ -62,10 +70,10 @@ fun ManageTodoScreen(
                             enabled = selectedTodos.size < ((uiState as? ManageTodoViewModel.UiState.Success)?.todoList?.size
                                 ?: 0),
                             onClick = {
-                                viewModel.selectAllTodos(
-                                    (uiState as? ManageTodoViewModel.UiState.Success)?.todoList
-                                        ?: emptyList()
-                                )
+                                selectedTodos =
+                                    (uiState as? ManageTodoViewModel.UiState.Success)?.todoList?.toSet()
+                                        ?: emptySet()
+
                             }
                         ) {
                             Text("Chọn tất cả")
@@ -109,7 +117,40 @@ fun ManageTodoScreen(
 
             is ManageTodoViewModel.UiState.Success -> {
                 val todoList = (uiState as ManageTodoViewModel.UiState.Success).todoList
-                TodoList(todoList, innerPadding)
+                Column(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    todoList.forEach { todo ->
+                        TodoItem(
+                            todo = todo,
+                            isSelected = todo in selectedTodos,
+                            onToggleSelection = {
+                                selectedTodos = if (todo in selectedTodos) {
+                                    selectedTodos - todo
+                                } else {
+                                    selectedTodos + todo
+                                }
+                            },
+                            onClick = {
+                                if (isSelectionMode) {
+                                    selectedTodos = if (todo in selectedTodos) {
+                                        selectedTodos - todo
+                                    } else {
+                                        selectedTodos + todo
+                                    }
+                                } else {
+                                    //update todo
+                                }
+                            },
+                            isSelectionMode = isSelectionMode,
+                            onLongClick = {
+                                isSelectionMode = true
+                            }
+                        )
+                    }
+                }
             }
 
             is ManageTodoViewModel.UiState.Error -> {

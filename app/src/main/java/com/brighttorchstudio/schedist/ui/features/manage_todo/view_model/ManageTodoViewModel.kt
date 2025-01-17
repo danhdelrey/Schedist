@@ -25,12 +25,6 @@ class ManageTodoViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _isSelectionMode = MutableStateFlow(false)
-    val isSelectionMode: StateFlow<Boolean> = _isSelectionMode.asStateFlow()
-
-    private val _selectedTodos = MutableStateFlow<Set<Todo>>(emptySet())
-    val selectedTodos: StateFlow<Set<Todo>> = _selectedTodos.asStateFlow()
-
 
     init {
         viewModelScope.launch {
@@ -38,27 +32,6 @@ class ManageTodoViewModel @Inject constructor(
                 _uiState.value = UiState.Success(todos)
             }
         }
-    }
-
-    fun enterSelectionMode() {
-        _isSelectionMode.value = true
-    }
-
-    fun exitSelectionMode() {
-        _isSelectionMode.value = false
-        _selectedTodos.value = emptySet()
-    }
-
-    fun toggleTodoSelection(todo: Todo) {
-        _selectedTodos.value = if (todo in _selectedTodos.value) {
-            _selectedTodos.value - todo
-        } else {
-            _selectedTodos.value + todo
-        }
-    }
-
-    fun selectAllTodos(allTodos: List<Todo>) {
-        _selectedTodos.value = allTodos.toSet()
     }
 
 
