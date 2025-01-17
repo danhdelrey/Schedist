@@ -1,10 +1,7 @@
 package com.brighttorchstudio.schedist.ui.features.manage_todo.view
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
@@ -114,21 +111,7 @@ fun ManageTodoScreen(
 
             is ManageTodoViewModel.UiState.Success -> {
                 val todoList = (uiState as ManageTodoViewModel.UiState.Success).todoList
-                Column(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    todoList.forEach { todo ->
-                        TodoItem(
-                            todo = todo,
-                            viewModel = viewModel,
-                            isSelected = todo in selectedTodos,
-                            onToggleSelection = { viewModel.toggleTodoSelection(todo) },
-                            onClick = {}
-                        )
-                    }
-                }
+                TodoList(todoList, innerPadding)
             }
 
             is ManageTodoViewModel.UiState.Error -> {
