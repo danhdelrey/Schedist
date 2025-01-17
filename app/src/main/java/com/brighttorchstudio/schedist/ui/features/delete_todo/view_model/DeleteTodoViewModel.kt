@@ -44,6 +44,9 @@ class DeleteTodoViewModel @Inject constructor(
             onActionPerformed = {
                 undoDeleteTodos()
             },
+            onSnackbarDismiss = {
+                todosDeleted.clear()
+            }
         )
     }
 }

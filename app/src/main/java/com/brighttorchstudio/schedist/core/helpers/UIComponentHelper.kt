@@ -14,6 +14,7 @@ class UIComponentHelper {
             message: String,
             actionLabel: String,
             onActionPerformed: () -> Unit,
+            onSnackbarDismiss: () -> Unit,
         ) {
             scope.launch {
                 snackbarHostState.currentSnackbarData?.dismiss()
@@ -29,7 +30,7 @@ class UIComponentHelper {
                     }
 
                     SnackbarResult.Dismissed -> {
-                        /* Handle snackbar dismissed */
+                        onSnackbarDismiss()
                     }
                 }
             }

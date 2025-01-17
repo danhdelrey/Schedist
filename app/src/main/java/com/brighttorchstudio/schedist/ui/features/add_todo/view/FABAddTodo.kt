@@ -8,6 +8,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brighttorchstudio.schedist.ui.features.add_todo.view_model.AddTodoViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -18,10 +22,20 @@ fun FABAddTodo(
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
 ) {
-    FloatingActionButton(
-        onClick = {
+    var showBottomSheet by remember { mutableStateOf(false) }
+    AddTodoBottomSheet(
+        showBottomSheet = showBottomSheet,
+        onDismiss = {
+            showBottomSheet = false
             viewModel.addTodo()
             viewModel.showAddedTodoSnackbar(scope, snackbarHostState)
+        }
+    )
+
+    FloatingActionButton(
+        onClick = {
+            showBottomSheet = true
+
         },
         shape = CircleShape,
         containerColor = MaterialTheme.colorScheme.primary,

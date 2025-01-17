@@ -60,6 +60,9 @@ class AddTodoViewModel @Inject constructor(
             onActionPerformed = {
                 undoAddTodo()
             },
+            onSnackbarDismiss = {
+                todoAdded = null
+            }
         )
     }
 }
