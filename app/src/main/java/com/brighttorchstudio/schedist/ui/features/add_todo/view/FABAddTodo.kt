@@ -27,7 +27,10 @@ fun FABAddTodo(
         showBottomSheet = showBottomSheet,
         onDismiss = {
             showBottomSheet = false
-            viewModel.addTodo()
+        },
+        onSubmit = {
+            viewModel.addTodo(it)
+            showBottomSheet = false
             viewModel.showAddedTodoSnackbar(scope, snackbarHostState)
         }
     )

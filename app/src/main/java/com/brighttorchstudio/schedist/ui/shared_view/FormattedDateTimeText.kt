@@ -24,6 +24,6 @@ fun FormattedTimeText(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         modifier = modifier
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 17.dp)
     )
 }
