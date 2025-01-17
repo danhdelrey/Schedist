@@ -39,7 +39,7 @@ class DeleteTodoViewModel @Inject constructor(
         UIComponentHelper.showSnackBar(
             scope = scope,
             snackbarHostState = snackBarHostState,
-            message = "Thêm nhiệm vụ mới thành công.",
+            message = "Xóa nhiệm vụ thành công.",
             actionLabel = "Hoàn tác",
             onActionPerformed = {
                 undoDeleteTodos()
