@@ -6,14 +6,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 
 @Composable
-fun BottomAppBarActions(
-    onActionPerformed: () -> Unit
+fun BottomActionBar(
 ) {
     BottomAppBar(
         actions = {
             TextButton(
                 onClick = {
-                    onActionPerformed()
+                    //onActionPerformed()
                 }
             ) {
                 Text("Delete")
