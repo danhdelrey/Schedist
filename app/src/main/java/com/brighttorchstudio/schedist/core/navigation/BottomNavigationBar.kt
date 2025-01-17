@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.shared_view
+package com.brighttorchstudio.schedist.core.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
