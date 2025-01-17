@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,19 +32,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
-import com.brighttorchstudio.schedist.core.common.ImportanceLevel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.brighttorchstudio.schedist.data.todo.model.Todo
+import com.brighttorchstudio.schedist.ui.features.update_todo.view_model.UpdateTodoViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.FormattedTimeText
 import com.brighttorchstudio.schedist.ui.shared_view.ImportanceDropdownButton
 import com.brighttorchstudio.schedist.ui.shared_view.StyledTextField
+import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateTodoBottomSheet(
+    viewModel: UpdateTodoViewModel = hiltViewModel(),
     todo: Todo,
+    onDismiss: () -> Unit,
+    onSubmit: () -> Unit,
     showBottomSheet: Boolean,
-    onSubmit: (Todo) -> Unit,
-    onDismiss: () -> Unit
+    scope: CoroutineScope,
+    snackbarHostState: SnackbarHostState,
 ) {
     var dateTime by remember { mutableStateOf(todo.dateTime) }
     var inputTodoTitle by remember { mutableStateOf(todo.title) }
@@ -62,9 +68,6 @@ fun UpdateTodoBottomSheet(
             sheetState = sheetState,
             onDismissRequest = {
                 onDismiss()
-                inputTodoTitle = ""
-                inputTodoDescription = ""
-                selectedImportance = ImportanceLevel.NORMAL
             },
             dragHandle = {},
         ) {
@@ -135,8 +138,8 @@ fun UpdateTodoBottomSheet(
                     )
                     IconButton(
                         onClick = {
-                            onDismiss()
-                            onSubmit(
+                            onSubmit()
+                            viewModel.updateTodo(
                                 Todo(
                                     id = todo.id,
                                     title = inputTodoTitle,
@@ -146,9 +149,11 @@ fun UpdateTodoBottomSheet(
                                     reminderEnabled = false
                                 )
                             )
-                            inputTodoTitle = ""
-                            inputTodoDescription = ""
-                            selectedImportance = ImportanceLevel.NORMAL
+                            viewModel.showUpdatedTodoSnackbar(
+                                scope = scope,
+                                snackbarHostState = snackbarHostState,
+                            )
+
                         },
                         enabled = (inputTodoTitle != todo.title || inputTodoDescription != todo.description || selectedImportance != todo.importanceLevel),
                         colors = IconButtonDefaults.iconButtonColors().copy(

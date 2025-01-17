@@ -122,7 +122,7 @@ fun TodoItem(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     )
-                    if (!todo.description.isNullOrEmpty()) {
+                    if (todo.description.isNotEmpty()) {
                         Text(
                             text = todo.description,
                             style = MaterialTheme.typography.bodyLarge.copy(

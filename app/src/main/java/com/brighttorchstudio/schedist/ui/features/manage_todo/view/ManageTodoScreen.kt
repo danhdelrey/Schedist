@@ -1,5 +1,6 @@
 package com.brighttorchstudio.schedist.ui.features.manage_todo.view
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -34,6 +35,7 @@ import com.brighttorchstudio.schedist.ui.features.delete_todo.view.DeleteTodoBut
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.BottomActionBar
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManageTodoScreen(
@@ -158,7 +160,7 @@ fun ManageTodoScreen(
                                         selectedTodos + todo
                                     }
                                 } else {
-                                    //update todo
+                                    //update
                                 }
                             },
                             isSelectionMode = isSelectionMode,
