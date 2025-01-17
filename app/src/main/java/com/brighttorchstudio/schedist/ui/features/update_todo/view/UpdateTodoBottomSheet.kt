@@ -140,7 +140,8 @@ fun UpdateTodoBottomSheet(
                         onClick = {
                             onSubmit()
                             viewModel.updateTodo(
-                                Todo(
+                                todo = todo,
+                                newTodo = Todo(
                                     id = todo.id,
                                     title = inputTodoTitle,
                                     description = inputTodoDescription,

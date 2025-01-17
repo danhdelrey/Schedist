@@ -16,22 +16,23 @@ import javax.inject.Inject
 class UpdateTodoViewModel @Inject constructor(
     private val localTodoRepository: TodoRepository
 ) : ViewModel() {
-    var todoUpdated: Todo? = null
+    var oldTodo: Todo? = null
 
     fun updateTodo(
-        todo: Todo
+        todo: Todo,
+        newTodo: Todo
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            localTodoRepository.updateTodo(todo)
-            todoUpdated = todo
+            localTodoRepository.updateTodo(newTodo)
+            oldTodo = todo
         }
     }
 
     fun undoUpdateTodo() {
-        if (todoUpdated != null) {
+        if (oldTodo != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                localTodoRepository.updateTodo(todoUpdated!!)
-                todoUpdated = null
+                localTodoRepository.updateTodo(oldTodo!!)
+                oldTodo = null
             }
         }
     }
@@ -49,7 +50,7 @@ class UpdateTodoViewModel @Inject constructor(
                 undoUpdateTodo()
             },
             onSnackbarDismiss = {
-                todoUpdated = null
+                oldTodo = null
             }
         )
     }
