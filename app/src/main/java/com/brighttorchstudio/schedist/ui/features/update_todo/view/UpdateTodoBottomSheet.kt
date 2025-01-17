@@ -1,11 +1,22 @@
 package com.brighttorchstudio.schedist.ui.features.update_todo.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -15,7 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -25,21 +36,20 @@ import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.shared_view.FormattedTimeText
 import com.brighttorchstudio.schedist.ui.shared_view.ImportanceDropdownButton
 import com.brighttorchstudio.schedist.ui.shared_view.StyledTextField
-import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateTodoBottomSheet(
-    todo: Todo? = null,
-    onUpdateTodo: (Todo) -> Unit
+    todo: Todo,
+    showBottomSheet: Boolean,
+    onSubmit: (Todo) -> Unit,
+    onDismiss: () -> Unit
 ) {
-    var showBottomSheet by remember { mutableStateOf(false) }
-    var inputTodoTitle by remember { mutableStateOf(todo?.title ?: "") }
-    var inputTodoDescription by remember { mutableStateOf(todo?.description ?: "") }
+    var dateTime by remember { mutableStateOf(todo.dateTime) }
+    var inputTodoTitle by remember { mutableStateOf(todo.title) }
+    var inputTodoDescription by remember { mutableStateOf(todo.description) }
     var selectedImportance by remember {
-        mutableStateOf(
-            todo?.importanceLevel ?: ImportanceLevel.NORMAL
-        )
+        mutableStateOf(todo.importanceLevel)
     }
 
 
@@ -51,23 +61,18 @@ fun UpdateTodoBottomSheet(
             modifier = Modifier.height(300.dp),
             sheetState = sheetState,
             onDismissRequest = {
-                showBottomSheet = false
-                // Reset các giá trị khi đóng BottomSheet
+                onDismiss()
                 inputTodoTitle = ""
                 inputTodoDescription = ""
                 selectedImportance = ImportanceLevel.NORMAL
             },
             dragHandle = {},
         ) {
-            // Sử dụng LaunchedEffect với key là Unit và derivedStateOf
+
             LaunchedEffect(Unit) {
-                snapshotFlow { showBottomSheet }
-                    .collect { isBottomSheetShown ->
-                        if (isBottomSheetShown) {
-                            focusRequester.requestFocus()
-                        }
-                    }
+                focusRequester.requestFocus()
             }
+
 
             Box(
                 modifier = Modifier
@@ -75,7 +80,7 @@ fun UpdateTodoBottomSheet(
                     .padding(top = 20.dp)
             ) {
                 Column {
-                    FormattedTimeText(LocalDateTime.now())
+                    FormattedTimeText(dateTime)
 
                     StyledTextField(
                         value = inputTodoTitle,
@@ -94,15 +99,67 @@ fun UpdateTodoBottomSheet(
                         maxLines = 3
                     )
 
-                    // Importance Dropdown
+
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceContainer
+                        )
+                ) {
+                    Spacer(
+                        modifier = Modifier
+                            .width(10.dp)
+                    )
                     ImportanceDropdownButton(
                         initialSelectedItem = selectedImportance,
                         onSelectedOption = { newImportance ->
                             selectedImportance = newImportance
                         }
                     )
+                    IconButton(
+                        onClick = {
 
-
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Date"
+                        )
+                    }
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                    IconButton(
+                        onClick = {
+                            onDismiss()
+                            onSubmit(
+                                Todo(
+                                    id = todo.id,
+                                    title = inputTodoTitle,
+                                    description = inputTodoDescription,
+                                    importanceLevel = selectedImportance,
+                                    dateTime = dateTime,
+                                    reminderEnabled = false
+                                )
+                            )
+                            inputTodoTitle = ""
+                            inputTodoDescription = ""
+                            selectedImportance = ImportanceLevel.NORMAL
+                        },
+                        enabled = (inputTodoTitle != todo.title || inputTodoDescription != todo.description || selectedImportance != todo.importanceLevel),
+                        colors = IconButtonDefaults.iconButtonColors().copy(
+                            contentColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "Add",
+                        )
+                    }
                 }
             }
         }

@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 data class Todo(
     val id: String,
     val title: String,
-    val description: String?,
+    val description: String,
     val importanceLevel: ImportanceLevel,
     val dateTime: LocalDateTime,
     val reminderEnabled: Boolean,
