@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.features.update.view
+package com.brighttorchstudio.schedist.ui.features.edit_todo.view
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -21,7 +21,7 @@ fun FABAddTodo(
 ) {
     var showUpdateTodoBottomSheet by remember { mutableStateOf(false) }
     if (showUpdateTodoBottomSheet) {
-        UpdateBottomSheet(
+        EditTodoBottomSheet(
             onDismiss = {
                 showUpdateTodoBottomSheet = false
             },

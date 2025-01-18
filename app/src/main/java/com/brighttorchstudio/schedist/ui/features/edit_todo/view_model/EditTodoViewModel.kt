@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.features.update.view_model
+package com.brighttorchstudio.schedist.ui.features.edit_todo.view_model
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UpdateViewModel @Inject constructor(
+class EditTodoViewModel @Inject constructor(
     private val localTodoRepository: TodoRepository
 ) : ViewModel() {
 

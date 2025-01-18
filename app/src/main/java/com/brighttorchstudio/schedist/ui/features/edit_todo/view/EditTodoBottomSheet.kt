@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.features.update.view
+package com.brighttorchstudio.schedist.ui.features.edit_todo.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -35,8 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 import com.brighttorchstudio.schedist.data.todo.model.Todo
+import com.brighttorchstudio.schedist.ui.features.edit_todo.view_model.EditTodoViewModel
 import com.brighttorchstudio.schedist.ui.features.schedule_todo.view.ScheduleTodoBottomSheet
-import com.brighttorchstudio.schedist.ui.features.update.view_model.UpdateViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.FormattedTimeText
 import com.brighttorchstudio.schedist.ui.shared_view.ImportanceDropdownButton
 import com.brighttorchstudio.schedist.ui.shared_view.StyledTextField
@@ -46,9 +46,9 @@ import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateBottomSheet(
+fun EditTodoBottomSheet(
     todo: Todo? = null,
-    viewModel: UpdateViewModel = hiltViewModel(),
+    viewModel: EditTodoViewModel = hiltViewModel(),
     onDismiss: () -> Unit,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,

@@ -31,9 +31,9 @@ import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.core.navigation.BottomNavigationBar
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.features.delete_todo.view.DeleteTodoButton
+import com.brighttorchstudio.schedist.ui.features.edit_todo.view.EditTodoBottomSheet
+import com.brighttorchstudio.schedist.ui.features.edit_todo.view.FABAddTodo
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
-import com.brighttorchstudio.schedist.ui.features.update.view.FABAddTodo
-import com.brighttorchstudio.schedist.ui.features.update.view.UpdateBottomSheet
 import com.brighttorchstudio.schedist.ui.shared_view.BottomActionBar
 
 @SuppressLint("UnrememberedMutableState")
@@ -53,7 +53,7 @@ fun ManageTodoScreen(
 
     var selectedTodo by remember { mutableStateOf<Todo?>(null) }
     if (selectedTodo != null) {
-        UpdateBottomSheet(
+        EditTodoBottomSheet(
             todo = selectedTodo,
             onDismiss = {
                 selectedTodo = null
