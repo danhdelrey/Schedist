@@ -186,6 +186,10 @@ fun UpdateBottomSheet(
                                     reminderEnabled = false
                                 )
                             )
+                            viewModel.showAddedTodoSnackbar(
+                                scope = scope,
+                                snackbarHostState = snackbarHostState,
+                            )
                         }
 
                     },
