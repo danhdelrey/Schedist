@@ -33,7 +33,7 @@ import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.features.add_todo.view.FABAddTodo
 import com.brighttorchstudio.schedist.ui.features.delete_todo.view.DeleteTodoButton
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
-import com.brighttorchstudio.schedist.ui.features.update_todo.view.UpdateTodoBottomSheet
+import com.brighttorchstudio.schedist.ui.features.update.view.UpdateBottomSheet
 import com.brighttorchstudio.schedist.ui.shared_view.BottomActionBar
 
 @SuppressLint("UnrememberedMutableState")
@@ -51,23 +51,13 @@ fun ManageTodoScreen(
     var isSelectionMode by remember { mutableStateOf(false) }
     var selectedTodos by remember { mutableStateOf(emptySet<Todo>()) }
 
-
-    var showUpdateTodoBottomSheet by remember { mutableStateOf(false) }
     var selectedTodo by remember { mutableStateOf<Todo?>(null) }
-
-
     if (selectedTodo != null) {
-        UpdateTodoBottomSheet(
-            todo = selectedTodo!!,
+        UpdateBottomSheet(
+            todo = selectedTodo,
             onDismiss = {
-                showUpdateTodoBottomSheet = false
                 selectedTodo = null
             },
-            onSubmit = {
-                showUpdateTodoBottomSheet = false
-                selectedTodo = null
-            },
-            showBottomSheet = showUpdateTodoBottomSheet,
             scope = scope,
             snackbarHostState = snackbarHostState
         )
@@ -183,7 +173,6 @@ fun ManageTodoScreen(
                                     }
                                 } else {
                                     selectedTodo = todo
-                                    showUpdateTodoBottomSheet = true
                                 }
                             },
                             isSelectionMode = isSelectionMode,

@@ -12,34 +12,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.brighttorchstudio.schedist.ui.features.add_todo.view_model.AddTodoViewModel
+import com.brighttorchstudio.schedist.ui.features.update.view.UpdateBottomSheet
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun FABAddTodo(
-    viewModel: AddTodoViewModel = hiltViewModel(),
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
 ) {
-    var showAddTodoBottomSheet by remember { mutableStateOf(false) }
-    if (showAddTodoBottomSheet) {
-        AddTodoBottomSheet(
+    var showUpdateTodoBottomSheet by remember { mutableStateOf(false) }
+    if (showUpdateTodoBottomSheet) {
+        UpdateBottomSheet(
             onDismiss = {
-                showAddTodoBottomSheet = false
+                showUpdateTodoBottomSheet = false
             },
-            onSubmit = {
-                viewModel.addTodo(it)
-                showAddTodoBottomSheet = false
-                viewModel.showAddedTodoSnackbar(scope, snackbarHostState)
-            }
+            scope = scope,
+            snackbarHostState = snackbarHostState
         )
     }
 
 
     FloatingActionButton(
         onClick = {
-            showAddTodoBottomSheet = true
+            showUpdateTodoBottomSheet = true
         },
         shape = CircleShape,
         containerColor = MaterialTheme.colorScheme.primary,
