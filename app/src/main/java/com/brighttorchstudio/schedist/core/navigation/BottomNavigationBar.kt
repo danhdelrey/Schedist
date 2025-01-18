@@ -1,14 +1,13 @@
 package com.brighttorchstudio.schedist.core.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
+import com.brighttorchstudio.schedist.R
 
 
 @Composable
@@ -20,8 +19,8 @@ fun BottomNavigationBar(
             selected = navController.currentDestination?.route == AppScreens.ManageTodoScreen.route,
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = "home"
+                    painter = painterResource(R.drawable.tasks),
+                    contentDescription = null
                 )
             },
             label = { Text("Home") },
@@ -38,8 +37,8 @@ fun BottomNavigationBar(
             selected = navController.currentDestination?.route == AppScreens.ManageNoteScreen.route,
             icon = {
                 Icon(
-                    imageVector = Icons.Default.LocationOn,
-                    contentDescription = "home"
+                    painter = painterResource(R.drawable.sticky_note),
+                    contentDescription = null
                 )
             },
             label = { Text("Note") },
