@@ -33,6 +33,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 import com.brighttorchstudio.schedist.data.todo.model.Todo
+import com.brighttorchstudio.schedist.ui.features.schedule_todo.view.ScheduleTodoBottomSheet
 import com.brighttorchstudio.schedist.ui.shared_view.FormattedTimeText
 import com.brighttorchstudio.schedist.ui.shared_view.ImportanceDropdownButton
 import com.brighttorchstudio.schedist.ui.shared_view.StyledTextField
@@ -52,6 +53,14 @@ fun AddTodoBottomSheet(
     var selectedImportance by remember {
         mutableStateOf(ImportanceLevel.NORMAL)
     }
+
+    var showScheduleBottomSheet by remember { mutableStateOf(false) }
+    ScheduleTodoBottomSheet(
+        showBottomSheet = showScheduleBottomSheet,
+        onDismiss = {
+            showScheduleBottomSheet = false
+        }
+    )
 
 
     val focusRequester = remember { FocusRequester() }
@@ -123,7 +132,7 @@ fun AddTodoBottomSheet(
                     )
                     IconButton(
                         onClick = {
-
+                            showScheduleBottomSheet = true
                         }
                     ) {
                         Icon(
