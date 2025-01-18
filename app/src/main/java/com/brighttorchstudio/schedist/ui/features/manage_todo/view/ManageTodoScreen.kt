@@ -30,9 +30,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.core.navigation.BottomNavigationBar
 import com.brighttorchstudio.schedist.data.todo.model.Todo
-import com.brighttorchstudio.schedist.ui.features.add_todo.view.FABAddTodo
 import com.brighttorchstudio.schedist.ui.features.delete_todo.view.DeleteTodoButton
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
+import com.brighttorchstudio.schedist.ui.features.update.view.FABAddTodo
 import com.brighttorchstudio.schedist.ui.features.update.view.UpdateBottomSheet
 import com.brighttorchstudio.schedist.ui.shared_view.BottomActionBar
 

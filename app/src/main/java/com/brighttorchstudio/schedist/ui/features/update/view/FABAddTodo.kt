@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.features.add_todo.view
+package com.brighttorchstudio.schedist.ui.features.update.view
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -12,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.brighttorchstudio.schedist.ui.features.update.view.UpdateBottomSheet
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
