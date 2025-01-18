@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,8 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.features.edit_todo.view_model.EditTodoViewModel
@@ -148,8 +147,8 @@ fun EditTodoBottomSheet(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = "Date"
+                        painter = painterResource(R.drawable.calendar_alt),
+                        contentDescription = null
                     )
                 }
                 Spacer(
@@ -168,7 +167,7 @@ fun EditTodoBottomSheet(
                                     description = inputTodoDescription,
                                     importanceLevel = selectedImportance,
                                     dateTime = dateTime,
-                                    reminderEnabled = false
+                                    reminderEnabled = reminderEnabled
                                 )
                             )
                             viewModel.showUpdatedTodoSnackbar(
@@ -183,7 +182,7 @@ fun EditTodoBottomSheet(
                                     description = inputTodoDescription,
                                     importanceLevel = selectedImportance,
                                     dateTime = dateTime,
-                                    reminderEnabled = false
+                                    reminderEnabled = reminderEnabled
                                 )
                             )
                             viewModel.showAddedTodoSnackbar(
@@ -199,8 +198,8 @@ fun EditTodoBottomSheet(
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "Add",
+                        painter = painterResource(R.drawable.check),
+                        contentDescription = null
                     )
                 }
             }

@@ -9,12 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,7 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import java.time.LocalDateTime
 
@@ -79,8 +77,8 @@ fun ScheduleBottomSheet(
                     onClick = onDismiss
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Date",
+                        painter = painterResource(R.drawable.chevron_left),
+                        contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -94,9 +92,9 @@ fun ScheduleBottomSheet(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "Date",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        painter = painterResource(R.drawable.check),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -124,9 +122,13 @@ fun ScheduleBottomSheet(
                         .padding(10.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = "Date",
+                        painter = painterResource(R.drawable.clock),
+                        contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .width(10.dp)
                     )
                     Text(
                         text = "Thời gian",
@@ -147,10 +149,17 @@ fun ScheduleBottomSheet(
                         modifier = Modifier.align(Alignment.CenterVertically)
 
                     )
+                    Spacer(
+                        modifier = Modifier
+                            .width(5.dp)
+                    )
                     Icon(
-                        imageVector = Icons.Default.PlayArrow,
-                        contentDescription = "Date",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        painter = painterResource(R.drawable.chevron_right),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier
+                            .size(15.dp)
+                            .align(Alignment.CenterVertically)
                     )
                 }
             }
@@ -173,9 +182,13 @@ fun ScheduleBottomSheet(
                         .padding(10.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = "Date",
+                        painter = painterResource(R.drawable.bell),
+                        contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .width(10.dp)
                     )
                     Text(
                         text = "Nhắc nhở",

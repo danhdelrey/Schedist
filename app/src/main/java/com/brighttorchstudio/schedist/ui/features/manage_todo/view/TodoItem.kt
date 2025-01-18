@@ -11,10 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
@@ -28,8 +24,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 
@@ -89,8 +87,8 @@ fun TodoItem(
                     )
                     Row {
                         Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = "Calendar",
+                            painter = painterResource(R.drawable.calendar_alt),
+                            contentDescription = null,
                             modifier = Modifier.size(20.dp),
                             tint = todo.importanceLevel.color
                         )
@@ -108,8 +106,10 @@ fun TodoItem(
                     onCheckedChange = { showTodoDetails = it }
                 ) {
                     Icon(
-                        imageVector = if (showTodoDetails) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                        contentDescription = "Expand details",
+                        painter = if (showTodoDetails) painterResource(R.drawable.chevron_up) else painterResource(
+                            R.drawable.chevron_down
+                        ),
+                        contentDescription = null,
                         tint = MaterialTheme.colorScheme.outlineVariant
                     )
                 }
