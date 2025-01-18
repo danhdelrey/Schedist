@@ -1,6 +1,7 @@
 package com.brighttorchstudio.schedist.ui.features.schedule_todo.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,11 +24,17 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import com.brighttorchstudio.schedist.ui.shared_view.DatePickerDocked
+import com.brighttorchstudio.schedist.ui.shared_view.TimePickerBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,6 +44,14 @@ fun ScheduleTodoBottomSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    var showTimePickerBottomSheet by remember { mutableStateOf(false) }
+    TimePickerBottomSheet(
+        showBottomSheet = showTimePickerBottomSheet,
+        onDismiss = {
+            showTimePickerBottomSheet = false
+        },
+        onConfirm = {}
+    )
     if (showBottomSheet) {
         ModalBottomSheet(
             modifier = Modifier.fillMaxSize(),
@@ -78,6 +93,12 @@ fun ScheduleTodoBottomSheet(
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 17.dp)
+                        .clip(MaterialTheme.shapes.small)
+                        .clickable(
+                            onClick = {
+                                showTimePickerBottomSheet = true
+                            }
+                        )
                 ) {
                     Row(
                         modifier = Modifier
