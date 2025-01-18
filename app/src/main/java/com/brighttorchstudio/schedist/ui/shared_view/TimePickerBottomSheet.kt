@@ -20,21 +20,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import java.util.Calendar
+import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerBottomSheet(
     showBottomSheet: Boolean,
+    initialTime: LocalTime,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: (LocalTime) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val currentTime = Calendar.getInstance()
 
     val timePickerState = rememberTimePickerState(
-        initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
-        initialMinute = currentTime.get(Calendar.MINUTE),
+        initialHour = initialTime.hour,
+        initialMinute = initialTime.minute,
         is24Hour = true,
     )
 
@@ -53,7 +53,7 @@ fun TimePickerBottomSheet(
                         .padding(top = 10.dp, start = 5.dp, end = 5.dp)
                 ) {
                     IconButton(
-                        onClick = {}
+                        onClick = onDismiss
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
@@ -65,7 +65,15 @@ fun TimePickerBottomSheet(
                         modifier = Modifier.weight(1f)
                     )
                     IconButton(
-                        onClick = {}
+                        onClick = {
+                            onConfirm(
+                                LocalTime.of(
+                                    timePickerState.hour,
+                                    timePickerState.minute
+                                )
+                            )
+                            onDismiss()
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Check,

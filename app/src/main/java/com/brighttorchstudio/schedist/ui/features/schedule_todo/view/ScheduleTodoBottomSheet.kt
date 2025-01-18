@@ -33,16 +33,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
+import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.ui.shared_view.DatePickerDocked
 import com.brighttorchstudio.schedist.ui.shared_view.TimePickerBottomSheet
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleTodoBottomSheet(
     showBottomSheet: Boolean,
     onDismiss: () -> Unit,
+    initialDateTime: LocalDateTime,
+    onSubmitted: (LocalDateTime) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var date by remember { mutableStateOf(initialDateTime.toLocalDate()) }
+    var time by remember { mutableStateOf(initialDateTime.toLocalTime()) }
 
     var showTimePickerBottomSheet by remember { mutableStateOf(false) }
     TimePickerBottomSheet(
@@ -50,8 +56,11 @@ fun ScheduleTodoBottomSheet(
         onDismiss = {
             showTimePickerBottomSheet = false
         },
-        onConfirm = {}
-    )
+        initialTime = time,
+    ) {
+        time = it
+    }
+
     if (showBottomSheet) {
         ModalBottomSheet(
             modifier = Modifier.fillMaxSize(),
@@ -68,7 +77,7 @@ fun ScheduleTodoBottomSheet(
                         .padding(top = 10.dp, start = 5.dp, end = 5.dp)
                 ) {
                     IconButton(
-                        onClick = {}
+                        onClick = onDismiss
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
@@ -80,7 +89,9 @@ fun ScheduleTodoBottomSheet(
                         modifier = Modifier.weight(1f)
                     )
                     IconButton(
-                        onClick = {}
+                        onClick = {
+                            onSubmitted(LocalDateTime.of(date, time))
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Check,
@@ -89,7 +100,11 @@ fun ScheduleTodoBottomSheet(
                         )
                     }
                 }
-                DatePickerDocked()
+                DatePickerDocked(
+                    initialDate = date
+                ) {
+                    date = it
+                }
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 17.dp)
@@ -125,7 +140,7 @@ fun ScheduleTodoBottomSheet(
                             modifier = Modifier.weight(1f)
                         )
                         Text(
-                            text = "9:00",
+                            text = DateTimeHelper.localTimeToFormattedString(time),
                             style = MaterialTheme.typography.labelLarge.copy(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             ),

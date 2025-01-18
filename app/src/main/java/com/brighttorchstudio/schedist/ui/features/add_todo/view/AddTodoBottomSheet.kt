@@ -59,6 +59,10 @@ fun AddTodoBottomSheet(
         showBottomSheet = showScheduleBottomSheet,
         onDismiss = {
             showScheduleBottomSheet = false
+        },
+        initialDateTime = dateTime,
+        onSubmitted = {
+            dateTime = it
         }
     )
 
