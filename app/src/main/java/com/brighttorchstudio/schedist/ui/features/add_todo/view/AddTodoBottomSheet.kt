@@ -43,7 +43,6 @@ import java.util.UUID
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTodoBottomSheet(
-    showBottomSheet: Boolean,
     onSubmit: (Todo) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -55,126 +54,125 @@ fun AddTodoBottomSheet(
     }
 
     var showScheduleBottomSheet by remember { mutableStateOf(false) }
-    ScheduleTodoBottomSheet(
-        showBottomSheet = showScheduleBottomSheet,
-        onDismiss = {
-            showScheduleBottomSheet = false
-        },
-        initialDateTime = dateTime,
-        onSubmitted = {
-            dateTime = it
-        }
-    )
+    if (showScheduleBottomSheet) {
+        ScheduleTodoBottomSheet(
+            onDismiss = {
+                showScheduleBottomSheet = false
+            },
+            initialDateTime = dateTime,
+            onSubmitted = {
+                dateTime = it
+            }
+        )
+    }
 
 
     val focusRequester = remember { FocusRequester() }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    if (showBottomSheet) {
-        ModalBottomSheet(
-            modifier = Modifier.height(300.dp),
-            sheetState = sheetState,
-            onDismissRequest = {
-                onDismiss()
-                inputTodoTitle = ""
-                inputTodoDescription = ""
-                selectedImportance = ImportanceLevel.NORMAL
-            },
-            dragHandle = {},
+    ModalBottomSheet(
+        modifier = Modifier.height(300.dp),
+        sheetState = sheetState,
+        onDismissRequest = {
+            onDismiss()
+            inputTodoTitle = ""
+            inputTodoDescription = ""
+            selectedImportance = ImportanceLevel.NORMAL
+        },
+        dragHandle = {},
+    ) {
+
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+            dateTime = LocalDateTime.now()
+        }
+
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 20.dp)
         ) {
+            Column {
+                FormattedTimeText(dateTime)
 
-            LaunchedEffect(Unit) {
-                focusRequester.requestFocus()
-                dateTime = LocalDateTime.now()
+                StyledTextField(
+                    value = inputTodoTitle,
+                    onValueChange = { inputTodoTitle = it },
+                    placeholderText = "Tên nhiệm vụ",
+                    textStyle = MaterialTheme.typography.titleLarge,
+                    maxLines = 2,
+                    modifier = Modifier.focusRequester(focusRequester)
+                )
+
+                StyledTextField(
+                    value = inputTodoDescription,
+                    onValueChange = { inputTodoDescription = it },
+                    placeholderText = "Nhập mô tả cho nhiệm vụ này...",
+                    textStyle = MaterialTheme.typography.bodyLarge,
+                    maxLines = 3
+                )
+
+
             }
-
-
-            Box(
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 20.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceContainer
+                    )
             ) {
-                Column {
-                    FormattedTimeText(dateTime)
-
-                    StyledTextField(
-                        value = inputTodoTitle,
-                        onValueChange = { inputTodoTitle = it },
-                        placeholderText = "Tên nhiệm vụ",
-                        textStyle = MaterialTheme.typography.titleLarge,
-                        maxLines = 2,
-                        modifier = Modifier.focusRequester(focusRequester)
-                    )
-
-                    StyledTextField(
-                        value = inputTodoDescription,
-                        onValueChange = { inputTodoDescription = it },
-                        placeholderText = "Nhập mô tả cho nhiệm vụ này...",
-                        textStyle = MaterialTheme.typography.bodyLarge,
-                        maxLines = 3
-                    )
-
-
-                }
-                Row(
+                Spacer(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceContainer
-                        )
+                        .width(10.dp)
+                )
+                ImportanceDropdownButton(
+                    initialSelectedItem = selectedImportance,
+                    onSelectedOption = { newImportance ->
+                        selectedImportance = newImportance
+                    }
+                )
+                IconButton(
+                    onClick = {
+                        showScheduleBottomSheet = true
+                    }
                 ) {
-                    Spacer(
-                        modifier = Modifier
-                            .width(10.dp)
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Date"
                     )
-                    ImportanceDropdownButton(
-                        initialSelectedItem = selectedImportance,
-                        onSelectedOption = { newImportance ->
-                            selectedImportance = newImportance
-                        }
-                    )
-                    IconButton(
-                        onClick = {
-                            showScheduleBottomSheet = true
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = "Date"
-                        )
-                    }
-                    Spacer(
-                        modifier = Modifier
-                            .weight(1f)
-                    )
-                    IconButton(
-                        onClick = {
-                            onDismiss()
-                            onSubmit(
-                                Todo(
-                                    id = UUID.randomUUID().toString(),
-                                    title = inputTodoTitle,
-                                    description = inputTodoDescription,
-                                    importanceLevel = selectedImportance,
-                                    dateTime = dateTime,
-                                    reminderEnabled = false
-                                )
+                }
+                Spacer(
+                    modifier = Modifier
+                        .weight(1f)
+                )
+                IconButton(
+                    onClick = {
+                        onDismiss()
+                        onSubmit(
+                            Todo(
+                                id = UUID.randomUUID().toString(),
+                                title = inputTodoTitle,
+                                description = inputTodoDescription,
+                                importanceLevel = selectedImportance,
+                                dateTime = dateTime,
+                                reminderEnabled = false
                             )
-                            inputTodoTitle = ""
-                            inputTodoDescription = ""
-                            selectedImportance = ImportanceLevel.NORMAL
-                        },
-                        enabled = inputTodoTitle.isNotBlank(),
-                        colors = IconButtonDefaults.iconButtonColors().copy(
-                            contentColor = MaterialTheme.colorScheme.primary
                         )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = "Add",
-                        )
-                    }
+                        inputTodoTitle = ""
+                        inputTodoDescription = ""
+                        selectedImportance = ImportanceLevel.NORMAL
+                    },
+                    enabled = inputTodoTitle.isNotBlank(),
+                    colors = IconButtonDefaults.iconButtonColors().copy(
+                        contentColor = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Add",
+                    )
                 }
             }
         }

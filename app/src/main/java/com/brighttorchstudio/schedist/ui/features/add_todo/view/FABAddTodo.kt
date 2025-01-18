@@ -22,23 +22,24 @@ fun FABAddTodo(
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
 ) {
-    var showBottomSheet by remember { mutableStateOf(false) }
-    AddTodoBottomSheet(
-        showBottomSheet = showBottomSheet,
-        onDismiss = {
-            showBottomSheet = false
-        },
-        onSubmit = {
-            viewModel.addTodo(it)
-            showBottomSheet = false
-            viewModel.showAddedTodoSnackbar(scope, snackbarHostState)
-        }
-    )
+    var showAddTodoBottomSheet by remember { mutableStateOf(false) }
+    if (showAddTodoBottomSheet) {
+        AddTodoBottomSheet(
+            onDismiss = {
+                showAddTodoBottomSheet = false
+            },
+            onSubmit = {
+                viewModel.addTodo(it)
+                showAddTodoBottomSheet = false
+                viewModel.showAddedTodoSnackbar(scope, snackbarHostState)
+            }
+        )
+    }
+
 
     FloatingActionButton(
         onClick = {
-            showBottomSheet = true
-
+            showAddTodoBottomSheet = true
         },
         shape = CircleShape,
         containerColor = MaterialTheme.colorScheme.primary,

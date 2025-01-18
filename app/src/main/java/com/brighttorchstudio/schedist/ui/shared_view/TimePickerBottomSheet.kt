@@ -25,7 +25,6 @@ import java.time.LocalTime
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerBottomSheet(
-    showBottomSheet: Boolean,
     initialTime: LocalTime,
     onDismiss: () -> Unit,
     onConfirm: (LocalTime) -> Unit
@@ -37,57 +36,54 @@ fun TimePickerBottomSheet(
         initialMinute = initialTime.minute,
         is24Hour = true,
     )
-
-    if (showBottomSheet) {
-        ModalBottomSheet(
-            modifier = Modifier.height(200.dp),
-            sheetState = sheetState,
-            onDismissRequest = {
-                onDismiss()
-            },
-            dragHandle = {},
-        ) {
-            Column {
-                Row(
-                    modifier = Modifier
-                        .padding(top = 10.dp, start = 5.dp, end = 5.dp)
+    ModalBottomSheet(
+        modifier = Modifier.height(200.dp),
+        sheetState = sheetState,
+        onDismissRequest = {
+            onDismiss()
+        },
+        dragHandle = {},
+    ) {
+        Column {
+            Row(
+                modifier = Modifier
+                    .padding(top = 10.dp, start = 5.dp, end = 5.dp)
+            ) {
+                IconButton(
+                    onClick = onDismiss
                 ) {
-                    IconButton(
-                        onClick = onDismiss
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Date",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                    Spacer(
-                        modifier = Modifier.weight(1f)
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Date",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    IconButton(
-                        onClick = {
-                            onConfirm(
-                                LocalTime.of(
-                                    timePickerState.hour,
-                                    timePickerState.minute
-                                )
-                            )
-                            onDismiss()
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = "Date",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
                 }
-                TimeInput(
-                    state = timePickerState,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
+                Spacer(
+                    modifier = Modifier.weight(1f)
                 )
+                IconButton(
+                    onClick = {
+                        onConfirm(
+                            LocalTime.of(
+                                timePickerState.hour,
+                                timePickerState.minute
+                            )
+                        )
+                        onDismiss()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Date",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
+            TimeInput(
+                state = timePickerState,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+            )
         }
     }
 }

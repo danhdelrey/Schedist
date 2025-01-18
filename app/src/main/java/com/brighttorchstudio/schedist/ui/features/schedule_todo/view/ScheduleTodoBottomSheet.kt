@@ -41,7 +41,6 @@ import java.time.LocalDateTime
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleTodoBottomSheet(
-    showBottomSheet: Boolean,
     onDismiss: () -> Unit,
     initialDateTime: LocalDateTime,
     onSubmitted: (LocalDateTime) -> Unit
@@ -51,155 +50,154 @@ fun ScheduleTodoBottomSheet(
     var time by remember { mutableStateOf(initialDateTime.toLocalTime()) }
 
     var showTimePickerBottomSheet by remember { mutableStateOf(false) }
-    TimePickerBottomSheet(
-        showBottomSheet = showTimePickerBottomSheet,
-        onDismiss = {
-            showTimePickerBottomSheet = false
-        },
-        initialTime = time,
-    ) {
-        time = it
+    if (showTimePickerBottomSheet) {
+        TimePickerBottomSheet(
+            onDismiss = {
+                showTimePickerBottomSheet = false
+            },
+            initialTime = time,
+        ) {
+            time = it
+        }
     }
 
-    if (showBottomSheet) {
-        ModalBottomSheet(
-            modifier = Modifier.fillMaxSize(),
-            sheetState = sheetState,
-            onDismissRequest = {
-                onDismiss()
-            },
-            dragHandle = {},
-        ) {
-            Column {
+    ModalBottomSheet(
+        modifier = Modifier.fillMaxSize(),
+        sheetState = sheetState,
+        onDismissRequest = {
+            onDismiss()
+        },
+        dragHandle = {},
+    ) {
+        Column {
 
+            Row(
+                modifier = Modifier
+                    .padding(top = 10.dp, start = 5.dp, end = 5.dp)
+            ) {
+                IconButton(
+                    onClick = onDismiss
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Date",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(
+                    onClick = {
+                        onSubmitted(LocalDateTime.of(date, time))
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Date",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            DatePickerDocked(
+                initialDate = date
+            ) {
+                date = it
+            }
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 17.dp)
+                    .clip(MaterialTheme.shapes.small)
+                    .clickable(
+                        onClick = {
+                            showTimePickerBottomSheet = true
+                        }
+                    )
+            ) {
                 Row(
                     modifier = Modifier
-                        .padding(top = 10.dp, start = 5.dp, end = 5.dp)
-                ) {
-                    IconButton(
-                        onClick = onDismiss
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Date",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                            shape = MaterialTheme.shapes.small
                         )
-                    }
+                        .padding(10.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Date",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "Thời gian",
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        ),
+                        modifier = Modifier.align(Alignment.CenterVertically)
+
+                    )
                     Spacer(
                         modifier = Modifier.weight(1f)
                     )
-                    IconButton(
-                        onClick = {
-                            onSubmitted(LocalDateTime.of(date, time))
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = "Date",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                    Text(
+                        text = DateTimeHelper.localTimeToFormattedString(time),
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        ),
+                        modifier = Modifier.align(Alignment.CenterVertically)
+
+                    )
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = "Date",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
-                DatePickerDocked(
-                    initialDate = date
-                ) {
-                    date = it
-                }
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 17.dp)
-                        .clip(MaterialTheme.shapes.small)
-                        .clickable(
-                            onClick = {
-                                showTimePickerBottomSheet = true
-                            }
-                        )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceContainerLowest,
-                                shape = MaterialTheme.shapes.small
-                            )
-                            .padding(10.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = "Date",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = "Thời gian",
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            ),
-                            modifier = Modifier.align(Alignment.CenterVertically)
-
-                        )
-                        Spacer(
-                            modifier = Modifier.weight(1f)
-                        )
-                        Text(
-                            text = DateTimeHelper.localTimeToFormattedString(time),
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            ),
-                            modifier = Modifier.align(Alignment.CenterVertically)
-
-                        )
-                        Icon(
-                            imageVector = Icons.Default.PlayArrow,
-                            contentDescription = "Date",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-
-                Spacer(
-                    modifier = Modifier
-                        .height(9.dp)
-                )
-
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 17.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceContainerLowest,
-                                shape = MaterialTheme.shapes.small
-                            )
-                            .padding(10.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Notifications,
-                            contentDescription = "Date",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = "Nhắc nhở",
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            ),
-                            modifier = Modifier.align(Alignment.CenterVertically)
-
-                        )
-                        Spacer(
-                            modifier = Modifier.weight(1f)
-                        )
-                        Switch(
-                            checked = true,
-                            onCheckedChange = {},
-                            modifier = Modifier
-                                .height(24.dp)
-                                .scale(0.9f)
-                        )
-                    }
-                }
-
-
             }
+
+            Spacer(
+                modifier = Modifier
+                    .height(9.dp)
+            )
+
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 17.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                            shape = MaterialTheme.shapes.small
+                        )
+                        .padding(10.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Notifications,
+                        contentDescription = "Date",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "Nhắc nhở",
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        ),
+                        modifier = Modifier.align(Alignment.CenterVertically)
+
+                    )
+                    Spacer(
+                        modifier = Modifier.weight(1f)
+                    )
+                    Switch(
+                        checked = true,
+                        onCheckedChange = {},
+                        modifier = Modifier
+                            .height(24.dp)
+                            .scale(0.9f)
+                    )
+                }
+            }
+
+
         }
     }
 }
