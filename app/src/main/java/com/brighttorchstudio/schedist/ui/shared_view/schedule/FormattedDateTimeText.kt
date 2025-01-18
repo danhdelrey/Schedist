@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.shared_view
+package com.brighttorchstudio.schedist.ui.shared_view.schedule
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme

@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.features.schedule_todo.view
+package com.brighttorchstudio.schedist.ui.shared_view.schedule
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,8 +34,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
-import com.brighttorchstudio.schedist.ui.shared_view.DatePickerDocked
-import com.brighttorchstudio.schedist.ui.shared_view.TimePickerBottomSheet
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)

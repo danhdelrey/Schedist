@@ -36,10 +36,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.features.edit_todo.view_model.EditTodoViewModel
-import com.brighttorchstudio.schedist.ui.features.schedule_todo.view.ScheduleBottomSheet
-import com.brighttorchstudio.schedist.ui.shared_view.FormattedTimeText
 import com.brighttorchstudio.schedist.ui.shared_view.ImportanceDropdownButton
 import com.brighttorchstudio.schedist.ui.shared_view.StyledTextField
+import com.brighttorchstudio.schedist.ui.shared_view.schedule.FormattedTimeText
+import com.brighttorchstudio.schedist.ui.shared_view.schedule.ScheduleBottomSheet
 import kotlinx.coroutines.CoroutineScope
 import java.time.LocalDateTime
 import java.util.UUID
