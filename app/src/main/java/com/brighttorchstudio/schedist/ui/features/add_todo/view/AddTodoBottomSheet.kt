@@ -52,6 +52,7 @@ fun AddTodoBottomSheet(
     var selectedImportance by remember {
         mutableStateOf(ImportanceLevel.NORMAL)
     }
+    var reminderEnabled by remember { mutableStateOf(true) }
 
     var showScheduleBottomSheet by remember { mutableStateOf(false) }
     if (showScheduleBottomSheet) {
@@ -60,9 +61,11 @@ fun AddTodoBottomSheet(
                 showScheduleBottomSheet = false
             },
             initialDateTime = dateTime,
-            onSubmitted = {
-                dateTime = it
-            }
+            onSubmitted = { selectedDateTime, selectedReminderEnabled ->
+                dateTime = selectedDateTime
+                reminderEnabled = selectedReminderEnabled
+            },
+            reminderEnabled = reminderEnabled
         )
     }
 

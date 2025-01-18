@@ -43,11 +43,13 @@ import java.time.LocalDateTime
 fun ScheduleTodoBottomSheet(
     onDismiss: () -> Unit,
     initialDateTime: LocalDateTime,
-    onSubmitted: (LocalDateTime) -> Unit
+    reminderEnabled: Boolean,
+    onSubmitted: (LocalDateTime, Boolean) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var date by remember { mutableStateOf(initialDateTime.toLocalDate()) }
     var time by remember { mutableStateOf(initialDateTime.toLocalTime()) }
+    var currentReminderEnabled by remember { mutableStateOf(reminderEnabled) }
 
     var showTimePickerBottomSheet by remember { mutableStateOf(false) }
     if (showTimePickerBottomSheet) {
@@ -89,7 +91,8 @@ fun ScheduleTodoBottomSheet(
                 )
                 IconButton(
                     onClick = {
-                        onSubmitted(LocalDateTime.of(date, time))
+                        onSubmitted(LocalDateTime.of(date, time), currentReminderEnabled)
+                        onDismiss()
                     }
                 ) {
                     Icon(
@@ -188,8 +191,10 @@ fun ScheduleTodoBottomSheet(
                         modifier = Modifier.weight(1f)
                     )
                     Switch(
-                        checked = true,
-                        onCheckedChange = {},
+                        checked = currentReminderEnabled,
+                        onCheckedChange = {
+                            currentReminderEnabled = it
+                        },
                         modifier = Modifier
                             .height(24.dp)
                             .scale(0.9f)
