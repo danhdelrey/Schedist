@@ -15,7 +15,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.todo.model.Todo
+import com.brighttorchstudio.schedist.ui.features.complete_todo.view.CompleteTodoButton
+import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -39,7 +41,9 @@ fun TodoItem(
     isSelected: Boolean,
     onToggleSelection: () -> Unit,
     onClick: () -> Unit,
-    onLongClick: () -> Unit
+    onLongClick: () -> Unit,
+    scope: CoroutineScope,
+    snackBarHostState: SnackbarHostState,
 ) {
     var showTodoDetails by remember { mutableStateOf(false) }
     var isDue = DateTimeHelper.isDue(todo.dateTime)
@@ -73,7 +77,11 @@ fun TodoItem(
                 if (isSelectionMode) {
                     Checkbox(checked = isSelected, onCheckedChange = { onToggleSelection() })
                 } else {
-                    RadioButton(selected = false, onClick = { /*TODO*/ })
+                    CompleteTodoButton(
+                        todo = todo,
+                        scope = scope,
+                        snackBarHostState = snackBarHostState
+                    )
                 }
 
 

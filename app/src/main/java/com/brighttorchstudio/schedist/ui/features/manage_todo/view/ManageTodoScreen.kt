@@ -194,7 +194,9 @@ fun ManageTodoScreen(
                                 isSelectionMode = isSelectionMode,
                                 onLongClick = {
                                     isSelectionMode = true
-                                }
+                                },
+                                scope = scope,
+                                snackBarHostState = snackbarHostState
                             )
                         }
                     }
