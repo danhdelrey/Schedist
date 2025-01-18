@@ -4,7 +4,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 class DateTimeHelper {
@@ -18,12 +18,12 @@ class DateTimeHelper {
             return dateTime.isBefore(LocalDateTime.now())
         }
 
-        fun localDateToMillis(localDate: LocalDate, zoneId: ZoneId = ZoneId.systemDefault()): Long {
-            return localDate.atStartOfDay(zoneId).toInstant().toEpochMilli()
+        fun localDateToMillis(localDate: LocalDate): Long {
+            return localDate.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
         }
 
-        fun millisToLocalDate(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
-            return Instant.ofEpochMilli(millis).atZone(zoneId).toLocalDate()
+        fun millisToLocalDate(millis: Long): LocalDate {
+            return Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate()
         }
 
         fun localTimeToFormattedString(localTime: LocalTime): String {
