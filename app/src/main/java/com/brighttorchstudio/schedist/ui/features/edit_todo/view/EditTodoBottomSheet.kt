@@ -36,7 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.features.edit_todo.view_model.EditTodoViewModel
-import com.brighttorchstudio.schedist.ui.features.schedule_todo.view.ScheduleTodoBottomSheet
+import com.brighttorchstudio.schedist.ui.features.schedule_todo.view.ScheduleBottomSheet
 import com.brighttorchstudio.schedist.ui.shared_view.FormattedTimeText
 import com.brighttorchstudio.schedist.ui.shared_view.ImportanceDropdownButton
 import com.brighttorchstudio.schedist.ui.shared_view.StyledTextField
@@ -63,7 +63,7 @@ fun EditTodoBottomSheet(
 
     var showScheduleBottomSheet by remember { mutableStateOf(false) }
     if (showScheduleBottomSheet) {
-        ScheduleTodoBottomSheet(
+        ScheduleBottomSheet(
             onDismiss = {
                 showScheduleBottomSheet = false
             },

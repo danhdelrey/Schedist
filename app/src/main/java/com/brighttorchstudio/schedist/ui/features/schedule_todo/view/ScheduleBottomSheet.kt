@@ -40,7 +40,7 @@ import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScheduleTodoBottomSheet(
+fun ScheduleBottomSheet(
     onDismiss: () -> Unit,
     initialDateTime: LocalDateTime,
     reminderEnabled: Boolean,
