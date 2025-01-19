@@ -1,6 +1,5 @@
 package com.brighttorchstudio.schedist.ui.features.manage_todo.view
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,16 +17,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -37,7 +31,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
 import com.brighttorchstudio.schedist.core.navigation.BottomNavigationBar
-import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.features.delete_todo.view.DeleteTodoButton
 import com.brighttorchstudio.schedist.ui.features.edit_todo.view.EditTodoBottomSheet
 import com.brighttorchstudio.schedist.ui.features.edit_todo.view.FABAddTodo
@@ -51,24 +44,16 @@ fun ManageTodoScreen(
     viewModel: ManageTodoViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
-    //trạng thái danh sách todo được lấy từ viewmodel
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val isSelectionMode by viewModel.isSelectionMode.collectAsStateWithLifecycle()
+    val selectedTodos by viewModel.selectedTodos.collectAsStateWithLifecycle()
+    val selectedTodo by viewModel.selectedTodo.collectAsStateWithLifecycle()
 
-    //cần thiết cho hiển thị snackbar
-    val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    //lưu trạng thái selection và các todo được chọn trong trạng thái này
-    var isSelectionMode by remember { mutableStateOf(false) }
-    var selectedTodos by remember { mutableStateOf(emptySet<Todo>()) }
-
-    //lưu todo được chọn trong trạng thái bình thường, dùng cho việc sửa todo
-    var selectedTodo by remember { mutableStateOf<Todo?>(null) }
     if (selectedTodo != null) {
         EditTodoBottomSheet(
             todo = selectedTodo,
             onDismiss = {
-                selectedTodo = null
+                viewModel.unSelectTodo()
             },
             scope = scope,
             snackbarHostState = snackbarHostState
@@ -89,8 +74,7 @@ fun ManageTodoScreen(
                     actions = {
                         TextButton(
                             onClick = {
-                                isSelectionMode = false
-                                selectedTodos = emptySet()
+                                viewModel.exitSelectionMode()
                             }
                         ) {
                             Text("Quay lại")
@@ -100,9 +84,10 @@ fun ManageTodoScreen(
                             enabled = selectedTodos.size < ((uiState as? ManageTodoViewModel.UiState.Success)?.todoList?.size
                                 ?: 0),
                             onClick = {
-                                selectedTodos =
+                                viewModel.selectAllTodosInSelectionMode(
                                     (uiState as? ManageTodoViewModel.UiState.Success)?.todoList?.toSet()
                                         ?: emptySet()
+                                )
 
                             }
                         ) {
@@ -117,9 +102,9 @@ fun ManageTodoScreen(
                         Text("Danh sách nhiệm vụ")
                     },
                     navigationIcon = {
-                        IconButton(onClick = { 
+                        IconButton(onClick = {
                             //mở side drawer
-                         }
+                        }
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Menu,
@@ -142,8 +127,7 @@ fun ManageTodoScreen(
                             snackBarHostState = snackbarHostState,
                             todoList = selectedTodos.toList(),
                             onDeletedTodo = {
-                                isSelectionMode = false
-                                selectedTodos = emptySet()
+                                viewModel.exitSelectionMode()
                             }
                         )
                     }
@@ -188,28 +172,19 @@ fun ManageTodoScreen(
                                 todo = todo,
                                 isSelected = todo in selectedTodos,
                                 onToggleSelection = {
-                                    selectedTodos = if (todo in selectedTodos) {
-                                        selectedTodos - todo
-                                    } else {
-                                        selectedTodos + todo
-                                    }
+                                    viewModel.toggleSelectionInSelectionMode(todo)
                                 },
                                 onClick = {
                                     if (isSelectionMode) {
-                                        //phải tạo một Set mới dựa trên Set cũ để jetpack compose nhận biết được thay đổi mà recompose lại giao diện
-                                        selectedTodos = if (todo in selectedTodos) {
-                                            selectedTodos - todo
-                                        } else {
-                                            selectedTodos + todo
-                                        }
+                                        viewModel.toggleSelectionInSelectionMode(todo)
                                     } else {
-                                        selectedTodo = todo
+                                        viewModel.selectTodo(todo)
                                     }
                                 },
                                 isSelectionMode = isSelectionMode,
                                 onLongClick = {
                                     //khi ấn và giữ vào một todo thì sẽ bật chế độ selection
-                                    isSelectionMode = true
+                                    viewModel.enterSelectionMode()
                                 },
                                 scope = scope,
                                 snackBarHostState = snackbarHostState

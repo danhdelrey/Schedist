@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.collections.minus
+import kotlin.collections.plus
 
 @HiltViewModel
 class ManageTodoViewModel @Inject constructor(
@@ -25,6 +27,17 @@ class ManageTodoViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
+
+    //lưu trạng thái selection và các todo được chọn trong trạng thái này
+    private val _isSelectionMode = MutableStateFlow(false)
+    val isSelectionMode: StateFlow<Boolean> = _isSelectionMode.asStateFlow()
+    private val _selectedTodos = MutableStateFlow(emptySet<Todo>())
+    val selectedTodos: StateFlow<Set<Todo>> = _selectedTodos.asStateFlow()
+
+    //lưu todo được chọn trong trạng thái bình thường, dùng cho việc sửa todo
+    private val _selectedTodo = MutableStateFlow<Todo?>(null)
+    val selectedTodo: StateFlow<Todo?> = _selectedTodo.asStateFlow()
+
     //Khi vừa được khởi tạo thì tiến hành lấy danh sách todo từ local database
     init {
         viewModelScope.launch {
@@ -32,6 +45,36 @@ class ManageTodoViewModel @Inject constructor(
                 _uiState.value = UiState.Success(todos)
             }
         }
+    }
+
+    fun toggleSelectionInSelectionMode(todo: Todo) {
+        _selectedTodos.value = if (todo in _selectedTodos.value) {
+            _selectedTodos.value - todo
+        } else {
+            _selectedTodos.value + todo
+        }
+    }
+
+    fun selectAllTodosInSelectionMode(allTodos: Set<Todo>) {
+        _selectedTodos.value = allTodos
+    }
+
+    fun enterSelectionMode() {
+        _isSelectionMode.value = true
+    }
+
+    fun exitSelectionMode() {
+        _isSelectionMode.value = false
+        _selectedTodos.value = emptySet()
+    }
+
+    //Chọn một todo để sửa
+    fun selectTodo(todo: Todo) {
+        _selectedTodo.value = todo
+    }
+
+    fun unSelectTodo() {
+        _selectedTodo.value = null
     }
 
 
