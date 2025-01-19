@@ -26,12 +26,17 @@ import androidx.compose.ui.unit.dp
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 
 
+//Hiển thị một nút có thể hiện menu khi nhấn vào để chọn mức độ quan trọng
 @Composable
 fun ImportanceDropdownButton(
-    initialSelectedItem: ImportanceLevel = ImportanceLevel.NORMAL,
-    onSelectedOption: (ImportanceLevel) -> Unit,
+    initialSelectedItem: ImportanceLevel = ImportanceLevel.NORMAL, //giá trị ban đầu
+    onSelectedOption: (ImportanceLevel) -> Unit, //truyền giá trị được chọn ra bên ngoài
 ) {
+
+    //lưu trạng thái ẩn/hiện menu
     var expanded by remember { mutableStateOf(false) }
+
+    //lưu item được chọn trong menu đó
     var selectedItem by remember { mutableStateOf(initialSelectedItem) }
 
     Box(

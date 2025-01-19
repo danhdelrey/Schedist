@@ -3,6 +3,7 @@ package com.brighttorchstudio.schedist.data.todo.repository
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import kotlinx.coroutines.flow.Flow
 
+//Định nghĩa các phương thức mà một TodoRepository cần có
 interface TodoRepository {
     fun getTodos(): Flow<List<Todo>>
     suspend fun addTodo(todo: Todo)

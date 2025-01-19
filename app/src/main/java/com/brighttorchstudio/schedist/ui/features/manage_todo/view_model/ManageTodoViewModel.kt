@@ -25,7 +25,7 @@ class ManageTodoViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-
+    //Khi vừa được khởi tạo thì tiến hành lấy danh sách todo từ local database
     init {
         viewModelScope.launch {
             localTodoRepository.getTodos().collect { todos ->

@@ -4,6 +4,7 @@ import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 import com.brighttorchstudio.schedist.data.local_database.todo.TodoEntity
 import java.time.LocalDateTime
 
+//Mặc dù thuộc tính giống TodoEntity nhưng TodoEntity (entity) chỉ được dùng trong database, còn để sử dụng trong giao diện thì phải dùng Todo (model)
 data class Todo(
     val id: String,
     val title: String,
@@ -13,6 +14,7 @@ data class Todo(
     val reminderEnabled: Boolean,
 ) {
 
+    //phương thức tạo ra TodoEntity từ một Todo
     fun toEntity(): TodoEntity {
         return TodoEntity(
             id = id,
@@ -24,7 +26,9 @@ data class Todo(
         )
     }
 
+    //Các phương thức tĩnh
     companion object {
+        //Tạo ra một Todo từ một TodoEntity
         fun fromEntity(todoEntity: TodoEntity): Todo {
             return Todo(
                 id = todoEntity.id,

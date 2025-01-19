@@ -44,21 +44,25 @@ import com.brighttorchstudio.schedist.ui.features.edit_todo.view.FABAddTodo
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.BottomActionBar
 
-@SuppressLint("UnrememberedMutableState")
+//Screen quản lý danh sách todo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManageTodoScreen(
     viewModel: ManageTodoViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
+    //trạng thái danh sách todo được lấy từ viewmodel
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    //cần thiết cho hiển thị snackbar
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    //lưu trạng thái selection và các todo được chọn trong trạng thái này
     var isSelectionMode by remember { mutableStateOf(false) }
     var selectedTodos by remember { mutableStateOf(emptySet<Todo>()) }
 
+    //lưu todo được chọn trong trạng thái bình thường, dùng cho việc sửa todo
     var selectedTodo by remember { mutableStateOf<Todo?>(null) }
     if (selectedTodo != null) {
         EditTodoBottomSheet(
@@ -72,11 +76,13 @@ fun ManageTodoScreen(
     }
 
 
+    //Giao diện chính
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
         topBar = {
+            //nếu trạng thái hiện tại là selection thì thay đổi topappbar thành "quay lại......chọn tất cả"
             if (isSelectionMode) {
                 TopAppBar(
                     title = { },
@@ -105,12 +111,16 @@ fun ManageTodoScreen(
                     }
                 )
             } else {
+                //topappbar ở trạng thái bình thường
                 TopAppBar(
                     title = {
                         Text("Danh sách nhiệm vụ")
                     },
                     navigationIcon = {
-                        IconButton(onClick = { /* do something */ }) {
+                        IconButton(onClick = { 
+                            //mở side drawer
+                         }
+                        ) {
                             Icon(
                                 imageVector = Icons.Filled.Menu,
                                 contentDescription = "drawer"
@@ -122,7 +132,9 @@ fun ManageTodoScreen(
             }
         },
         bottomBar = {
+            //khi ở trạng thái selection thì bottomappbar sẽ chứa các hành động
             if (isSelectionMode) {
+                //tự custom BottomActionBar, hiện tại chỉ có 1 action là xóa
                 BottomActionBar(
                     action1 = {
                         DeleteTodoButton(
@@ -137,10 +149,12 @@ fun ManageTodoScreen(
                     }
                 )
             } else {
+                //ở trạng thái bình thường thì nó sẽ chứa các điều hướng
                 BottomNavigationBar(navController)
             }
         },
         floatingActionButton = {
+            //ẩn FAB nếu đang trong trạng thái selection
             if (!isSelectionMode) {
                 FABAddTodo(
                     scope = scope,
@@ -182,6 +196,7 @@ fun ManageTodoScreen(
                                 },
                                 onClick = {
                                     if (isSelectionMode) {
+                                        //phải tạo một Set mới dựa trên Set cũ để jetpack compose nhận biết được thay đổi mà recompose lại giao diện
                                         selectedTodos = if (todo in selectedTodos) {
                                             selectedTodos - todo
                                         } else {
@@ -193,6 +208,7 @@ fun ManageTodoScreen(
                                 },
                                 isSelectionMode = isSelectionMode,
                                 onLongClick = {
+                                    //khi ấn và giữ vào một todo thì sẽ bật chế độ selection
                                     isSelectionMode = true
                                 },
                                 scope = scope,

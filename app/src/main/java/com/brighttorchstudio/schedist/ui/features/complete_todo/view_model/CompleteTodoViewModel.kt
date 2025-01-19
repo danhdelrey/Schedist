@@ -17,7 +17,7 @@ class CompleteTodoViewModel @Inject constructor(
     private val localTodoRepository: TodoRepository
 ) : ViewModel() {
 
-    var todoCompleted: Todo? = null
+    var todoCompleted: Todo? = null //todo mới vừa hoàn thành xong, được dùng cho việc hoàn tác
 
     fun completeTodo(
         todo: Todo

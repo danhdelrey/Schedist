@@ -33,19 +33,23 @@ import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.features.complete_todo.view.CompleteTodoButton
 import kotlinx.coroutines.CoroutineScope
 
+//Hiển thị một todo
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TodoItem(
-    todo: Todo,
-    isSelectionMode: Boolean,
-    isSelected: Boolean,
-    onToggleSelection: () -> Unit,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
-    scope: CoroutineScope,
-    snackBarHostState: SnackbarHostState,
+    todo: Todo, //todo cần hiển thị
+    isSelectionMode: Boolean, //có đang trong trạng thái selection hay không
+    isSelected: Boolean, //có được chọn trong trạng thái selection hay không
+    onToggleSelection: () -> Unit, //thực hiện khi chọn hoặc bỏ chọn todo trong trajgn thái selection
+    onClick: () -> Unit, //thực hiện khi nhấn vào todo
+    onLongClick: () -> Unit, //thực hiện khi nhấn và giữ vào todo
+    scope: CoroutineScope, //cần cho snackbar hiển thị
+    snackBarHostState: SnackbarHostState, //cần cho snackbar hiển thị
 ) {
+    //lưu trạng thái hiển thị chi tiết todo
     var showTodoDetails by remember { mutableStateOf(false) }
+
+    //kiểm tra xem todo đã tới hạn hay chưa
     var isDue = DateTimeHelper.isDue(todo.dateTime)
 
     Box(
@@ -73,7 +77,8 @@ fun TodoItem(
     ) {
         Column(modifier = Modifier.padding(vertical = 10.dp)) {
             Row(modifier = Modifier.fillMaxWidth()) {
-
+                
+                //khi ở trạng thái selection thì hiển thị Checkbox, còn không thì hiển thị CompleteTodoButton (radio button)
                 if (isSelectionMode) {
                     Checkbox(checked = isSelected, onCheckedChange = { onToggleSelection() })
                 } else {
@@ -122,7 +127,11 @@ fun TodoItem(
                     )
                 }
             }
+
+            //Animation lên xuống mượt mà khi ẩn/hiện chi tiết todo
             AnimatedVisibility(visible = showTodoDetails) {
+
+                //Hiển thị chi tiết todo
                 Column(modifier = Modifier.padding(horizontal = 14.dp)) {
                     Text(
                         text = todo.title,

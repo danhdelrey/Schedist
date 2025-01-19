@@ -34,19 +34,21 @@ import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import java.time.LocalDateTime
 
+//Bottomsheet chứa date picker, time picker và lựa chọn nhắc nhở
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleBottomSheet(
-    onDismiss: () -> Unit,
-    initialDateTime: LocalDateTime,
-    reminderEnabled: Boolean,
-    onSubmitted: (LocalDateTime, Boolean) -> Unit
+    onDismiss: () -> Unit, //thực hiện khi Bottomsheet được ẩn
+    initialDateTime: LocalDateTime, //datetime ban đầu
+    reminderEnabled: Boolean, //lựa chọn nhắc nhở ban đầu
+    onSubmitted: (LocalDateTime, Boolean) -> Unit //truyền datetime đã được chọn và lựa chọn nhắc nhở ra bên ngoài
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var date by remember { mutableStateOf(initialDateTime.toLocalDate()) }
     var time by remember { mutableStateOf(initialDateTime.toLocalTime()) }
     var currentReminderEnabled by remember { mutableStateOf(reminderEnabled) }
 
+    //lưu trạng thái ẩn/hiện time picker Bottomsheet
     var showTimePickerBottomSheet by remember { mutableStateOf(false) }
     if (showTimePickerBottomSheet) {
         TimePickerBottomSheet(
@@ -69,6 +71,7 @@ fun ScheduleBottomSheet(
     ) {
         Column {
 
+            //Hiển thị 2 icon action bên trên
             Row(
                 modifier = Modifier
                     .padding(top = 10.dp, start = 5.dp, end = 5.dp)
@@ -98,11 +101,15 @@ fun ScheduleBottomSheet(
                     )
                 }
             }
+
+            //hiển thị date picker 
             DatePickerDocked(
                 initialDate = date
             ) {
                 date = it
             }
+
+            //Hiển thị phần chọn giờ
             Box(
                 modifier = Modifier
                     .padding(horizontal = 17.dp)
@@ -169,6 +176,7 @@ fun ScheduleBottomSheet(
                     .height(9.dp)
             )
 
+            //Hiển thị phần tùy chọ nhắn nhở
             Box(
                 modifier = Modifier
                     .padding(horizontal = 17.dp)

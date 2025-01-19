@@ -15,7 +15,7 @@ import androidx.compose.ui.text.TextStyle
 @Composable
 fun StyledTextField(
     value: String,
-    onValueChange: (String) -> Unit,
+    onValueChange: (String) -> Unit, //truyền giá trị đã nhập ra bên ngoài
     placeholderText: String,
     textStyle: TextStyle,
     maxLines: Int = 1, // Mặc định là 1 dòng

@@ -6,18 +6,25 @@ import androidx.compose.material3.SnackbarResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+//Lớp này chứa các phương thức tĩnh liên quan đến việc thao tác với các thành phần UI
 class UIComponentHelper {
+
+    //companion object chứa các phương thức tĩnh
     companion object {
+
+        //phương thức hiển thị một snackbar
         fun showSnackBar(
-            scope: CoroutineScope,
-            snackbarHostState: SnackbarHostState,
-            message: String,
-            actionLabel: String,
-            onActionPerformed: () -> Unit,
-            onSnackbarDismiss: () -> Unit,
+            scope: CoroutineScope, //cần thiết để snackbar được hiển thị trong một Scaffold
+            snackbarHostState: SnackbarHostState, //cần thiết để snackbar được hiển thị trong một Scaffold
+            message: String, //thông điệp của snackbar
+            actionLabel: String, //Tên của action
+            onActionPerformed: () -> Unit, //Thực hiện khi nhấn vào action
+            onSnackbarDismiss: () -> Unit, //Thực hiện khi snackbar biến mất
         ) {
             scope.launch {
-                snackbarHostState.currentSnackbarData?.dismiss()
+                snackbarHostState.currentSnackbarData?.dismiss() //Xóa tất cả snackbar trước đó, chỉ cho tồn tại 1 lần 1 snackbar, tránh trường hợp snackbar xuất hiện liên hồi
+
+                //hiển thị snackbar
                 val result = snackbarHostState
                     .showSnackbar(
                         message = message,

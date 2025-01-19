@@ -43,15 +43,19 @@ import kotlinx.coroutines.CoroutineScope
 import java.time.LocalDateTime
 import java.util.UUID
 
+//Hiển thị một bottomsheet để thêm hoặc sửa một todo
+//phải remember một boolean ở bên ngoài để ẩn hoặc hiện bottomsheet này
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditTodoBottomSheet(
-    todo: Todo? = null,
+    todo: Todo? = null, //nếu todo truyền vào là null -> thêm, khác null -> sửa
     viewModel: EditTodoViewModel = hiltViewModel(),
-    onDismiss: () -> Unit,
+    onDismiss: () -> Unit, //thực hiện khi bottomsheet bị ẩn
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
 ) {
+
+    //các thuộc tính của Todo
     var dateTime by remember { mutableStateOf(if (todo != null) todo.dateTime else LocalDateTime.now()) }
     var inputTodoTitle by remember { mutableStateOf(if (todo != null) todo.title else "") }
     var inputTodoDescription by remember { mutableStateOf(if (todo != null) todo.description else "") }
@@ -60,6 +64,7 @@ fun EditTodoBottomSheet(
     }
     var reminderEnabled by remember { mutableStateOf(if (todo != null) todo.reminderEnabled else true) }
 
+    //Ẩn hoặc hiện bottomsheet chọn ngày và giờ
     var showScheduleBottomSheet by remember { mutableStateOf(false) }
     if (showScheduleBottomSheet) {
         ScheduleBottomSheet(
@@ -75,32 +80,39 @@ fun EditTodoBottomSheet(
         )
     }
 
-
+    //focus cho textfield
     val focusRequester = remember { FocusRequester() }
+
+    //cần cho bottomsheet để có thể hiển thị được
+    //đổi thành false nếu muốn bottomsheet hiển thị phân nữa, true thì hiển thị full
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
-        modifier = Modifier.height(300.dp),
+        modifier = Modifier.height(300.dp), //giới hạn chiều cao
         sheetState = sheetState,
         onDismissRequest = {
             onDismiss()
         },
-        dragHandle = {},
+        dragHandle = {}, //xóa bỏ icon ở giữa bottomsheet
     ) {
 
+        //LaunchedEffect có key là Unit sẽ được gọi 1 lần khi bottomsheet được compose lại
         LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
+            focusRequester.requestFocus() //yêu cầu focus vào textfield
             if (todo == null) {
+                //nếu todo = null -> thêm todo mới, truyền thời gian hiện tại vào
                 dateTime = LocalDateTime.now()
             }
         }
 
-
+        //dùng Box để hiển thị các thành phần xếp chồng lên nhau
+        //trongg trường hợp này là thanh các action sẽ xếp chồng lên chổ chứa các text field
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 20.dp)
         ) {
+            //hiển thị label ngày giờ và 2 textfield
             Column {
                 FormattedTimeText(dateTime)
 
@@ -121,8 +133,9 @@ fun EditTodoBottomSheet(
                     maxLines = 3
                 )
 
-
             }
+
+            //Hiển thị thanh các action
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

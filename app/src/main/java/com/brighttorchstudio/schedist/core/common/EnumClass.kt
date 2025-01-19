@@ -2,6 +2,7 @@ package com.brighttorchstudio.schedist.core.common
 
 import androidx.compose.ui.graphics.Color
 
+//dùng class enum để lưu trữ mức độ quan trọng để dễ dàng truy cập màu sắc và tên
 enum class ImportanceLevel(val color: Color) {
     VERY_IMPORTANT(veryImportantTask),
     IMPORTANT(importantTask),
@@ -17,3 +18,5 @@ enum class ImportanceLevel(val color: Color) {
         }
     }
 }
+
+//Khai báo các class enum khác ở đây

@@ -12,16 +12,19 @@ import androidx.compose.ui.draw.scale
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import java.time.LocalDate
 
+//Hiển thị giao diện chọn ngày (lịch)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerDocked(
     initialDate: LocalDate,
-    onDateSelected: (LocalDate) -> Unit,
+    onDateSelected: (LocalDate) -> Unit, //truyền date được chọn ra bên ngoài
 ) {
+    //cần thiết để hiển thị date picker
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = DateTimeHelper.localDateToMillis(initialDate)
     )
 
+    //Mỗi khi date bị thay đổi thì thực hiện việc truyền thời gian đó ra bên ngoài
     LaunchedEffect(datePickerState.selectedDateMillis) {
         if (datePickerState.selectedDateMillis != null) {
             val selectedLocalDate =
@@ -32,7 +35,7 @@ fun DatePickerDocked(
         }
     }
 
-
+    //giao diện date picker của material 3
     DatePicker(
         state = datePickerState,
         showModeToggle = false,

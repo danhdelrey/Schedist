@@ -11,9 +11,10 @@ import androidx.compose.ui.unit.dp
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import java.time.LocalDateTime
 
+//Hiển thị một text chứa datetime đã được format thành dạng HH:mm dd/MM/yyyy
 @Composable
 fun FormattedTimeText(
-    dateTime: LocalDateTime,
+    dateTime: LocalDateTime, //datetime cần format
     style: TextStyle = MaterialTheme.typography.labelLarge,
     color: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     modifier: Modifier = Modifier,

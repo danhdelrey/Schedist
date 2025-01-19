@@ -17,8 +17,8 @@ class EditTodoViewModel @Inject constructor(
     private val localTodoRepository: TodoRepository
 ) : ViewModel() {
 
-    var todoAdded: Todo? = null
-    var oldTodo: Todo? = null
+    var todoAdded: Todo? = null //todo vừa mới được thêm, dùng cho việc hoàn tác thêm todo
+    var oldTodo: Todo? = null //todo trước khi được sửa, dùng cho việc hoàn tác sửa todo
 
     fun addTodo(
         todo: Todo

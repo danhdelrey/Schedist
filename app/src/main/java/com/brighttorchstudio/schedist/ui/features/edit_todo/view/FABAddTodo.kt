@@ -14,15 +14,18 @@ import androidx.compose.ui.res.painterResource
 import com.brighttorchstudio.schedist.R
 import kotlinx.coroutines.CoroutineScope
 
+//Hiển thị một FAB có chức năng mở bottomsheet để thêm todo mới
 @Composable
 fun FABAddTodo(
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
 ) {
+    //biến boolean để ẩn/hiện bottomsheet
     var showUpdateTodoBottomSheet by remember { mutableStateOf(false) }
     if (showUpdateTodoBottomSheet) {
         EditTodoBottomSheet(
             onDismiss = {
+                //Khi bottomsheet chui xuống thì phải cho nó false để nó biến mất, nếu không thì nó sẽ chỉ chui xuống mà không biến mất
                 showUpdateTodoBottomSheet = false
             },
             scope = scope,

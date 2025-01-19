@@ -16,7 +16,7 @@ import javax.inject.Inject
 class DeleteTodoViewModel @Inject constructor(
     private val localTodoRepository: TodoRepository
 ) : ViewModel() {
-    var todosDeleted = mutableListOf<Todo>()
+    var todosDeleted = mutableListOf<Todo>() //lưu các todo vừa mới xóa, dùng cho việc hoàn tác
 
     fun deleteTodos(todos: List<Todo>) {
         viewModelScope.launch(Dispatchers.IO) {

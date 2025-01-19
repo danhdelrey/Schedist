@@ -12,9 +12,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view.ManageTodoScreen
 
+//Là điểm vào đầu tiên của ứng dụng
+//Chứa các route của các screen để điều hướng
 @Composable
 fun AppNavigation() {
-    val navController = rememberNavController()
+    val navController = rememberNavController() //truyền cho các screen để nó có thể dùng để điều hướng sang screen khác
     NavHost(navController = navController, startDestination = AppScreens.ManageTodoScreen.route) {
         composable(
             route = AppScreens.ManageTodoScreen.route,
@@ -28,6 +30,8 @@ fun AppNavigation() {
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None }
         ) {
+
+            //Nội dung của screen
             Scaffold(
                 bottomBar = {
                     BottomNavigationBar(navController = navController)
@@ -36,5 +40,7 @@ fun AppNavigation() {
                 Text("Manage Note Screen", modifier = Modifier.padding(innerPadding))
             }
         }
+
+        //Khai báo các route khác ở đây...
     }
 }

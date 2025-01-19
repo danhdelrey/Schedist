@@ -11,7 +11,11 @@ import javax.inject.Named
 @InstallIn(SingletonComponent::class)
 abstract class TodoRepositoryModule {
 
+    //Liên kết LocalTodoRepository với TodoRepository interface
+    //Khi khai báo TodoRepository thì Hilt sẽ biến nó thành LocalTodoRepository
     @Binds
     abstract fun bindLocalTodoRepository(localTodoRepository: LocalTodoRepository): TodoRepository
+
+    //bindRemoteTodoRepository...
 
 }

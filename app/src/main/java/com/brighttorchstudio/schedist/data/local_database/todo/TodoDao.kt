@@ -7,8 +7,11 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
+//Định nghĩa các phương thức trừu tượng tương tác với database
+//Room sẽ tự generate code dựa trên các interface này
 @Dao
 interface TodoDao {
+
     @Query("SELECT * FROM TodoEntity ORDER BY dateTime")
     fun getTodos(): Flow<List<TodoEntity>>
 

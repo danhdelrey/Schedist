@@ -6,9 +6,10 @@ import androidx.room.TypeConverters
 import com.brighttorchstudio.schedist.data.local_database.todo.TodoDao
 import com.brighttorchstudio.schedist.data.local_database.todo.TodoEntity
 
-
+//Khai báo các entities trong đây
 @Database(entities = [TodoEntity::class], version = 1)
-@TypeConverters(Converter::class)
+@TypeConverters(Converter::class) //Cho Room biết sử dụng lớp Converter để chuyển đổi các kiểu dữ liệu mà nó không hỗ trợ
 abstract class TodoDatabase : RoomDatabase() {
     abstract fun todoDao(): TodoDao
+    //Khai báo các Dao khác ở đây...
 }

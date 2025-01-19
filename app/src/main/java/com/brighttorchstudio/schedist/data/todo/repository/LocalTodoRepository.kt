@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+//Là lớp chứa các logic thao tác với dữ liệu (thêm, sửa, xóa, truy xuất) cục bộ với nguồn dữ liệu là Todo
+//Mọi thay đổi liên quan đến dữ liệu Todo cục bộ đều phải qua lớp này
+//Implement TodoRepository interface để đảm bảo đầu vào và đầu ra rõ ràng
 class LocalTodoRepository @Inject constructor(
     private val todoDao: TodoDao
 ) : TodoRepository {

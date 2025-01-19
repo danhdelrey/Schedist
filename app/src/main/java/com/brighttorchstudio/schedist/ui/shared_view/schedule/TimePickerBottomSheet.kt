@@ -22,20 +22,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import java.time.LocalTime
 
+
+//Hiển thị bottomsheet chọn thời gian
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerBottomSheet(
-    initialTime: LocalTime,
-    onDismiss: () -> Unit,
-    onConfirm: (LocalTime) -> Unit
+    initialTime: LocalTime, //giờ ban đầu
+    onDismiss: () -> Unit, //thực hiện khi bottomsheet bị ẩn
+    onConfirm: (LocalTime) -> Unit //truyền thời gian đã được chọn ra bên ngoài
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    //cần thiết cho time picker
     val timePickerState = rememberTimePickerState(
         initialHour = initialTime.hour,
         initialMinute = initialTime.minute,
         is24Hour = true,
     )
+
+    //Hiển thị bottomsheet
     ModalBottomSheet(
         modifier = Modifier.height(200.dp),
         sheetState = sheetState,
@@ -79,6 +84,8 @@ fun TimePickerBottomSheet(
                     )
                 }
             }
+
+            //time picker của material 3
             TimeInput(
                 state = timePickerState,
                 modifier = Modifier
