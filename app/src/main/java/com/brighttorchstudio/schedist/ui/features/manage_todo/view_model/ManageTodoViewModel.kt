@@ -74,7 +74,6 @@ class ManageTodoViewModel @Inject constructor(
         }
     }
 
-    fun isTodoSelectedInSelectionMode(todo: Todo) = todo in _selectedTodosForPerformingActions.value
 
     fun cancelUpdatingTodo() {
         _selectedTodoForUpdating.value = null

@@ -50,6 +50,8 @@ fun TodoItem(
     var isDue = DateTimeHelper.isDue(todo.dateTime)
 
     val isSelectionMode by viewModel.isSelectionMode.collectAsStateWithLifecycle()
+    val selectedTodosForPerformingActions by viewModel.selectedTodosForPerformingActions.collectAsStateWithLifecycle()
+
 
 
     Box(
@@ -80,7 +82,7 @@ fun TodoItem(
                 //khi ở trạng thái selection thì hiển thị Checkbox, còn không thì hiển thị CompleteTodoButton (radio button)
                 if (isSelectionMode) {
                     Checkbox(
-                        checked = viewModel.isTodoSelectedInSelectionMode(todo),
+                        checked = todo in selectedTodosForPerformingActions,
                         onCheckedChange = {
                             viewModel.onTodoClicked(todo)
                         }
