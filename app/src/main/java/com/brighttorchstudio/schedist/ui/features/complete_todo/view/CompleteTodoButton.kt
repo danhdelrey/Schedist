@@ -11,16 +11,14 @@ import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.features.complete_todo.view_model.CompleteTodoViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 
 //Hiển thị một Raddio buton mang chức năng hoàn thành todo
 @Composable
 fun CompleteTodoButton(
     viewModel: CompleteTodoViewModel = hiltViewModel(), //viewmodel chức năng tương ứng
-    scope: CoroutineScope, //cần để snackbar được hiển thị
-    snackBarHostState: SnackbarHostState, //cần để snackbar được hiển thị
     todo: Todo, //todo đưuọc gắn với nút này
+    snackBarHostState: SnackbarHostState,
     onCompletedTodo: () -> Unit = {} //thực hiện sau khi hoàn thành todo
 ) {
     var isChecked by remember { mutableStateOf(false) }
@@ -31,10 +29,10 @@ fun CompleteTodoButton(
             delay(100) //delay 0.1s để cho cái animation hoàn thành trước khi nó bị xóa
             viewModel.completeTodo(todo)
             viewModel.showCompletedTodoSnackbar(
-                scope = scope,
                 snackbarHostState = snackBarHostState
             )
-            isChecked = false //phải reset để tránh trường hợp jetpack compose tái sử dụng isChecked cho các todo phía sau trong danh sách, dẫn đến việc xóa todo đầu tiên xong rồi thì todo thứ 2 tự dưng nó được checked
+            isChecked =
+                false //phải reset để tránh trường hợp jetpack compose tái sử dụng isChecked cho các todo phía sau trong danh sách, dẫn đến việc xóa todo đầu tiên xong rồi thì todo thứ 2 tự dưng nó được checked
 
             onCompletedTodo() //thực hiện hàm được truyền vào
         }
