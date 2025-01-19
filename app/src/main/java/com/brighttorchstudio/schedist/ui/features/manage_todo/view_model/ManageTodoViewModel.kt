@@ -47,12 +47,33 @@ class ManageTodoViewModel @Inject constructor(
         }
     }
 
-    fun toggleSelectionInSelectionMode(todo: Todo) {
-        _selectedTodos.value = if (todo in _selectedTodos.value) {
-            _selectedTodos.value - todo
+    fun onTodoClicked(todo: Todo) {
+        if (_isSelectionMode.value) {
+            _selectedTodos.value = if (todo in _selectedTodos.value) {
+                _selectedTodos.value - todo
+            } else {
+                _selectedTodos.value + todo
+            }
         } else {
-            _selectedTodos.value + todo
+            _selectedTodo.value = todo
         }
+    }
+
+    fun onTodoLongClicked(todo: Todo) {
+        if (!_isSelectionMode.value) {
+            enterSelectionMode()
+            _selectedTodos.value = if (todo in _selectedTodos.value) {
+                _selectedTodos.value - todo
+            } else {
+                _selectedTodos.value + todo
+            }
+        }
+    }
+
+    fun isTodoSelectedInSelectionMode(todo: Todo) = todo in _selectedTodos.value
+
+    fun cancelUpdatingTodo() {
+        _selectedTodo.value = null
     }
 
     fun selectAllTodosInSelectionMode(allTodos: Set<Todo>) {
@@ -66,15 +87,6 @@ class ManageTodoViewModel @Inject constructor(
     fun exitSelectionMode() {
         _isSelectionMode.value = false
         _selectedTodos.value = emptySet()
-    }
-
-    //Chọn một todo để sửa
-    fun selectTodo(todo: Todo) {
-        _selectedTodo.value = todo
-    }
-
-    fun unSelectTodo() {
-        _selectedTodo.value = null
     }
 
 

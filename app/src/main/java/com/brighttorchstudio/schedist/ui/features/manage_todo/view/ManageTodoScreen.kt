@@ -53,7 +53,7 @@ fun ManageTodoScreen(
         EditTodoBottomSheet(
             todo = selectedTodo,
             onDismiss = {
-                viewModel.unSelectTodo()
+                viewModel.cancelUpdatingTodo()
             },
             scope = scope,
             snackbarHostState = snackbarHostState
@@ -168,27 +168,7 @@ fun ManageTodoScreen(
                             .verticalScroll(rememberScrollState())
                     ) {
                         todoList.forEach { todo ->
-                            TodoItem(
-                                todo = todo,
-                                isSelected = todo in selectedTodos,
-                                onToggleSelection = {
-                                    viewModel.toggleSelectionInSelectionMode(todo)
-                                },
-                                onClick = {
-                                    if (isSelectionMode) {
-                                        viewModel.toggleSelectionInSelectionMode(todo)
-                                    } else {
-                                        viewModel.selectTodo(todo)
-                                    }
-                                },
-                                isSelectionMode = isSelectionMode,
-                                onLongClick = {
-                                    //khi ấn và giữ vào một todo thì sẽ bật chế độ selection
-                                    viewModel.enterSelectionMode()
-                                },
-                                scope = scope,
-                                snackBarHostState = snackbarHostState
-                            )
+                            TodoItem(todo = todo)
                         }
                     }
                 } else {

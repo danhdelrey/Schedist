@@ -15,7 +15,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,30 +26,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.features.complete_todo.view.CompleteTodoButton
-import kotlinx.coroutines.CoroutineScope
+import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
 
 //Hiển thị một todo
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TodoItem(
-    todo: Todo, //todo cần hiển thị
-    isSelectionMode: Boolean, //có đang trong trạng thái selection hay không
-    isSelected: Boolean, //có được chọn trong trạng thái selection hay không
-    onToggleSelection: () -> Unit, //thực hiện khi chọn hoặc bỏ chọn todo trong trajgn thái selection
-    onClick: () -> Unit, //thực hiện khi nhấn vào todo
-    onLongClick: () -> Unit, //thực hiện khi nhấn và giữ vào todo
-    scope: CoroutineScope, //cần cho snackbar hiển thị
-    snackBarHostState: SnackbarHostState, //cần cho snackbar hiển thị
+    viewModel: ManageTodoViewModel = hiltViewModel(),
+    todo: Todo,
 ) {
     //lưu trạng thái hiển thị chi tiết todo
     var showTodoDetails by remember { mutableStateOf(false) }
 
     //kiểm tra xem todo đã tới hạn hay chưa
     var isDue = DateTimeHelper.isDue(todo.dateTime)
+
+    val isSelectionMode by viewModel.isSelectionMode.collectAsStateWithLifecycle()
+
 
     Box(
         modifier = Modifier
@@ -65,22 +63,26 @@ fun TodoItem(
                 shape = MaterialTheme.shapes.small
             )
             .combinedClickable(
-                onClick = onClick,
+                onClick = {
+                    viewModel.onTodoClicked(todo)
+                },
                 onLongClick = {
-                    if (!isSelectionMode) {
-                        onLongClick()
-                        onToggleSelection()
-                    }
+                    viewModel.onTodoLongClicked(todo)
                 }
             )
 
     ) {
         Column(modifier = Modifier.padding(vertical = 10.dp)) {
             Row(modifier = Modifier.fillMaxWidth()) {
-                
+
                 //khi ở trạng thái selection thì hiển thị Checkbox, còn không thì hiển thị CompleteTodoButton (radio button)
                 if (isSelectionMode) {
-                    Checkbox(checked = isSelected, onCheckedChange = { onToggleSelection() })
+                    Checkbox(
+                        checked = viewModel.isTodoSelectedInSelectionMode(todo),
+                        onCheckedChange = {
+                            viewModel.onTodoClicked(todo)
+                        }
+                    )
                 } else {
                     CompleteTodoButton(
                         todo = todo,
