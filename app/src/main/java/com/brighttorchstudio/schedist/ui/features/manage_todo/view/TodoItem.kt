@@ -15,6 +15,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,6 +41,7 @@ import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageT
 fun TodoItem(
     viewModel: ManageTodoViewModel = hiltViewModel(),
     todo: Todo,
+    snackBarHostState: SnackbarHostState
 ) {
     //lưu trạng thái hiển thị chi tiết todo
     var showTodoDetails by remember { mutableStateOf(false) }
@@ -86,7 +88,6 @@ fun TodoItem(
                 } else {
                     CompleteTodoButton(
                         todo = todo,
-                        scope = scope,
                         snackBarHostState = snackBarHostState
                     )
                 }

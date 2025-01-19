@@ -17,11 +17,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -29,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
 import com.brighttorchstudio.schedist.core.navigation.BottomNavigationBar
 import com.brighttorchstudio.schedist.ui.features.delete_todo.view.DeleteTodoButton
 import com.brighttorchstudio.schedist.ui.features.edit_todo.view.EditTodoBottomSheet
@@ -46,20 +47,21 @@ fun ManageTodoScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isSelectionMode by viewModel.isSelectionMode.collectAsStateWithLifecycle()
-    val selectedTodos by viewModel.selectedTodos.collectAsStateWithLifecycle()
-    val selectedTodo by viewModel.selectedTodo.collectAsStateWithLifecycle()
+    val selectedTodosForPerformingActions by viewModel.selectedTodosForPerformingActions.collectAsStateWithLifecycle()
+    val selectedTodoForUpdating by viewModel.selectedTodoForUpdating.collectAsStateWithLifecycle()
 
-    if (selectedTodo != null) {
+    val snackbarHostState =
+        remember { SnackbarHostState() } //cần thiết để scaffold hiển thị snackbar
+
+    if (selectedTodoForUpdating != null) {
         EditTodoBottomSheet(
-            todo = selectedTodo,
+            todo = selectedTodoForUpdating,
             onDismiss = {
                 viewModel.cancelUpdatingTodo()
             },
-            scope = scope,
             snackbarHostState = snackbarHostState
         )
     }
-
 
     //Giao diện chính
     Scaffold(
@@ -81,14 +83,10 @@ fun ManageTodoScreen(
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         TextButton(
-                            enabled = selectedTodos.size < ((uiState as? ManageTodoViewModel.UiState.Success)?.todoList?.size
+                            enabled = selectedTodosForPerformingActions.size < ((uiState as? ManageTodoViewModel.UiState.Success)?.todoList?.size
                                 ?: 0),
                             onClick = {
-                                viewModel.selectAllTodosInSelectionMode(
-                                    (uiState as? ManageTodoViewModel.UiState.Success)?.todoList?.toSet()
-                                        ?: emptySet()
-                                )
-
+                                viewModel.selectAllTodosInSelectionMode()
                             }
                         ) {
                             Text("Chọn tất cả")
@@ -123,9 +121,8 @@ fun ManageTodoScreen(
                 BottomActionBar(
                     action1 = {
                         DeleteTodoButton(
-                            scope = scope,
                             snackBarHostState = snackbarHostState,
-                            todoList = selectedTodos.toList(),
+                            todoList = selectedTodosForPerformingActions.toList(),
                             onDeletedTodo = {
                                 viewModel.exitSelectionMode()
                             }
@@ -141,7 +138,6 @@ fun ManageTodoScreen(
             //ẩn FAB nếu đang trong trạng thái selection
             if (!isSelectionMode) {
                 FABAddTodo(
-                    scope = scope,
                     snackbarHostState = snackbarHostState
                 )
             }
@@ -168,7 +164,10 @@ fun ManageTodoScreen(
                             .verticalScroll(rememberScrollState())
                     ) {
                         todoList.forEach { todo ->
-                            TodoItem(todo = todo)
+                            TodoItem(
+                                todo = todo,
+                                snackBarHostState = snackbarHostState
+                            )
                         }
                     }
                 } else {
@@ -200,14 +199,6 @@ fun ManageTodoScreen(
                 ) {
                     CircularProgressIndicator()
                 }
-                UIComponentHelper.showSnackBar(
-                    scope = scope,
-                    snackbarHostState = snackbarHostState,
-                    message = "Có lỗi xảy ra khi tải nhiệm vụ!",
-                    actionLabel = "Đóng",
-                    onActionPerformed = {},
-                    onSnackbarDismiss = {}
-                )
             }
         }
     }

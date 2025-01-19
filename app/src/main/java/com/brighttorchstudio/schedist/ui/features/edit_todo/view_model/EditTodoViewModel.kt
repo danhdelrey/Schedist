@@ -7,7 +7,6 @@ import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.data.todo.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -58,11 +57,10 @@ class EditTodoViewModel @Inject constructor(
     }
 
     fun showUpdatedTodoSnackbar(
-        scope: CoroutineScope,
         snackbarHostState: SnackbarHostState,
     ) {
         UIComponentHelper.showSnackBar(
-            scope = scope,
+            scope = viewModelScope,
             snackbarHostState = snackbarHostState,
             message = "Cập nhật nhiệm vụ thành công.",
             actionLabel = "Hoàn tác",
@@ -76,11 +74,10 @@ class EditTodoViewModel @Inject constructor(
     }
 
     fun showAddedTodoSnackbar(
-        scope: CoroutineScope,
         snackbarHostState: SnackbarHostState,
     ) {
         UIComponentHelper.showSnackBar(
-            scope = scope,
+            scope = viewModelScope,
             snackbarHostState = snackbarHostState,
             message = "Thêm nhiệm vụ mới thành công.",
             actionLabel = "Hoàn tác",

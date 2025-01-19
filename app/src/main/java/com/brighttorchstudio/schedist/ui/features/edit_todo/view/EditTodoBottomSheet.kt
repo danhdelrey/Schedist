@@ -39,7 +39,6 @@ import com.brighttorchstudio.schedist.ui.shared_view.ImportanceDropdownButton
 import com.brighttorchstudio.schedist.ui.shared_view.StyledTextField
 import com.brighttorchstudio.schedist.ui.shared_view.schedule.FormattedTimeText
 import com.brighttorchstudio.schedist.ui.shared_view.schedule.ScheduleBottomSheet
-import kotlinx.coroutines.CoroutineScope
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -51,7 +50,6 @@ fun EditTodoBottomSheet(
     todo: Todo? = null, //nếu todo truyền vào là null -> thêm, khác null -> sửa
     viewModel: EditTodoViewModel = hiltViewModel(),
     onDismiss: () -> Unit, //thực hiện khi bottomsheet bị ẩn
-    scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
 ) {
 
@@ -184,7 +182,6 @@ fun EditTodoBottomSheet(
                                 )
                             )
                             viewModel.showUpdatedTodoSnackbar(
-                                scope = scope,
                                 snackbarHostState = snackbarHostState,
                             )
                         } else {
@@ -199,7 +196,6 @@ fun EditTodoBottomSheet(
                                 )
                             )
                             viewModel.showAddedTodoSnackbar(
-                                scope = scope,
                                 snackbarHostState = snackbarHostState,
                             )
                         }

@@ -31,12 +31,14 @@ class ManageTodoViewModel @Inject constructor(
     //lưu trạng thái selection và các todo được chọn trong trạng thái này
     private val _isSelectionMode = MutableStateFlow(false)
     val isSelectionMode: StateFlow<Boolean> = _isSelectionMode.asStateFlow()
-    private val _selectedTodos = MutableStateFlow(emptySet<Todo>())
-    val selectedTodos: StateFlow<Set<Todo>> = _selectedTodos.asStateFlow()
+
+    private val _selectedTodosForPerformingActions = MutableStateFlow(emptySet<Todo>())
+    val selectedTodosForPerformingActions: StateFlow<Set<Todo>> =
+        _selectedTodosForPerformingActions.asStateFlow()
 
     //lưu todo được chọn trong trạng thái bình thường, dùng cho việc sửa todo
-    private val _selectedTodo = MutableStateFlow<Todo?>(null)
-    val selectedTodo: StateFlow<Todo?> = _selectedTodo.asStateFlow()
+    private val _selectedTodoForUpdating = MutableStateFlow<Todo?>(null)
+    val selectedTodoForUpdating: StateFlow<Todo?> = _selectedTodoForUpdating.asStateFlow()
 
     //Khi vừa được khởi tạo thì tiến hành lấy danh sách todo từ local database
     init {
@@ -49,35 +51,38 @@ class ManageTodoViewModel @Inject constructor(
 
     fun onTodoClicked(todo: Todo) {
         if (_isSelectionMode.value) {
-            _selectedTodos.value = if (todo in _selectedTodos.value) {
-                _selectedTodos.value - todo
-            } else {
-                _selectedTodos.value + todo
-            }
+            _selectedTodosForPerformingActions.value =
+                if (todo in _selectedTodosForPerformingActions.value) {
+                    _selectedTodosForPerformingActions.value - todo
+                } else {
+                    _selectedTodosForPerformingActions.value + todo
+                }
         } else {
-            _selectedTodo.value = todo
+            _selectedTodoForUpdating.value = todo
         }
     }
 
     fun onTodoLongClicked(todo: Todo) {
         if (!_isSelectionMode.value) {
             enterSelectionMode()
-            _selectedTodos.value = if (todo in _selectedTodos.value) {
-                _selectedTodos.value - todo
-            } else {
-                _selectedTodos.value + todo
-            }
+            _selectedTodosForPerformingActions.value =
+                if (todo in _selectedTodosForPerformingActions.value) {
+                    _selectedTodosForPerformingActions.value - todo
+                } else {
+                    _selectedTodosForPerformingActions.value + todo
+                }
         }
     }
 
-    fun isTodoSelectedInSelectionMode(todo: Todo) = todo in _selectedTodos.value
+    fun isTodoSelectedInSelectionMode(todo: Todo) = todo in _selectedTodosForPerformingActions.value
 
     fun cancelUpdatingTodo() {
-        _selectedTodo.value = null
+        _selectedTodoForUpdating.value = null
     }
 
-    fun selectAllTodosInSelectionMode(allTodos: Set<Todo>) {
-        _selectedTodos.value = allTodos
+    fun selectAllTodosInSelectionMode() {
+        val allTodos = (_uiState.value as UiState.Success).todoList
+        _selectedTodosForPerformingActions.value = allTodos.toSet()
     }
 
     fun enterSelectionMode() {
@@ -86,7 +91,7 @@ class ManageTodoViewModel @Inject constructor(
 
     fun exitSelectionMode() {
         _isSelectionMode.value = false
-        _selectedTodos.value = emptySet()
+        _selectedTodosForPerformingActions.value = emptySet()
     }
 
 
