@@ -3,6 +3,7 @@ package com.brighttorchstudio.schedist.ui.features.edit_todo.view_model
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
 import com.brighttorchstudio.schedist.data.notification.model.Notification
 import com.brighttorchstudio.schedist.data.notification.repository.NotificationRepository
@@ -13,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class EditTodoViewModel @Inject constructor(
@@ -29,15 +31,18 @@ class EditTodoViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             if (todo.reminderEnabled) {
-                localNotificationRepository.scheduleNotification(
-                    notification = Notification(
-                        id = todo.id,
-                        title = todo.title,
-                        description = todo.description,
-                    ),
-                    duration = 2,
-                    timeUnit = TimeUnit.SECONDS
-                )
+                val secondDifference = DateTimeHelper.calculateSecondsDifference(todo.dateTime)
+                if (secondDifference < 0) {
+                    localNotificationRepository.scheduleNotification(
+                        notification = Notification(
+                            id = todo.id,
+                            title = todo.title,
+                            description = todo.description,
+                        ),
+                        duration = abs(secondDifference),
+                        timeUnit = TimeUnit.SECONDS
+                    )
+                }
             }
 
             localTodoRepository.addTodo(todo)

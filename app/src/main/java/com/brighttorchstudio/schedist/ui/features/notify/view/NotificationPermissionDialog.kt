@@ -6,9 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -20,10 +18,15 @@ fun NotificationPermissionDialog(
     viewModel: NotifyViewModel = hiltViewModel(),
 ) {
     val permissionState by viewModel.permissionState.collectAsStateWithLifecycle()
-    var showDialog by remember { mutableStateOf(false) }
+    val showDialog by viewModel.showPermissionDialog.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     when (permissionState) {
         is NotifyViewModel.PermissionState.GrantedAndEnabled -> {
+
+        }
+
+        is NotifyViewModel.PermissionState.GrantedButDisabled -> {
             if (showDialog) {
                 AlertDialog(
                     icon = {
@@ -33,42 +36,76 @@ fun NotificationPermissionDialog(
                         )
                     },
                     title = {
-                        Text(text = "Dialog Title")
+                        Text(text = "Cho phép thông báo")
                     },
                     text = {
-                        Text(text = "Dialog Text")
+                        Text(text = "Ứng dụng cần quyền truy cập để gửi thông báo nhắc nhở về các nhiệm vụ của bạn. Vui lòng bật thông báo trong cài đặt để sử dụng tính năng này.")
                     },
                     onDismissRequest = {
-                        showDialog = false
+                        viewModel.hideDialog()
                     },
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                //setting
+                                viewModel.openNotificationSettings(context)
+                                viewModel.hideDialog()
                             }
                         ) {
-                            Text("Confirm")
+                            Text("Mở cài đặt")
                         }
                     },
                     dismissButton = {
                         TextButton(
                             onClick = {
-                                showDialog = false
+                                viewModel.hideDialog()
                             }
                         ) {
-                            Text("Dismiss")
+                            Text("Hủy")
                         }
                     }
                 )
             }
         }
 
-        is NotifyViewModel.PermissionState.GrantedButDisabled -> {
-
-        }
-
         is NotifyViewModel.PermissionState.Denied -> {
-
+            if (showDialog) {
+                AlertDialog(
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.bell),
+                            contentDescription = "Example Icon"
+                        )
+                    },
+                    title = {
+                        Text(text = "Cho phép thông báo")
+                    },
+                    text = {
+                        Text(text = "Ứng dụng cần quyền truy cập để gửi thông báo nhắc nhở về các nhiệm vụ của bạn. Vui lòng bật thông báo trong cài đặt để sử dụng tính năng này.")
+                    },
+                    onDismissRequest = {
+                        viewModel.hideDialog()
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.openNotificationSettings(context)
+                                viewModel.hideDialog()
+                            }
+                        ) {
+                            Text("Mở cài đặt")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.hideDialog()
+                            }
+                        ) {
+                            Text("Hủy")
+                        }
+                    }
+                )
+            }
         }
     }
 }

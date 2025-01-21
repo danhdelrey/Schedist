@@ -1,5 +1,6 @@
 package com.brighttorchstudio.schedist.core.helpers
 
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -39,6 +40,13 @@ class DateTimeHelper {
             val formatter = DateTimeFormatter.ofPattern("HH:mm")
             return localTime.format(formatter)
         }
+
+        fun calculateSecondsDifference(inputDateTime: LocalDateTime): Long {
+            val now = LocalDateTime.now()
+            val duration = Duration.between(inputDateTime, now)
+            return duration.seconds
+        }
+
 
     }
 }

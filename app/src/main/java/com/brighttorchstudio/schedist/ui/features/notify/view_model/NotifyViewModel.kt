@@ -1,5 +1,8 @@
 package com.brighttorchstudio.schedist.ui.features.notify.view_model
 
+import android.content.Context
+import android.content.Intent
+import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import com.brighttorchstudio.schedist.core.common.NotificationPermissionState
 import com.brighttorchstudio.schedist.data.notification.repository.NotificationRepository
@@ -24,6 +27,10 @@ class NotifyViewModel @Inject constructor(
         MutableStateFlow<PermissionState>(PermissionState.GrantedAndEnabled)
     val permissionState: StateFlow<PermissionState> = _permissionState.asStateFlow()
 
+    private val _showPermissionDialog = MutableStateFlow(false)
+    val showPermissionDialog: StateFlow<Boolean> = _showPermissionDialog.asStateFlow()
+
+
     init {
         checkPermissionState()
     }
@@ -33,16 +40,34 @@ class NotifyViewModel @Inject constructor(
         when (localNotificationRepository.checkNotificationPermissionState()) {
             NotificationPermissionState.GRANTED_AND_ENABLED -> {
                 _permissionState.value = PermissionState.GrantedAndEnabled
+                hideDialog()
             }
 
             NotificationPermissionState.GRANTED_BUT_DISABLED -> {
                 _permissionState.value = PermissionState.GrantedButDisabled
+                showDialog()
             }
 
             NotificationPermissionState.DENIED -> {
                 _permissionState.value = PermissionState.Denied
+                showDialog()
             }
         }
+    }
+
+    fun hideDialog() {
+        _showPermissionDialog.value = false
+    }
+
+    fun showDialog() {
+        _showPermissionDialog.value = true
+    }
+
+    fun openNotificationSettings(context: Context) {
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+        }
+        context.startActivity(intent)
     }
 
 

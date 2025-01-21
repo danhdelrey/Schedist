@@ -64,8 +64,6 @@ fun ManageTodoScreen(
         )
     }
 
-    //nhắc nhở bật thông báo
-    NotificationPermissionDialog()
 
     //Giao diện chính
     Scaffold(
@@ -160,6 +158,9 @@ fun ManageTodoScreen(
             }
 
             is ManageTodoViewModel.UiState.Success -> {
+                //nhắc nhở bật thông báo
+                NotificationPermissionDialog()
+                
                 val todoList = (uiState as ManageTodoViewModel.UiState.Success).todoList
                 if (todoList.isNotEmpty()) {
                     Column(
