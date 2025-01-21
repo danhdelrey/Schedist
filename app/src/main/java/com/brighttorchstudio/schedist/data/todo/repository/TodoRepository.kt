@@ -12,6 +12,4 @@ interface TodoRepository {
     suspend fun deleteTodo(todo: List<Todo>)
     suspend fun updateTodo(todo: Todo)
     suspend fun updateTodo(todo: List<Todo>)
-    suspend fun deleteAllTodos()
-
 }

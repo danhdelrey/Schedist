@@ -15,6 +15,9 @@ interface TodoDao {
     @Query("SELECT * FROM TodoEntity ORDER BY dateTime")
     fun getTodos(): Flow<List<TodoEntity>>
 
+    @Query("SELECT * FROM TodoEntity WHERE id = :id")
+    fun getTodoById(id: String): TodoEntity
+
     @Insert
     suspend fun addTodo(todo: TodoEntity)
 
@@ -33,6 +36,4 @@ interface TodoDao {
     @Update
     suspend fun updateTodo(todo: List<TodoEntity>)
 
-    @Query("DELETE FROM TodoEntity")
-    suspend fun deleteAllTodos()
 }
