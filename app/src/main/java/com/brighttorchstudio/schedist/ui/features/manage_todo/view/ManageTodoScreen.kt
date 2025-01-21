@@ -36,6 +36,7 @@ import com.brighttorchstudio.schedist.ui.features.delete_todo.view.DeleteTodoBut
 import com.brighttorchstudio.schedist.ui.features.edit_todo.view.EditTodoBottomSheet
 import com.brighttorchstudio.schedist.ui.features.edit_todo.view.FABAddTodo
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
+import com.brighttorchstudio.schedist.ui.features.notify.view.NotificationPermissionDialog
 import com.brighttorchstudio.schedist.ui.shared_view.BottomActionBar
 
 //Screen quản lý danh sách todo
@@ -62,6 +63,9 @@ fun ManageTodoScreen(
             snackbarHostState = snackbarHostState
         )
     }
+
+    //nhắc nhở bật thông báo
+    NotificationPermissionDialog()
 
     //Giao diện chính
     Scaffold(

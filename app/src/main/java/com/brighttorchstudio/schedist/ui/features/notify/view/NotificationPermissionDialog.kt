@@ -19,11 +19,11 @@ import com.brighttorchstudio.schedist.ui.features.notify.view_model.NotifyViewMo
 fun NotificationPermissionDialog(
     viewModel: NotifyViewModel = hiltViewModel(),
 ) {
-    val permissionState by viewModel.notificationPermissionState.collectAsStateWithLifecycle()
+    val permissionState by viewModel.permissionState.collectAsStateWithLifecycle()
     var showDialog by remember { mutableStateOf(false) }
 
     when (permissionState) {
-        is NotifyViewModel.NotificationPermissionState.GrantedAndEnabled -> {
+        is NotifyViewModel.PermissionState.GrantedAndEnabled -> {
             if (showDialog) {
                 AlertDialog(
                     icon = {
@@ -63,11 +63,11 @@ fun NotificationPermissionDialog(
             }
         }
 
-        is NotifyViewModel.NotificationPermissionState.GrantedButDisabled -> {
+        is NotifyViewModel.PermissionState.GrantedButDisabled -> {
 
         }
 
-        is NotifyViewModel.NotificationPermissionState.Denied -> {
+        is NotifyViewModel.PermissionState.Denied -> {
 
         }
     }
