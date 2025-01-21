@@ -6,15 +6,14 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.brighttorchstudio.schedist.data.notification.model.NotificationModel
-import com.brighttorchstudio.schedist.data.services.notification.ReminderWorker
+import com.brighttorchstudio.schedist.data.services.workers.NotificationWorker
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class LocalNotificationRepository @Inject constructor(
     @ApplicationContext private val context: Context,
-
-    ) : NotificationRepository {
+) : NotificationRepository {
 
     private val workManager = WorkManager.getInstance(context)
 
@@ -29,7 +28,7 @@ class LocalNotificationRepository @Inject constructor(
         data.putString("notification_title", notification.title)
         data.putString("notification_description", notification.description)
 
-        val workRequestBuilder = OneTimeWorkRequestBuilder<ReminderWorker>()
+        val workRequestBuilder = OneTimeWorkRequestBuilder<NotificationWorker>()
             .setInitialDelay(duration, timeUnit)
             .setInputData(data.build())
             .build()

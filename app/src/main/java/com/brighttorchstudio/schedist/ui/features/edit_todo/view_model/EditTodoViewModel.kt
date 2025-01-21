@@ -4,16 +4,20 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
+import com.brighttorchstudio.schedist.data.notification.model.NotificationModel
+import com.brighttorchstudio.schedist.data.notification.repository.NotificationRepository
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.data.todo.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class EditTodoViewModel @Inject constructor(
-    private val localTodoRepository: TodoRepository
+    private val localTodoRepository: TodoRepository,
+    private val localNotificationRepository: NotificationRepository,
 ) : ViewModel() {
 
     var todoAdded: Todo? = null //todo vừa mới được thêm, dùng cho việc hoàn tác thêm todo
@@ -25,6 +29,15 @@ class EditTodoViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             localTodoRepository.addTodo(todo)
             todoAdded = todo
+            localNotificationRepository.scheduleNotification(
+                notification = NotificationModel(
+                    id = todo.id,
+                    title = todo.title,
+                    description = todo.description,
+                ),
+                duration = 10,
+                timeUnit = TimeUnit.SECONDS
+            )
         }
     }
 
