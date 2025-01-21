@@ -72,6 +72,9 @@ dependencies {
     val nav_version = "2.8.5"
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
+    val work_version = "2.10.0"
+    implementation("androidx.work:work-runtime-ktx:$work_version")
+
 }
 
 // Allow references to generated code
