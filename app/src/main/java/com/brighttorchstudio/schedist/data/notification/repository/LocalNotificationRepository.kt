@@ -1,32 +1,33 @@
-package com.brighttorchstudio.schedist.data.services.notification
+package com.brighttorchstudio.schedist.data.notification.repository
 
 import android.content.Context
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.brighttorchstudio.schedist.data.local_database.todo.TodoDao
+import com.brighttorchstudio.schedist.data.notification.model.NotificationModel
+import com.brighttorchstudio.schedist.data.services.notification.ReminderWorker
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class TodoWorkerManagerRepository @Inject constructor(
+class LocalNotificationRepository @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val todoDao: TodoDao,
-) : WorkManagerRepository {
+
+    ) : NotificationRepository {
 
     private val workManager = WorkManager.getInstance(context)
 
-    override suspend fun scheduleReminder(
+    override fun scheduleNotification(
+        notification: NotificationModel,
         duration: Long,
-        timeUnit: TimeUnit,
-        id: String,
+        timeUnit: TimeUnit
     ) {
-        val todo = todoDao.getTodoById(id)
 
         val data = Data.Builder()
-        data.putString("todo_title", todo.title)
-        data.putString("todo_description", todo.description)
+        data.putString("notification_id", notification.id)
+        data.putString("notification_title", notification.title)
+        data.putString("notification_description", notification.description)
 
         val workRequestBuilder = OneTimeWorkRequestBuilder<ReminderWorker>()
             .setInitialDelay(duration, timeUnit)
@@ -34,9 +35,11 @@ class TodoWorkerManagerRepository @Inject constructor(
             .build()
 
         workManager.enqueueUniqueWork(
-            id,
+            notification.id,
             ExistingWorkPolicy.REPLACE,
             workRequestBuilder
         )
     }
+
+
 }
