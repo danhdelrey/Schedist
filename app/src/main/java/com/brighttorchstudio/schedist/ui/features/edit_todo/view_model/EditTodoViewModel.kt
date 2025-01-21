@@ -53,6 +53,7 @@ class EditTodoViewModel @Inject constructor(
     fun undoAddTodo() {
         if (todoAdded != null) {
             viewModelScope.launch(Dispatchers.IO) {
+                localNotificationRepository.cancelNotification(todoAdded!!.id)
                 localTodoRepository.deleteTodo(todoAdded!!)
                 todoAdded = null
             }
@@ -64,6 +65,23 @@ class EditTodoViewModel @Inject constructor(
         newTodo: Todo
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+
+            localNotificationRepository.cancelNotification(todo.id)
+            if (newTodo.reminderEnabled) {
+                val secondDifference = DateTimeHelper.calculateSecondsDifference(newTodo.dateTime)
+                if (secondDifference < 0) {
+                    localNotificationRepository.scheduleNotification(
+                        notification = Notification(
+                            id = todo.id, //id không bao giờ thay đổi nên vẫn giữ nguyên
+                            title = newTodo.title,
+                            description = newTodo.description,
+                        ),
+                        duration = abs(secondDifference),
+                        timeUnit = TimeUnit.SECONDS
+                    )
+                }
+            }
+
             localTodoRepository.updateTodo(newTodo)
             oldTodo = todo
         }
@@ -72,6 +90,24 @@ class EditTodoViewModel @Inject constructor(
     fun undoUpdateTodo() {
         if (oldTodo != null) {
             viewModelScope.launch(Dispatchers.IO) {
+
+                localNotificationRepository.cancelNotification(oldTodo!!.id)
+                if (oldTodo!!.reminderEnabled) {
+                    val secondDifference =
+                        DateTimeHelper.calculateSecondsDifference(oldTodo!!.dateTime)
+                    if (secondDifference < 0) {
+                        localNotificationRepository.scheduleNotification(
+                            notification = Notification(
+                                id = oldTodo!!.id,
+                                title = oldTodo!!.title,
+                                description = oldTodo!!.description,
+                            ),
+                            duration = abs(secondDifference),
+                            timeUnit = TimeUnit.SECONDS
+                        )
+                    }
+                }
+
                 localTodoRepository.updateTodo(oldTodo!!)
                 oldTodo = null
             }

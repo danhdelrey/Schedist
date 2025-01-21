@@ -71,5 +71,9 @@ class LocalNotificationRepository @Inject constructor(
         )
     }
 
+    override fun cancelNotification(notificationId: String) {
+        workManager.cancelUniqueWork(notificationId)
+    }
+
 
 }

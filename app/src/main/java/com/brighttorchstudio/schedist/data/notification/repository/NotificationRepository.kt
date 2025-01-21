@@ -12,4 +12,7 @@ interface NotificationRepository {
         timeUnit: TimeUnit
     )
 
+    fun cancelNotification(notificationId: String)
+
+
 }
