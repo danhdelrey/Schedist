@@ -10,7 +10,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.brighttorchstudio.schedist.core.common.NotificationPermissionState
-import com.brighttorchstudio.schedist.data.notification.model.NotificationModel
+import com.brighttorchstudio.schedist.data.notification.model.Notification
 import com.brighttorchstudio.schedist.data.services.workers.NotificationWorker
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.TimeUnit
@@ -48,7 +48,7 @@ class LocalNotificationRepository @Inject constructor(
     }
 
     override fun scheduleNotification(
-        notification: NotificationModel,
+        notification: Notification,
         duration: Long,
         timeUnit: TimeUnit
     ) {
