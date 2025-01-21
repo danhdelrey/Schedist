@@ -18,9 +18,3 @@ enum class ImportanceLevel(val color: Color) {
         }
     }
 }
-
-enum class NotificationPermissionState {
-    GRANTED_AND_ENABLED,
-    GRANTED_BUT_DISABLED,
-    DENIED
-}

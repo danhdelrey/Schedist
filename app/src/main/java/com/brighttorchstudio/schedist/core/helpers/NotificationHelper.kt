@@ -6,42 +6,14 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import com.brighttorchstudio.schedist.MainActivity
 import com.brighttorchstudio.schedist.R
-import com.brighttorchstudio.schedist.core.common.NotificationPermissionState
 
 
 object NotificationHelper {
-
-    fun checkNotificationPermissionState(context: Context): NotificationPermissionState {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return if (ContextCompat.checkSelfPermission(
-                    context,
-                    android.Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
-                    NotificationPermissionState.GRANTED_AND_ENABLED
-                } else {
-                    NotificationPermissionState.GRANTED_BUT_DISABLED
-                }
-            } else {
-                NotificationPermissionState.DENIED
-            }
-        } else {
-            // On pre-Tiramisu, only check if notifications are enabled:
-            return if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
-                NotificationPermissionState.GRANTED_AND_ENABLED
-            } else {
-                NotificationPermissionState.GRANTED_BUT_DISABLED
-            }
-        }
-    }
 
     @SuppressLint("MissingPermission")
     fun pushNotification(
@@ -77,10 +49,7 @@ object NotificationHelper {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
-        if (checkNotificationPermissionState(context) == NotificationPermissionState.GRANTED_AND_ENABLED) {
-            NotificationManagerCompat.from(context)
-                .notify(id, builder.build())
-        }
+        NotificationManagerCompat.from(context).notify(id, builder.build())
 
     }
 
