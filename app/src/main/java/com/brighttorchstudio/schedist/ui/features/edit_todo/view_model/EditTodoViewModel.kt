@@ -3,7 +3,6 @@ package com.brighttorchstudio.schedist.ui.features.edit_todo.view_model
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
 import com.brighttorchstudio.schedist.data.notification.model.Notification
 import com.brighttorchstudio.schedist.data.notification.repository.NotificationRepository
@@ -12,9 +11,7 @@ import com.brighttorchstudio.schedist.data.todo.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.math.abs
 
 @HiltViewModel
 class EditTodoViewModel @Inject constructor(
@@ -31,18 +28,14 @@ class EditTodoViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             if (todo.reminderEnabled) {
-                val secondDifference = DateTimeHelper.calculateSecondsDifference(todo.dateTime)
-                if (secondDifference < 0) {
-                    localNotificationRepository.scheduleNotification(
-                        notification = Notification(
-                            id = todo.id,
-                            title = todo.title,
-                            description = todo.description,
-                        ),
-                        duration = abs(secondDifference),
-                        timeUnit = TimeUnit.SECONDS
+                localNotificationRepository.scheduleNotification(
+                    Notification(
+                        id = todo.id,
+                        title = todo.title,
+                        description = todo.description,
+                        scheduledDateTime = todo.dateTime
                     )
-                }
+                )
             }
 
             localTodoRepository.addTodo(todo)
@@ -66,20 +59,15 @@ class EditTodoViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            localNotificationRepository.cancelNotification(todo.id)
             if (newTodo.reminderEnabled) {
-                val secondDifference = DateTimeHelper.calculateSecondsDifference(newTodo.dateTime)
-                if (secondDifference < 0) {
-                    localNotificationRepository.scheduleNotification(
-                        notification = Notification(
-                            id = todo.id, //id không bao giờ thay đổi nên vẫn giữ nguyên
-                            title = newTodo.title,
-                            description = newTodo.description,
-                        ),
-                        duration = abs(secondDifference),
-                        timeUnit = TimeUnit.SECONDS
+                localNotificationRepository.scheduleNotification(
+                    Notification(
+                        id = newTodo.id,
+                        title = newTodo.title,
+                        description = newTodo.description,
+                        scheduledDateTime = newTodo.dateTime
                     )
-                }
+                )
             }
 
             localTodoRepository.updateTodo(newTodo)
@@ -91,21 +79,15 @@ class EditTodoViewModel @Inject constructor(
         if (oldTodo != null) {
             viewModelScope.launch(Dispatchers.IO) {
 
-                localNotificationRepository.cancelNotification(oldTodo!!.id)
                 if (oldTodo!!.reminderEnabled) {
-                    val secondDifference =
-                        DateTimeHelper.calculateSecondsDifference(oldTodo!!.dateTime)
-                    if (secondDifference < 0) {
-                        localNotificationRepository.scheduleNotification(
-                            notification = Notification(
-                                id = oldTodo!!.id,
-                                title = oldTodo!!.title,
-                                description = oldTodo!!.description,
-                            ),
-                            duration = abs(secondDifference),
-                            timeUnit = TimeUnit.SECONDS
+                    localNotificationRepository.scheduleNotification(
+                        Notification(
+                            id = oldTodo!!.id,
+                            title = oldTodo!!.title,
+                            description = oldTodo!!.description,
+                            scheduledDateTime = oldTodo!!.dateTime
                         )
-                    }
+                    )
                 }
 
                 localTodoRepository.updateTodo(oldTodo!!)

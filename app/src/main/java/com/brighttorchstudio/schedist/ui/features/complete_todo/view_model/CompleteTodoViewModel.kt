@@ -3,7 +3,6 @@ package com.brighttorchstudio.schedist.ui.features.complete_todo.view_model
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
 import com.brighttorchstudio.schedist.data.notification.model.Notification
 import com.brighttorchstudio.schedist.data.notification.repository.NotificationRepository
@@ -12,9 +11,7 @@ import com.brighttorchstudio.schedist.data.todo.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.math.abs
 
 @HiltViewModel
 class CompleteTodoViewModel @Inject constructor(
@@ -39,19 +36,14 @@ class CompleteTodoViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
 
                 if (todoCompleted!!.reminderEnabled) {
-                    val secondDifference =
-                        DateTimeHelper.calculateSecondsDifference(todoCompleted!!.dateTime)
-                    if (secondDifference < 0) {
-                        localNotificationRepository.scheduleNotification(
-                            notification = Notification(
-                                id = todoCompleted!!.id,
-                                title = todoCompleted!!.title,
-                                description = todoCompleted!!.description,
-                            ),
-                            duration = abs(secondDifference),
-                            timeUnit = TimeUnit.SECONDS
+                    localNotificationRepository.scheduleNotification(
+                        Notification(
+                            id = todoCompleted!!.id,
+                            title = todoCompleted!!.title,
+                            description = todoCompleted!!.description,
+                            scheduledDateTime = todoCompleted!!.dateTime
                         )
-                    }
+                    )
                 }
 
                 localTodoRepository.addTodo(todoCompleted!!)
