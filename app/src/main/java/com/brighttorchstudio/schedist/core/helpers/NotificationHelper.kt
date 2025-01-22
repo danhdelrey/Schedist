@@ -1,21 +1,22 @@
 package com.brighttorchstudio.schedist.core.helpers
 
-import android.annotation.SuppressLint
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.brighttorchstudio.schedist.MainActivity
 import com.brighttorchstudio.schedist.R
 
 
 object NotificationHelper {
 
-    @SuppressLint("MissingPermission")
     fun pushNotification(
         id: Int,
         title: String?,
@@ -25,6 +26,17 @@ object NotificationHelper {
         verboseNotificationChannelDescription: String = "Shows notifications whenever work starts",
         channelId: String = "VERBOSE_NOTIFICATION",
     ) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+        }
+
         val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel(
             channelId,
