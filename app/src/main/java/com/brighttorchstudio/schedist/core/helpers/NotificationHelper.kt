@@ -22,9 +22,9 @@ object NotificationHelper {
         title: String?,
         description: String?,
         context: Context,
-        verboseNotificationChannelName: String = "Verbose WorkManager Notifications",
-        verboseNotificationChannelDescription: String = "Shows notifications whenever work starts",
-        channelId: String = "VERBOSE_NOTIFICATION",
+        verboseNotificationChannelName: String = "Nhiệm vụ cần làm",
+        verboseNotificationChannelDescription: String = "Thông báo nhắc nhở nhiệm vụ cần làm",
+        channelId: String = "NHIEM_VU",
     ) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
