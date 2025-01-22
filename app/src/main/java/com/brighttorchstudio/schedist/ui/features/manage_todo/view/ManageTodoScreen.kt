@@ -36,8 +36,8 @@ import com.brighttorchstudio.schedist.ui.features.delete_todo.view.DeleteTodoBut
 import com.brighttorchstudio.schedist.ui.features.edit_todo.view.EditTodoBottomSheet
 import com.brighttorchstudio.schedist.ui.features.edit_todo.view.FABAddTodo
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
-import com.brighttorchstudio.schedist.ui.features.notify.view.NotificationPermissionDialog
 import com.brighttorchstudio.schedist.ui.shared_view.BottomActionBar
+import com.brighttorchstudio.schedist.ui.shared_view.RequestNotificationPermission
 
 //Screen quản lý danh sách todo
 @OptIn(ExperimentalMaterial3Api::class)
@@ -159,8 +159,8 @@ fun ManageTodoScreen(
 
             is ManageTodoViewModel.UiState.Success -> {
                 //nhắc nhở bật thông báo
-                NotificationPermissionDialog()
-                
+                RequestNotificationPermission()
+
                 val todoList = (uiState as ManageTodoViewModel.UiState.Success).todoList
                 if (todoList.isNotEmpty()) {
                     Column(
