@@ -2,6 +2,9 @@ package com.brighttorchstudio.schedist.data.local_database
 
 import androidx.room.TypeConverter
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
+import com.brighttorchstudio.schedist.data.local_database.tag.TagEntity
+import com.brighttorchstudio.schedist.data.tag.model.Tag
+import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
@@ -33,4 +36,10 @@ class Converter {
     fun toImportanceLevel(value: String): ImportanceLevel {
         return ImportanceLevel.valueOf(value) // Chuyển đổi từ String sang enum
     }
+
+    @TypeConverter
+    fun fromTagEntity(tagEntity: List<TagEntity>) : String = Json.encodeToString(tagEntity)
+
+    @TypeConverter
+    fun toTagEntity(tag : String) : List<TagEntity> = Json.decodeFromString(tag)
 }
