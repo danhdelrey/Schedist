@@ -3,6 +3,7 @@ package com.brighttorchstudio.schedist.data.local_database
 import android.content.Context
 import androidx.room.Room
 import com.brighttorchstudio.schedist.data.local_database.note.NoteDao
+import com.brighttorchstudio.schedist.data.local_database.tag.TagDao
 import com.brighttorchstudio.schedist.data.local_database.todo.TodoDao
 import dagger.Module
 import dagger.Provides
@@ -22,8 +23,16 @@ object DatabaseModule {
         return todoDatabase.todoDao()
     }
 
+    @Provides
+    @Singleton
     fun provideNoteDao(todoDatabase: TodoDatabase): NoteDao {
         return todoDatabase.noteDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTagDao(todoDatabase: TodoDatabase): TagDao {
+        return todoDatabase.tagDao()
     }
 
     @Provides

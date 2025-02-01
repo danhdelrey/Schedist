@@ -1,6 +1,5 @@
 package com.brighttorchstudio.schedist.data.local_database.note
 
-import android.provider.ContactsContract.CommonDataKinds.Note
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -10,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
-    @Query("SELECT * FROM NoteEntity ORDER BY dateTime")
+    @Query("SELECT * FROM NoteEntity ORDER BY dateCreated DESC")
     fun getNotes(): Flow<List<NoteEntity>>
 
     @Insert

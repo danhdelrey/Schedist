@@ -1,5 +1,6 @@
 package com.brighttorchstudio.schedist.data.local_database
 
+import android.graphics.Color
 import androidx.room.TypeConverter
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 import com.brighttorchstudio.schedist.data.local_database.tag.TagEntity
@@ -38,8 +39,9 @@ class Converter {
     }
 
     @TypeConverter
-    fun fromTagEntity(tagEntity: List<TagEntity>) : String = Json.encodeToString(tagEntity)
+    fun fromTagList(tagList: List<String>) : String = Json.encodeToString(tagList)
 
     @TypeConverter
-    fun toTagEntity(tag : String) : List<TagEntity> = Json.decodeFromString(tag)
+    fun toTagList(tagList : String) : List<String> = Json.decodeFromString(tagList)
+
 }

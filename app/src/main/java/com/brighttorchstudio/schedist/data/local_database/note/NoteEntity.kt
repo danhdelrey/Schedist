@@ -10,6 +10,7 @@ data class NoteEntity(
     @PrimaryKey val id: String,
     val title: String,
     val description: String,
-    val tags: List<TagEntity>,
+    val tags: List<String>,
+    val dateCreated : LocalDateTime,
     val dateTime: LocalDateTime,
 )

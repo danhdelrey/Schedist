@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.brighttorchstudio.schedist.ui.features.manage_note.view.ManageNoteScreen
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view.ManageTodoScreen
 
 //Là điểm vào đầu tiên của ứng dụng
@@ -30,15 +31,7 @@ fun AppNavigation() {
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None }
         ) {
-
-            //Nội dung của screen
-            Scaffold(
-                bottomBar = {
-                    BottomNavigationBar(navController = navController)
-                }
-            ) { innerPadding ->
-                Text("Manage Note Screen", modifier = Modifier.padding(innerPadding))
-            }
+            ManageNoteScreen(navController = navController)
         }
 
         //Khai báo các route khác ở đây...

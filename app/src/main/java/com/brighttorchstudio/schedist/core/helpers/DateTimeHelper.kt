@@ -19,6 +19,11 @@ class DateTimeHelper {
             return dateTime.format(formatter)
         }
 
+        fun formatDateOnly(date: LocalDateTime): String {
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            return date.format(formatter)
+        }
+
         //Kiểm tra xem ngày đó có tới hạn chưa
         fun isDue(dateTime: LocalDateTime): Boolean {
             return dateTime.isBefore(LocalDateTime.now())
@@ -38,6 +43,10 @@ class DateTimeHelper {
         fun localTimeToFormattedString(localTime: LocalTime): String {
             val formatter = DateTimeFormatter.ofPattern("HH:mm")
             return localTime.format(formatter)
+        }
+
+        fun isEqual(dateTime1: LocalDateTime) : Boolean{
+            return dateTime1.isEqual(LocalDateTime.of(0,1,1,0,0))
         }
 
     }

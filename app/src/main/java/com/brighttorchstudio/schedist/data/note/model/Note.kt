@@ -8,8 +8,9 @@ data class Note(
     val id: String,
     val title: String,
     val description: String,
-    val tags: List<TagEntity>,
+    val tags: List<String>,
     val dateTime: LocalDateTime,
+    val dateCreated : LocalDateTime,
 ){
     fun toEntity() : NoteEntity{
         return NoteEntity(
@@ -18,6 +19,7 @@ data class Note(
             description = description,
             tags = tags,
             dateTime = dateTime,
+            dateCreated = dateCreated
         )
     }
 
@@ -28,7 +30,8 @@ data class Note(
                 title = noteEntity.title,
                 description = noteEntity.description,
                 tags = noteEntity.tags,
-                dateTime = noteEntity.dateTime
+                dateTime = noteEntity.dateTime,
+                dateCreated = noteEntity.dateCreated
                 )
         }
     }

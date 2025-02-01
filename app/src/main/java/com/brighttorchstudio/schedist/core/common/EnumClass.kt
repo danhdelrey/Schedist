@@ -20,3 +20,8 @@ enum class ImportanceLevel(val color: Color) {
 }
 
 //Khai báo các class enum khác ở đây
+
+enum class BasicColorTagSet(val color: Color){
+    PURPLE(puprleTag);
+
+}
