@@ -5,6 +5,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+
 }
 
 android {
@@ -71,6 +72,9 @@ dependencies {
 
     val nav_version = "2.8.5"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0") //serialization
 
     val work_version = "2.10.0"
     implementation("androidx.work:work-runtime-ktx:$work_version")

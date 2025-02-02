@@ -20,6 +20,11 @@ class DateTimeHelper {
             return dateTime.format(formatter)
         }
 
+        fun formatDateOnly(date: LocalDateTime): String {
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            return date.format(formatter)
+        }
+
         //Kiểm tra xem ngày đó có tới hạn chưa
         fun isDue(dateTime: LocalDateTime): Boolean {
             return dateTime.isBefore(LocalDateTime.now())
@@ -41,12 +46,15 @@ class DateTimeHelper {
             return localTime.format(formatter)
         }
 
+        fun isEqual(dateTime1: LocalDateTime) : Boolean{
+            return dateTime1.isEqual(LocalDateTime.of(0,1,1,0,0))
+        }
+
         fun calculateSecondsDifference(inputDateTime: LocalDateTime): Long {
             val now = LocalDateTime.now()
             val duration = Duration.between(inputDateTime, now)
             return duration.seconds
         }
-
 
     }
 }
