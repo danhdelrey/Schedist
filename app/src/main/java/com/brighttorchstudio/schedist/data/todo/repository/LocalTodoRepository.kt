@@ -11,7 +11,7 @@ import javax.inject.Inject
 //Mọi thay đổi liên quan đến dữ liệu Todo cục bộ đều phải qua lớp này
 //Implement TodoRepository interface để đảm bảo đầu vào và đầu ra rõ ràng
 class LocalTodoRepository @Inject constructor(
-    private val todoDao: TodoDao
+    private val todoDao: TodoDao,
 ) : TodoRepository {
 
     override fun getTodos(): Flow<List<Todo>> = todoDao.getTodos().map { todos ->
@@ -43,10 +43,5 @@ class LocalTodoRepository @Inject constructor(
     override suspend fun updateTodo(todo: List<Todo>) {
         todoDao.updateTodo(todo.map { it.toEntity() })
     }
-
-    override suspend fun deleteAllTodos() {
-        todoDao.deleteAllTodos()
-    }
-
 
 }

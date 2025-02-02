@@ -4,6 +4,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
+import com.brighttorchstudio.schedist.data.notification.model.Notification
+import com.brighttorchstudio.schedist.data.notification.repository.NotificationRepository
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.data.todo.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditTodoViewModel @Inject constructor(
-    private val localTodoRepository: TodoRepository
+    private val localTodoRepository: TodoRepository,
+    private val localNotificationRepository: NotificationRepository,
 ) : ViewModel() {
 
     var todoAdded: Todo? = null //todo vừa mới được thêm, dùng cho việc hoàn tác thêm todo
@@ -23,6 +26,18 @@ class EditTodoViewModel @Inject constructor(
         todo: Todo
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+
+            if (todo.reminderEnabled) {
+                localNotificationRepository.scheduleNotification(
+                    Notification(
+                        id = todo.id,
+                        title = todo.title,
+                        description = todo.description,
+                        scheduledDateTime = todo.dateTime
+                    )
+                )
+            }
+
             localTodoRepository.addTodo(todo)
             todoAdded = todo
         }
@@ -31,6 +46,7 @@ class EditTodoViewModel @Inject constructor(
     fun undoAddTodo() {
         if (todoAdded != null) {
             viewModelScope.launch(Dispatchers.IO) {
+                localNotificationRepository.cancelNotification(todoAdded!!.id)
                 localTodoRepository.deleteTodo(todoAdded!!)
                 todoAdded = null
             }
@@ -42,6 +58,18 @@ class EditTodoViewModel @Inject constructor(
         newTodo: Todo
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+
+            if (newTodo.reminderEnabled) {
+                localNotificationRepository.scheduleNotification(
+                    Notification(
+                        id = newTodo.id,
+                        title = newTodo.title,
+                        description = newTodo.description,
+                        scheduledDateTime = newTodo.dateTime
+                    )
+                )
+            }
+
             localTodoRepository.updateTodo(newTodo)
             oldTodo = todo
         }
@@ -50,6 +78,18 @@ class EditTodoViewModel @Inject constructor(
     fun undoUpdateTodo() {
         if (oldTodo != null) {
             viewModelScope.launch(Dispatchers.IO) {
+
+                if (oldTodo!!.reminderEnabled) {
+                    localNotificationRepository.scheduleNotification(
+                        Notification(
+                            id = oldTodo!!.id,
+                            title = oldTodo!!.title,
+                            description = oldTodo!!.description,
+                            scheduledDateTime = oldTodo!!.dateTime
+                        )
+                    )
+                }
+
                 localTodoRepository.updateTodo(oldTodo!!)
                 oldTodo = null
             }

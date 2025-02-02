@@ -1,5 +1,6 @@
 package com.brighttorchstudio.schedist.core.helpers
 
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -47,6 +48,12 @@ class DateTimeHelper {
 
         fun isEqual(dateTime1: LocalDateTime) : Boolean{
             return dateTime1.isEqual(LocalDateTime.of(0,1,1,0,0))
+        }
+
+        fun calculateSecondsDifference(inputDateTime: LocalDateTime): Long {
+            val now = LocalDateTime.now()
+            val duration = Duration.between(inputDateTime, now)
+            return duration.seconds
         }
 
     }

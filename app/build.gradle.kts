@@ -76,6 +76,10 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0") //serialization
 
+    val work_version = "2.10.0"
+    implementation("androidx.work:work-runtime-ktx:$work_version")
+
+    implementation("androidx.core:core-splashscreen:1.0.0")
 }
 
 // Allow references to generated code

@@ -37,6 +37,7 @@ import com.brighttorchstudio.schedist.ui.features.edit_todo.view.EditTodoBottomS
 import com.brighttorchstudio.schedist.ui.features.edit_todo.view.FABAddTodo
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.BottomActionBar
+import com.brighttorchstudio.schedist.ui.shared_view.RequestNotificationPermission
 
 //Screen quản lý danh sách todo
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,6 +63,7 @@ fun ManageTodoScreen(
             snackbarHostState = snackbarHostState
         )
     }
+
 
     //Giao diện chính
     Scaffold(
@@ -156,6 +158,9 @@ fun ManageTodoScreen(
             }
 
             is ManageTodoViewModel.UiState.Success -> {
+                //nhắc nhở bật thông báo
+                RequestNotificationPermission()
+
                 val todoList = (uiState as ManageTodoViewModel.UiState.Success).todoList
                 if (todoList.isNotEmpty()) {
                     Column(
