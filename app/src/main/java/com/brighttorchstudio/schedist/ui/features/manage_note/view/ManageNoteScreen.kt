@@ -22,13 +22,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,8 +33,6 @@ import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.core.navigation.BottomNavigationBar
 import com.brighttorchstudio.schedist.ui.features.delete_note.view.DeleteNoteButton
 import com.brighttorchstudio.schedist.ui.features.manage_note.view_model.ManageNoteViewModel
-import com.brighttorchstudio.schedist.ui.features.manage_todo.view.TodoItem
-import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
 import com.brighttorchstudio.schedist.ui.features.update_note.view.FABAddNote
 import com.brighttorchstudio.schedist.ui.features.update_note.view.UpdateNotePBS
 import com.brighttorchstudio.schedist.ui.shared_view.BottomActionBar
@@ -80,11 +75,6 @@ fun ManageNoteScreen(
             TopAppBar(
                 actions = {
                     if (inSelectMode){
-                        TextButton(
-                            onClick = {viewModel.exitSelectMode()}
-                        ) {
-                            Text("Quay lại")
-                        }
                         if (!selectAllNotes)
                             TextButton(
                                 onClick = {viewModel.onSelectAllNotesClicked()}
@@ -103,14 +93,22 @@ fun ManageNoteScreen(
 
                 title = { Text(topBarText) },
                 navigationIcon = {
-                    IconButton(
-                        onClick = {}
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "menu"
-                        )
+                    if (inSelectMode){
+                        TextButton(
+                            onClick = {viewModel.exitSelectMode()}
+                        ) {
+                            Text("Quay lại")
+                        }
                     }
+                    else
+                        IconButton(
+                            onClick = {}
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Menu,
+                                contentDescription = "menu"
+                            )
+                        }
                 }
             )
         },

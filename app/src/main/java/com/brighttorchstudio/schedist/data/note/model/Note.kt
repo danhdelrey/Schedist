@@ -8,7 +8,7 @@ data class Note(
     val id: String,
     val title: String,
     val description: String,
-    val tags: List<String>,
+    var tags: List<String>,
     val dateTime: LocalDateTime,
     val dateCreated : LocalDateTime,
 ){

@@ -3,7 +3,6 @@ package com.brighttorchstudio.schedist.ui.features.manage_note.view
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,20 +22,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.brighttorchstudio.schedist.R
+import com.brighttorchstudio.schedist.core.common.BasicColorTagSet
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.note.model.Note
+import com.brighttorchstudio.schedist.data.tag.model.Tag
 import com.brighttorchstudio.schedist.ui.features.manage_note.view_model.ManageNoteViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.schedule.FormattedDateText
+import com.brighttorchstudio.schedist.ui.shared_view.tag.TagList
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -49,6 +49,15 @@ fun NoteItem(
     val selectedNotesForPerformingActions by viewModel.selectedNotesForPerformingAction.collectAsStateWithLifecycle()
 
     var haveDate = !DateTimeHelper.isEqual(note.dateTime)
+
+    val tempTag : List<Tag> = listOf(
+        Tag("a", "Hoa hoc", BasicColorTagSet.PURPLE.color.toArgb().toLong()),
+        Tag("a", "Mua sắm", BasicColorTagSet.PINK.color.toArgb().toLong()),
+        Tag("a", "truong hoc", BasicColorTagSet.GREEN.color.toArgb().toLong()),
+        Tag("a", "Hoa hoc", BasicColorTagSet.PURPLE.color.toArgb().toLong()),
+        Tag("a", "Mua sắm", BasicColorTagSet.PINK.color.toArgb().toLong()),
+        Tag("a", "truong hoc", BasicColorTagSet.GREEN.color.toArgb().toLong()),
+    )
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -95,7 +104,6 @@ fun NoteItem(
                     modifier = Modifier.fillMaxWidth().weight(1f),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Row(modifier = Modifier.fillMaxWidth()){
                         if (note.title.isNotEmpty())
                             Text(
                                 text = note.title,
@@ -116,7 +124,7 @@ fun NoteItem(
 
                             )
                         }
-                    }
+
                     if (haveDate){
                         Row{
                             FormattedDateText(
@@ -141,19 +149,28 @@ fun NoteItem(
             }
 
             AnimatedVisibility(visible = !showNoteDetail) {
+                Row(modifier = Modifier.padding(horizontal = 14.dp)){
+                    TagList(
+                        tagList = tempTag
+                    )
+                }
 
             }
 
             AnimatedVisibility(visible = (showNoteDetail && (note.description.isNotEmpty() || note.tags.isNotEmpty()))) {
-                Row(modifier = Modifier.padding(horizontal = 14.dp)){
+                Column(modifier = Modifier.padding(horizontal = 14.dp)){
                     Text(
                         text = note.description,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     )
-                }
 
+                    TagList(
+                        fullMode = true,
+                        tagList = tempTag
+                    )
+                }
             }
         }
 

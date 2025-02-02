@@ -9,6 +9,7 @@ val trivialTask = Color(0xFF108C61)
 
 //Bang mau co san cua Tag
 val puprleTag = Color(0xFFBA6EFF)
-
+val pinkTag = Color(0xFFED7EB9)
+val greenTag = Color(0xFF4DBB56)
 
 //Khai báo các màu khác ở đây...

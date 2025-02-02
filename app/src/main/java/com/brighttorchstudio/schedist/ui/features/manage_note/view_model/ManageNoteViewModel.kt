@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brighttorchstudio.schedist.data.note.model.Note
 import com.brighttorchstudio.schedist.data.note.repository.NoteRepository
+import com.brighttorchstudio.schedist.data.tag.repository.LocalTagRepository
+import com.brighttorchstudio.schedist.data.tag.repository.TagRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ManageNoteViewModel @Inject constructor(
-    private val localNoteRepository: NoteRepository
+    private val localNoteRepository: NoteRepository,
+    private val localTagRepository: TagRepository,
 ) : ViewModel(){
 
     sealed class UiState{
@@ -41,8 +44,10 @@ class ManageNoteViewModel @Inject constructor(
     init{
         viewModelScope.launch {
             localNoteRepository.getNotes().collect{
-                notes -> _uiState.value = UiState.Success(notes)
+                notes ->
+                    _uiState.value = UiState.Success(notes)
             }
+
         }
     }
 
