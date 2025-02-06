@@ -5,12 +5,11 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
-    @Query("SELECT * FROM NoteEntity ORDER BY dateCreated DESC")
-    fun getNotes(): Flow<List<NoteEntity>>
+//    @Query("SELECT * FROM NoteEntity ORDER BY dateCreated DESC")
+//    fun getNotes(): Flow<List<NoteEntity>>
 
     @Insert
     suspend fun addNote(note: NoteEntity)
