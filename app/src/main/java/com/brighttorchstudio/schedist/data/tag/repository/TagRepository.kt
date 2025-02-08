@@ -4,8 +4,7 @@ import com.brighttorchstudio.schedist.data.tag.model.Tag
 import kotlinx.coroutines.flow.Flow
 
 interface TagRepository {
-    fun getTags() : Flow<List<Tag>>
-    suspend fun getTagById(tagId : String) : Tag
+    fun getTags(): Flow<List<Tag>>
+    suspend fun getTagById(tagId: String): Tag
     suspend fun addTag(tag: Tag)
-    //fun getTagListForNote(tagIds : List<String>) : List<Tag>
 }

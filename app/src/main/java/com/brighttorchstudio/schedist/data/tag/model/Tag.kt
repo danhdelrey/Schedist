@@ -6,19 +6,19 @@ data class Tag(
     val id: String,
     val name: String,
     val color: Long
-){
-    fun toEntity() : TagEntity {
+) {
+    fun toEntity(): TagEntity {
         return TagEntity(
-            id = id,
+            tagId = id,
             name = name,
             color = color
         )
     }
 
-    companion object{
-        fun fromEntity(tagEntity : TagEntity): Tag{
+    companion object {
+        fun fromEntity(tagEntity: TagEntity): Tag {
             return Tag(
-                id = tagEntity.id,
+                id = tagEntity.tagId,
                 name = tagEntity.name,
                 color = tagEntity.color
             )
