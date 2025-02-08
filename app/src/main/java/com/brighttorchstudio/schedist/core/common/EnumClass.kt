@@ -19,10 +19,24 @@ enum class ImportanceLevel(val color: Color) {
     }
 }
 
-//Khai báo các class enum khác ở đây
-
-enum class BasicColorTagSet(val color: Color){
-    PURPLE(puprleTag),
-    PINK(pinkTag),
-    GREEN(greenTag)
+enum class BasicColorTagSet(val color: Color) {
+    BLUE_GRAY(Color(0xFF607D8B)),      // Blue Gray
+    RED(Color(0xFFE91E63)),            // Red
+    PINK(Color(0xFFF08080)),            // Light Coral (slightly different pink)
+    PURPLE(Color(0xFF9C27B0)),         // Purple
+    DEEP_PURPLE(Color(0xFF673AB7)),     // Deep Purple
+    INDIGO(Color(0xFF3F51B5)),         // Indigo
+    BLUE(Color(0xFF2196F3)),            // Blue
+    LIGHT_BLUE(Color(0xFF03A9F4)),     // Light Blue
+    CYAN(Color(0xFF00BCD4)),           // Cyan
+    TEAL(Color(0xFF009688)),           // Teal
+    GREEN(Color(0xFF4CAF50)),           // Green
+    LIGHT_GREEN(Color(0xFF8BC34A)),     // Light Green
+    LIME(Color(0xFFCDDC39)),           // Lime
+    YELLOW(Color(0xFFFFEB3B)),         // Yellow
+    AMBER(Color(0xFFFFC107)),         // Amber
+    ORANGE(Color(0xFFFF9800)),         // Orange
+    DEEP_ORANGE(Color(0xFFFF5722)),     // Deep Orange
+    BROWN(Color(0xFF795548)),          // Brown
+    GRAY(Color(0xFF9E9E9E)),           // Gray
 }
