@@ -159,7 +159,7 @@ fun NoteItem(
                         note.tags.forEach { tag ->
                             TagItem(
                                 tag = tag,
-                                selected = false,
+                                selected = true,
                                 onClick = {
                                     viewModel.onNoteClicked(note)
                                 }
@@ -191,7 +191,7 @@ fun NoteItem(
                         note.tags.forEach { tag ->
                             TagItem(
                                 tag = tag,
-                                selected = false,
+                                selected = true,
                                 onClick = {
                                     viewModel.onNoteClicked(note)
                                 }
