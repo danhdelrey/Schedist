@@ -7,6 +7,9 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,9 +35,11 @@ import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.note.model.Note
 import com.brighttorchstudio.schedist.ui.features.manage_note.view_model.ManageNoteViewModel
+import com.brighttorchstudio.schedist.ui.features.manage_tag.view.TagItem
+import com.brighttorchstudio.schedist.ui.shared_view.EllipsisBox
 import com.brighttorchstudio.schedist.ui.shared_view.schedule.FormattedDateText
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun NoteItem(
     note: Note,
@@ -46,14 +51,6 @@ fun NoteItem(
 
     var haveDate = !DateTimeHelper.isEqual(note.dateTime)
 
-//    val tempTag : List<Tag> = listOf(
-//        Tag("a", "Hoa hoc", BasicColorTagSet.PURPLE.color.toArgb().toLong()),
-//        Tag("a", "Mua sắm", BasicColorTagSet.PINK.color.toArgb().toLong()),
-//        Tag("a", "truong hoc", BasicColorTagSet.GREEN.color.toArgb().toLong()),
-//        Tag("a", "Hoa hoc", BasicColorTagSet.PURPLE.color.toArgb().toLong()),
-//        Tag("a", "Mua sắm", BasicColorTagSet.PINK.color.toArgb().toLong()),
-//        Tag("a", "truong hoc", BasicColorTagSet.GREEN.color.toArgb().toLong()),
-//    )
 
     Box(
         modifier = Modifier
@@ -147,16 +144,36 @@ fun NoteItem(
                 }
             }
 
-            AnimatedVisibility(visible = !showNoteDetail) {
+            AnimatedVisibility(
+                visible = !showNoteDetail,
+            ) {
                 Row(modifier = Modifier.padding(horizontal = 14.dp)) {
-//                    TagList(
-//                        tagList = tempTag
-//                    )
-                }
+                    FlowRow(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        maxLines = 1,
+                        overflow = FlowRowOverflow.expandIndicator {
+                            EllipsisBox()
+                        }
+                    ) {
+                        note.tags.forEach { tag ->
+                            TagItem(
+                                tag = tag,
+                                selected = false,
+                                onClick = {
+                                    viewModel.onNoteClicked(note)
+                                }
+                            )
+                        }
 
+                    }
+                }
             }
 
-            AnimatedVisibility(visible = (showNoteDetail && (note.description.isNotEmpty() || note.tags.isNotEmpty()))) {
+            AnimatedVisibility(
+                visible = (showNoteDetail && (note.description.isNotEmpty() || note.tags.isNotEmpty())),
+
+                ) {
                 Column(modifier = Modifier.padding(horizontal = 14.dp)) {
                     Text(
                         text = note.description,
@@ -164,11 +181,24 @@ fun NoteItem(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     )
+                    FlowRow(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        overflow = FlowRowOverflow.expandIndicator {
+                            EllipsisBox()
+                        }
+                    ) {
+                        note.tags.forEach { tag ->
+                            TagItem(
+                                tag = tag,
+                                selected = false,
+                                onClick = {
+                                    viewModel.onNoteClicked(note)
+                                }
+                            )
+                        }
 
-//                    TagList(
-//                        fullMode = true,
-//                        tagList = tempTag
-//                    )
+                    }
                 }
             }
         }
