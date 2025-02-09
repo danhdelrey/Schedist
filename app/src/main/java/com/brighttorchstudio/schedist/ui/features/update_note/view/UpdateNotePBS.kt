@@ -36,12 +36,12 @@ import com.brighttorchstudio.schedist.core.common.BasicColorTagSet
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.note.model.Note
 import com.brighttorchstudio.schedist.data.tag.model.Tag
+import com.brighttorchstudio.schedist.ui.features.manage_tag.view.TagList
+import com.brighttorchstudio.schedist.ui.features.manage_tag.view.TagPickerModal
 import com.brighttorchstudio.schedist.ui.features.update_note.view_model.UpdateNoteViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.StyledTextField
 import com.brighttorchstudio.schedist.ui.shared_view.schedule.DatePickerModal
 import com.brighttorchstudio.schedist.ui.shared_view.schedule.FormattedDateText
-import com.brighttorchstudio.schedist.ui.shared_view.tag.TagList
-import com.brighttorchstudio.schedist.ui.shared_view.tag.TagPickerModal
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
@@ -54,25 +54,39 @@ fun UpdateNotePBS(
     snackbarHostState: SnackbarHostState,
     onDismiss: () -> Unit,
     note: Note? = null
-){
+) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
     )
     val focusRequester = remember { FocusRequester() }
 
     var inputNoteTitle by remember { mutableStateOf(note?.title ?: "") }
-    var inputNoteDescription by remember { mutableStateOf(note?.description ?:"") }
-    var inputNoteTags by remember { mutableStateOf(note?.tags ?: emptyList())}
-    var inputNoteDateTime by remember { mutableStateOf(note?.dateTime ?:LocalDateTime.of(0,1,1,0,0)) }
+    var inputNoteDescription by remember { mutableStateOf(note?.description ?: "") }
+    var inputNoteTags by remember { mutableStateOf(note?.tags ?: emptyList()) }
+    var inputNoteDateTime by remember {
+        mutableStateOf(
+            note?.dateTime ?: LocalDateTime.of(
+                0,
+                1,
+                1,
+                0,
+                0
+            )
+        )
+    }
 
-    var haveDate by remember { mutableStateOf(if (note!=null) !(DateTimeHelper.isEqual(inputNoteDateTime))
-                                            else false) }
+    var haveDate by remember {
+        mutableStateOf(
+            if (note != null) !(DateTimeHelper.isEqual(inputNoteDateTime))
+            else false
+        )
+    }
 
     var showDatePicker by remember { mutableStateOf(false) }
 
     var showTagPicker by remember { mutableStateOf(false) }
 
-    val tempTag : List<Tag> = listOf(
+    val tempTag: List<Tag> = listOf(
         Tag("a", "Hoa hoc", BasicColorTagSet.PURPLE.color.toArgb().toLong()),
         Tag("a", "Mua sắm", BasicColorTagSet.PINK.color.toArgb().toLong()),
         Tag("a", "truong hoc", BasicColorTagSet.GREEN.color.toArgb().toLong()),
@@ -85,10 +99,10 @@ fun UpdateNotePBS(
         focusRequester.requestFocus()
     }
 
-    if (showDatePicker){
+    if (showDatePicker) {
         DatePickerModal(
-            initialDate = if(haveDate) inputNoteDateTime!!.toLocalDate() else LocalDate.now(),
-            onDismiss = {showDatePicker = false},
+            initialDate = if (haveDate) inputNoteDateTime!!.toLocalDate() else LocalDate.now(),
+            onDismiss = { showDatePicker = false },
             onDateSelected = {
                 inputNoteDateTime = it.atStartOfDay()
                 haveDate = true
@@ -97,14 +111,14 @@ fun UpdateNotePBS(
             clearDate = {
                 haveDate = false
                 showDatePicker = false
-                inputNoteDateTime = LocalDateTime.of(0,1,1,0,0)
+                inputNoteDateTime = LocalDateTime.of(0, 1, 1, 0, 0)
             }
         )
     }
 
-    if (showTagPicker){
+    if (showTagPicker) {
         TagPickerModal(
-            onDismiss= {showTagPicker=false},
+            onDismiss = { showTagPicker = false },
             tagInUse = tempTag
         )
     }
@@ -125,10 +139,11 @@ fun UpdateNotePBS(
             Column {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween)
+                    horizontalArrangement = Arrangement.SpaceBetween
+                )
                 {
                     IconButton(
-                        onClick = {onDismiss()}
+                        onClick = { onDismiss() }
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.chevron_left),
@@ -141,12 +156,12 @@ fun UpdateNotePBS(
 
                     IconButton(
                         colors = IconButtonDefaults.iconButtonColors().copy(
-                                contentColor = MaterialTheme.colorScheme.primary
-                                ),
+                            contentColor = MaterialTheme.colorScheme.primary
+                        ),
                         enabled = inputNoteTitle.isNotBlank() || inputNoteDescription.isNotBlank(),
                         onClick = {
                             onDismiss()
-                            if (note!=null){
+                            if (note != null) {
                                 viewModel.updateNote(
                                     note = note,
                                     newNote = Note(
@@ -159,8 +174,7 @@ fun UpdateNotePBS(
                                     ),
                                     snackbarHostState = snackbarHostState
                                 )
-                            }
-                            else{
+                            } else {
                                 viewModel.addNote(
                                     note = Note(
                                         id = UUID.randomUUID().toString(),
@@ -181,10 +195,10 @@ fun UpdateNotePBS(
                         )
                     }
                 }
-                Row{
+                Row {
                     StyledTextField(
                         value = inputNoteTitle,
-                        onValueChange = {inputNoteTitle = it},
+                        onValueChange = { inputNoteTitle = it },
                         placeholderText = "Nhập tiêu đề...",
                         textStyle = MaterialTheme.typography.titleLarge,
                         maxLines = 2,
@@ -192,10 +206,10 @@ fun UpdateNotePBS(
                             .focusRequester(focusRequester)
                     )
                 }
-                Row{
+                Row {
                     StyledTextField(
                         value = inputNoteDescription,
-                        onValueChange = {inputNoteDescription = it},
+                        onValueChange = { inputNoteDescription = it },
                         placeholderText = "Nhập mô tả...",
                         textStyle = MaterialTheme.typography.bodyLarge,
                         maxLines = 23
@@ -210,17 +224,17 @@ fun UpdateNotePBS(
                         color = MaterialTheme.colorScheme.surfaceContainer
                     )
                     .padding(horizontal = 10.dp)
-            ){
+            ) {
                 Column {
-                    if (note!=null)
+                    if (note != null)
                         TagList(
-                            onClick = {showTagPicker=true},
+                            onClick = { showTagPicker = true },
                             tagList = tempTag
                         )
 
-                    Row{
+                    Row {
                         IconButton(
-                            onClick = {showTagPicker=true}
+                            onClick = { showTagPicker = true }
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.tag),
@@ -229,7 +243,7 @@ fun UpdateNotePBS(
                             )
                         }
                         IconButton(
-                            onClick = {showDatePicker = true}
+                            onClick = { showDatePicker = true }
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.calendar_alt),

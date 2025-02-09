@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.shared_view.tag
+package com.brighttorchstudio.schedist.ui.features.manage_tag.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,7 +27,7 @@ import com.brighttorchstudio.schedist.data.tag.model.Tag
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TagPickerModal(
-    tagInUse: List<Tag>,
+    availableTags: List<Tag>,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(
