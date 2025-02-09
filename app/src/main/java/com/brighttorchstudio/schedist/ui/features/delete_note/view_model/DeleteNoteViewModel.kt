@@ -24,7 +24,9 @@ class DeleteNoteViewModel @Inject constructor(
         if (noteList.isNotEmpty()) {
             viewModelScope.launch(Dispatchers.IO) {
                 noteList.forEach {
-                    localNoteWithTagsRepository.deleteNoteTagCrossRefsByNoteId(it.id)
+                    if (it.tags.isNotEmpty()) {
+                        localNoteWithTagsRepository.deleteNoteTagCrossRefsByNoteId(it.id)
+                    }
                 }
                 localNoteRepository.deleteNotes(noteList)
                 deletedNotes = noteList
@@ -36,7 +38,9 @@ class DeleteNoteViewModel @Inject constructor(
     fun deleteAllNotes(noteList: List<Note>, snackbarHostState: SnackbarHostState) {
         viewModelScope.launch(Dispatchers.IO) {
             noteList.forEach {
-                localNoteWithTagsRepository.deleteNoteTagCrossRefsByNoteId(it.id)
+                if (it.tags.isNotEmpty()) {
+                    localNoteWithTagsRepository.deleteNoteTagCrossRefsByNoteId(it.id)
+                }
             }
             localNoteRepository.deleteAllNotes()
             deletedNotes = noteList
@@ -50,10 +54,12 @@ class DeleteNoteViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 localNoteRepository.addNotes(deletedNotes!!)
                 deletedNotes!!.forEach {
-                    localNoteWithTagsRepository.addTagsToNote(
-                        it.id,
-                        it.tags.map { tag -> tag.id }
-                    )
+                    if (it.tags.isNotEmpty()) {
+                        localNoteWithTagsRepository.addTagsToNote(
+                            it.id,
+                            it.tags.map { tag -> tag.id }
+                        )
+                    }
                 }
                 deletedNotes = emptyList()
             }

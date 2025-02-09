@@ -24,7 +24,7 @@ class UpdateNoteViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             localNoteRepository.addNote(note)
             if (note.tags.isNotEmpty()) {
-                note.tags.map {
+                note.tags.forEach {
                     localNoteWithTagsRepository.addTagToNote(note.id, it.id)
                 }
             }
@@ -36,6 +36,12 @@ class UpdateNoteViewModel @Inject constructor(
 
     fun updateNote(newNote: Note, note: Note, snackbarHostState: SnackbarHostState) {
         viewModelScope.launch(Dispatchers.IO) {
+            if (note.tags.isNotEmpty()) {
+                localNoteWithTagsRepository.deleteNoteTagCrossRefsByNoteId(note.id)
+                newNote.tags.forEach {
+                    localNoteWithTagsRepository.addTagToNote(newNote.id, it.id)
+                }
+            }
             localNoteRepository.updateNote(newNote)
             oldNote = note
         }
@@ -82,12 +88,21 @@ class UpdateNoteViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             //undo add
             newNote?.let {
+                if (it.tags.isNotEmpty()) {
+                    localNoteWithTagsRepository.deleteNoteTagCrossRefsByNoteId(it.id)
+                }
                 localNoteRepository.deleteNote(it)
                 newNote = null
             }
 
             //undo update
             oldNote?.let {
+                if (it.tags.isNotEmpty()) {
+                    localNoteWithTagsRepository.deleteNoteTagCrossRefsByNoteId(it.id)
+                    it.tags.forEach {
+                        localNoteWithTagsRepository.addTagToNote(it.id, it.id)
+                    }
+                }
                 localNoteRepository.updateNote(it)
                 oldNote = null
             }
