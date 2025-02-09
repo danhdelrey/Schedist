@@ -18,7 +18,7 @@ import com.brighttorchstudio.schedist.data.tag.model.Tag
 fun TagItem(
     tag: Tag,
     selected: Boolean = false,
-    onToggleSelection: () -> Unit
+    onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -36,9 +36,7 @@ fun TagItem(
                     shape = MaterialTheme.shapes.small
                 )
                 .clickable(
-                    onClick = {
-                        onToggleSelection()
-                    }
+                    onClick = onClick
                 )
         ) {
             Text(

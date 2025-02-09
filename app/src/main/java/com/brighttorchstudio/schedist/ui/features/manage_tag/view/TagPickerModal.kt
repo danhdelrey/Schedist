@@ -38,7 +38,8 @@ import com.brighttorchstudio.schedist.ui.shared_view.EllipsisBox
 fun TagPickerModal(
     viewModel: ManageTagViewModel = hiltViewModel(),
     selectedTags: List<Tag> = emptyList(),
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onSubmitted: (List<Tag>) -> Unit
 ) {
 
     val tagList by viewModel.tagList.collectAsStateWithLifecycle()
@@ -84,6 +85,7 @@ fun TagPickerModal(
                         ),
                         onClick = {
                             onDismiss()
+                            onSubmitted(currentSelectedTags)
                         }
                     ) {
                         Icon(
@@ -104,7 +106,7 @@ fun TagPickerModal(
                         TagItem(
                             tag = tag,
                             selected = tag in currentSelectedTags,
-                            onToggleSelection = {
+                            onClick = {
                                 currentSelectedTags = if (tag in currentSelectedTags) {
                                     currentSelectedTags - tag
                                 } else {

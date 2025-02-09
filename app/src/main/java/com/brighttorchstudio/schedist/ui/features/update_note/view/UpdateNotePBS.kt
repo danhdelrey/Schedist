@@ -4,6 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,8 +36,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.note.model.Note
+import com.brighttorchstudio.schedist.ui.features.manage_tag.view.TagItem
 import com.brighttorchstudio.schedist.ui.features.manage_tag.view.TagPickerModal
 import com.brighttorchstudio.schedist.ui.features.update_note.view_model.UpdateNoteViewModel
+import com.brighttorchstudio.schedist.ui.shared_view.EllipsisBox
 import com.brighttorchstudio.schedist.ui.shared_view.StyledTextField
 import com.brighttorchstudio.schedist.ui.shared_view.schedule.DatePickerModal
 import com.brighttorchstudio.schedist.ui.shared_view.schedule.FormattedDateText
@@ -43,7 +48,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun UpdateNotePBS(
     viewModel: UpdateNoteViewModel = hiltViewModel(),
@@ -107,6 +112,10 @@ fun UpdateNotePBS(
     if (showTagPicker) {
         TagPickerModal(
             onDismiss = { showTagPicker = false },
+            selectedTags = inputNoteTags,
+            onSubmitted = {
+                inputNoteTags = it
+            }
         )
     }
 
@@ -213,11 +222,27 @@ fun UpdateNotePBS(
                     .padding(horizontal = 10.dp)
             ) {
                 Column {
-//                    if (note != null)
-//                        TagList(
-//                            onClick = { showTagPicker = true },
-//                            tagList = tempTag
-//                        )
+                    if (inputNoteTags.isNotEmpty()) {
+                        FlowRow(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            maxLines = 2,
+                            overflow = FlowRowOverflow.expandIndicator {
+                                EllipsisBox()
+                            }
+                        ) {
+                            inputNoteTags.forEach { tag ->
+                                TagItem(
+                                    tag = tag,
+                                    selected = false,
+                                    onClick = {
+                                        showTagPicker = true
+                                    }
+                                )
+                            }
+
+                        }
+                    }
 
                     Row {
                         IconButton(

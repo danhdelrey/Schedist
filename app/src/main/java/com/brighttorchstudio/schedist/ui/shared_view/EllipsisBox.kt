@@ -11,13 +11,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-@Preview
-fun EllipsisBox(){
+fun EllipsisBox() {
     Box(
         modifier = Modifier
             .rotate(90f)
@@ -30,13 +27,13 @@ fun EllipsisBox(){
                 color = MaterialTheme.colorScheme.outlineVariant,
                 shape = MaterialTheme.shapes.medium
             )
-            .padding(top=4.dp)
-    ){
-      Icon(
-          Icons.Filled.MoreVert,
-          contentDescription = null,
-          tint = MaterialTheme.colorScheme.outline,
-          modifier = Modifier.padding(6.dp)
-      )
+            .padding(top = 4.dp)
+    ) {
+        Icon(
+            Icons.Filled.MoreVert,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.outline,
+            modifier = Modifier.padding(6.dp)
+        )
     }
 }
