@@ -3,6 +3,9 @@ package com.brighttorchstudio.schedist.ui.features.manage_tag.view
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,45 +19,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.brighttorchstudio.schedist.R
-import com.brighttorchstudio.schedist.core.common.BasicColorTagSet
 import com.brighttorchstudio.schedist.data.tag.model.Tag
+import com.brighttorchstudio.schedist.ui.features.manage_tag.view_model.ManageTagViewModel
+import com.brighttorchstudio.schedist.ui.shared_view.EllipsisBox
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun TagPickerModal(
-    availableTags: List<Tag>,
+    viewModel: ManageTagViewModel = hiltViewModel(),
+    selectedTags: List<Tag> = emptyList(),
     onDismiss: () -> Unit
 ) {
+
+    val tagList by viewModel.tagList.collectAsStateWithLifecycle()
+    var currentSelectedTags by remember { mutableStateOf(selectedTags) }
+
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
     )
 
-    val tempTag: List<Tag> = listOf(
-        Tag("a1", "Công việc", BasicColorTagSet.BLUE_GRAY.color.toArgb().toLong()),
-        Tag("a2", "Quan trọng", BasicColorTagSet.RED.color.toArgb().toLong()),
-        Tag("a3", "Gia đình", BasicColorTagSet.PINK.color.toArgb().toLong()),
-        Tag("a4", "Học tập", BasicColorTagSet.PURPLE.color.toArgb().toLong()),
-        Tag("a5", "Sức khỏe", BasicColorTagSet.DEEP_PURPLE.color.toArgb().toLong()),
-        Tag("a6", "Tài chính", BasicColorTagSet.INDIGO.color.toArgb().toLong()),
-        Tag("a7", "Du lịch", BasicColorTagSet.BLUE.color.toArgb().toLong()),
-        Tag("a8", "Giải trí", BasicColorTagSet.LIGHT_BLUE.color.toArgb().toLong()),
-        Tag("a9", "Công nghệ", BasicColorTagSet.CYAN.color.toArgb().toLong()),
-        Tag("a10", "Thiên nhiên", BasicColorTagSet.TEAL.color.toArgb().toLong()),
-        Tag("a11", "Sách", BasicColorTagSet.GREEN.color.toArgb().toLong()),
-        Tag("a12", "Âm nhạc", BasicColorTagSet.LIGHT_GREEN.color.toArgb().toLong()),
-        Tag("a13", "Phim ảnh", BasicColorTagSet.LIME.color.toArgb().toLong()),
-        Tag("a14", "Món ăn", BasicColorTagSet.YELLOW.color.toArgb().toLong()),
-        Tag("a15", "Thể thao", BasicColorTagSet.AMBER.color.toArgb().toLong()),
-        Tag("a16", "Mua sắm", BasicColorTagSet.ORANGE.color.toArgb().toLong()),
-        Tag("a17", "Bạn bè", BasicColorTagSet.DEEP_ORANGE.color.toArgb().toLong()),
-        Tag("a18", "Nghệ thuật", BasicColorTagSet.BROWN.color.toArgb().toLong()),
-        Tag("a19", "Khác", BasicColorTagSet.GRAY.color.toArgb().toLong()),
-    )
+
 
     ModalBottomSheet(
         modifier = Modifier.fillMaxHeight(),
@@ -99,12 +93,28 @@ fun TagPickerModal(
                     }
                 }
 
-                TagList(
-                    tagList = tempTag,
-                    checkTag = tagInUse,
-                    pickMode = true,
-                    fullMode = true
-                )
+                FlowRow(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    overflow = FlowRowOverflow.expandIndicator {
+                        EllipsisBox()
+                    }
+                ) {
+                    tagList.forEach { tag ->
+                        TagItem(
+                            tag = tag,
+                            selected = tag in currentSelectedTags,
+                            onToggleSelection = {
+                                currentSelectedTags = if (tag in currentSelectedTags) {
+                                    currentSelectedTags - tag
+                                } else {
+                                    currentSelectedTags + tag
+                                }
+                            }
+                        )
+                    }
+
+                }
             }
         }
     }

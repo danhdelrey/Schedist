@@ -27,16 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brighttorchstudio.schedist.R
-import com.brighttorchstudio.schedist.core.common.BasicColorTagSet
 import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.note.model.Note
-import com.brighttorchstudio.schedist.data.tag.model.Tag
-import com.brighttorchstudio.schedist.ui.features.manage_tag.view.TagList
 import com.brighttorchstudio.schedist.ui.features.manage_tag.view.TagPickerModal
 import com.brighttorchstudio.schedist.ui.features.update_note.view_model.UpdateNoteViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.StyledTextField
@@ -86,14 +82,6 @@ fun UpdateNotePBS(
 
     var showTagPicker by remember { mutableStateOf(false) }
 
-    val tempTag: List<Tag> = listOf(
-        Tag("a", "Hoa hoc", BasicColorTagSet.PURPLE.color.toArgb().toLong()),
-        Tag("a", "Mua sắm", BasicColorTagSet.PINK.color.toArgb().toLong()),
-        Tag("a", "truong hoc", BasicColorTagSet.GREEN.color.toArgb().toLong()),
-        Tag("a", "Hoa hoc", BasicColorTagSet.PURPLE.color.toArgb().toLong()),
-        Tag("a", "Mua sắm", BasicColorTagSet.PINK.color.toArgb().toLong()),
-        Tag("a", "truong hoc", BasicColorTagSet.GREEN.color.toArgb().toLong()),
-    )
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -119,7 +107,6 @@ fun UpdateNotePBS(
     if (showTagPicker) {
         TagPickerModal(
             onDismiss = { showTagPicker = false },
-            tagInUse = tempTag
         )
     }
 
@@ -226,11 +213,11 @@ fun UpdateNotePBS(
                     .padding(horizontal = 10.dp)
             ) {
                 Column {
-                    if (note != null)
-                        TagList(
-                            onClick = { showTagPicker = true },
-                            tagList = tempTag
-                        )
+//                    if (note != null)
+//                        TagList(
+//                            onClick = { showTagPicker = true },
+//                            tagList = tempTag
+//                        )
 
                     Row {
                         IconButton(
