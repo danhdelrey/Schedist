@@ -28,8 +28,21 @@ class LocalNoteWithTagsRepository @Inject constructor(
         noteTagCrossRefDao.addTagToNote(noteId, tagId)
     }
 
+    override suspend fun addTagsToNote(
+        noteId: String,
+        tagIds: List<String>
+    ) {
+        tagIds.forEach {
+            noteTagCrossRefDao.addTagToNote(noteId, it)
+        }
+    }
+
     override suspend fun deleteNoteTagCrossRef(noteId: String, tagId: String) {
         noteTagCrossRefDao.deleteNoteTagCrossRef(noteId, tagId)
+    }
+
+    override suspend fun deleteNoteTagCrossRefsByNoteId(noteId: String) {
+        noteTagCrossRefDao.deleteNoteTagCrossRefsByNoteId(noteId)
     }
 
 }

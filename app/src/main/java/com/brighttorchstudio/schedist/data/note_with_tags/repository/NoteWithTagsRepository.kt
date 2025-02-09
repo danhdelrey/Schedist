@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface NoteWithTagsRepository {
     suspend fun getNotesWithTags(): Flow<List<NoteWithTags>>
     suspend fun addTagToNote(noteId: String, tagId: String)
+    suspend fun addTagsToNote(noteId: String, tagIds: List<String>)
     suspend fun deleteNoteTagCrossRef(noteId: String, tagId: String)
-
+    suspend fun deleteNoteTagCrossRefsByNoteId(noteId: String)
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
 import com.brighttorchstudio.schedist.data.note.model.Note
 import com.brighttorchstudio.schedist.data.note.repository.NoteRepository
+import com.brighttorchstudio.schedist.data.note_with_tags.repository.NoteWithTagsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,14 +14,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DeleteNoteViewModel @Inject constructor(
-    private val localNoteRepository: NoteRepository
-) : ViewModel(){
+    private val localNoteRepository: NoteRepository,
+    private val localNoteWithTagsRepository: NoteWithTagsRepository
+) : ViewModel() {
 
-    var deletedNotes : List<Note>? = emptyList()
+    var deletedNotes: List<Note>? = emptyList()
 
-    fun deleteNotes(noteList: List<Note>, snackbarHostState: SnackbarHostState){
-        if (noteList.isNotEmpty()){
+    fun deleteNotes(noteList: List<Note>, snackbarHostState: SnackbarHostState) {
+        if (noteList.isNotEmpty()) {
             viewModelScope.launch(Dispatchers.IO) {
+                noteList.forEach {
+                    localNoteWithTagsRepository.deleteNoteTagCrossRefsByNoteId(it.id)
+                }
                 localNoteRepository.deleteNotes(noteList)
                 deletedNotes = noteList
             }
@@ -28,8 +33,11 @@ class DeleteNoteViewModel @Inject constructor(
         }
     }
 
-    fun deleteAllNotes(noteList: List<Note>, snackbarHostState: SnackbarHostState){
+    fun deleteAllNotes(noteList: List<Note>, snackbarHostState: SnackbarHostState) {
         viewModelScope.launch(Dispatchers.IO) {
+            noteList.forEach {
+                localNoteWithTagsRepository.deleteNoteTagCrossRefsByNoteId(it.id)
+            }
             localNoteRepository.deleteAllNotes()
             deletedNotes = noteList
         }
@@ -37,16 +45,23 @@ class DeleteNoteViewModel @Inject constructor(
     }
 
 
-    fun undoDeleteNotes(){
+    fun undoDeleteNotes() {
         if (deletedNotes!!.isNotEmpty())
             viewModelScope.launch(Dispatchers.IO) {
                 localNoteRepository.addNotes(deletedNotes!!)
+                deletedNotes!!.forEach {
+                    localNoteWithTagsRepository.addTagsToNote(
+                        it.id,
+                        it.tags.map { tag -> tag.id }
+                    )
+                }
                 deletedNotes = emptyList()
             }
     }
 
     fun showSuccessDeleteNoteSnackBar(
-        snackbarHostState: SnackbarHostState){
+        snackbarHostState: SnackbarHostState
+    ) {
         UIComponentHelper.showSnackBar(
             scope = viewModelScope,
             snackbarHostState = snackbarHostState,
