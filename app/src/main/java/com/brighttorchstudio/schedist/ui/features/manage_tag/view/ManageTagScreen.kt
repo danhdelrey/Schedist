@@ -126,7 +126,9 @@ fun ManageTagScreen(
                                 showLeadingIcon = true,
                                 textStyle = MaterialTheme.typography.titleMedium,
                                 foregroundColor = Color.White,
-                            ) { }
+                            ) {
+
+                            }
                         }
                     }
                 }

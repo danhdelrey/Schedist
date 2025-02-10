@@ -10,6 +10,7 @@ import com.brighttorchstudio.schedist.ui.features.manage_note.view.ManageNoteScr
 import com.brighttorchstudio.schedist.ui.features.manage_profile.view.ManageProfileScreen
 import com.brighttorchstudio.schedist.ui.features.manage_tag.view.ManageTagScreen
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view.ManageTodoScreen
+import com.brighttorchstudio.schedist.ui.features.update_tag.view.UpdateTagScreen
 
 //Là điểm vào đầu tiên của ứng dụng
 //Chứa các route của các screen để điều hướng
@@ -39,10 +40,20 @@ fun AppNavigation() {
         ) {
             ManageProfileScreen(navController = navController)
         }
+
+
         composable(
             route = AppScreens.ManageTagScreen.route,
         ) {
             ManageTagScreen(navController = navController)
+        }
+        composable(
+            route = AppScreens.UpdateTagScreen.route,
+        ) {
+            UpdateTagScreen(
+                navController = navController,
+                tag = it.savedStateHandle.get<String>("tag")
+            )
         }
     }
 }
