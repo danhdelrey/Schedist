@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.brighttorchstudio.schedist.ui.features.manage_note.view.ManageNoteScreen
 import com.brighttorchstudio.schedist.ui.features.manage_profile.view.ManageProfileScreen
+import com.brighttorchstudio.schedist.ui.features.manage_tag.view.ManageTagScreen
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view.ManageTodoScreen
 
 //Là điểm vào đầu tiên của ứng dụng
@@ -38,6 +39,10 @@ fun AppNavigation() {
         ) {
             ManageProfileScreen(navController = navController)
         }
-
+        composable(
+            route = AppScreens.ManageTagScreen.route,
+        ) {
+            ManageTagScreen(navController = navController)
+        }
     }
 }

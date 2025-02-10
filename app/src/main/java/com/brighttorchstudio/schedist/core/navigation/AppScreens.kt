@@ -7,5 +7,5 @@ sealed class AppScreens(val route: String) {
 
     object ManageNoteScreen : AppScreens("manage_note_screen")
     object ProfileScreen : AppScreens("profile_screen")
-
+    object ManageTagScreen : AppScreens("manage_tag_screen")
 }
