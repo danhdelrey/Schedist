@@ -1,5 +1,7 @@
 package com.brighttorchstudio.schedist.core.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -23,7 +25,7 @@ fun BottomNavigationBar(
                     contentDescription = null
                 )
             },
-            label = { Text("Home") },
+            label = { Text("Nhiệm vụ") },
             onClick = {
                 //nếu route hiện tại không trùng với route của screen này thì mới có thể navigate sang screen này, tránh trường hợp điều hướng đến chính bản thân nó
                 if (navController.currentDestination?.route != AppScreens.ManageTodoScreen.route) {
@@ -43,11 +45,29 @@ fun BottomNavigationBar(
                     contentDescription = null
                 )
             },
-            label = { Text("Note") },
+            label = { Text("Ghi chú") },
             onClick = {
                 if (navController.currentDestination?.route != AppScreens.ManageNoteScreen.route) {
                     navController.navigate(AppScreens.ManageNoteScreen.route) {
                         popUpTo(AppScreens.ManageNoteScreen.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            }
+        )
+        NavigationBarItem(
+            selected = navController.currentDestination?.route == AppScreens.ProfileScreen.route,
+            icon = {
+                Icon(
+                    Icons.Default.AccountCircle,
+                    contentDescription = null
+                )
+            },
+            label = { Text("Hồ sơ") },
+            onClick = {
+                if (navController.currentDestination?.route != AppScreens.ProfileScreen.route) {
+                    navController.navigate(AppScreens.ProfileScreen.route) {
+                        popUpTo(AppScreens.ProfileScreen.route) { inclusive = true }
                         launchSingleTop = true
                     }
                 }
