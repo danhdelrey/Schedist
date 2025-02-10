@@ -1,12 +1,17 @@
 package com.brighttorchstudio.schedist.ui.features.manage_tag.view
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,17 +22,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.R
-import com.brighttorchstudio.schedist.core.common.BasicColorTagSet
-import com.brighttorchstudio.schedist.data.tag.model.Tag
 import com.brighttorchstudio.schedist.ui.features.manage_tag.view_model.ManageTagViewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,6 +41,9 @@ fun ManageTagScreen(
     navController: NavHostController,
     viewModel: ManageTagViewModel = hiltViewModel(),
 ) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(
         topBar = {
             Column(
@@ -91,20 +100,46 @@ fun ManageTagScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
         ) {
-            TagItem(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                tag = Tag(
-                    "dfd",
-                    "fdfdf",
-                    BasicColorTagSet.RED.color.toArgb().toLong()
-                ),
-                selected = true,
-                showLeadingIcon = true,
-                textStyle = MaterialTheme.typography.titleMedium,
-                foregroundColor = Color.White,
-            ) { }
+            when (uiState) {
+                is ManageTagViewModel.UiState.Loading -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is ManageTagViewModel.UiState.Success -> {
+                    val tagList = (uiState as ManageTagViewModel.UiState.Success).tagList
+                    if (tagList.isNotEmpty()) {
+                        tagList.forEach {
+                            TagItem(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                tag = it,
+                                selected = true,
+                                showLeadingIcon = true,
+                                textStyle = MaterialTheme.typography.titleMedium,
+                                foregroundColor = Color.White,
+                            ) { }
+                        }
+                    }
+                }
+
+                is ManageTagViewModel.UiState.Error -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+            }
 
         }
     }
