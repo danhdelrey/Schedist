@@ -17,6 +17,11 @@ fun UpdateTagScreen(
     tag: Tag? = null
 ) {
     Scaffold { innerPadding ->
-        Text(text = "Update Tag Screen (add or update)", modifier = Modifier.padding(innerPadding))
+        if (tag != null) {
+            Text(text = tag.name, modifier = Modifier.padding(innerPadding))
+        } else {
+            Text(text = "Tag is null", modifier = Modifier.padding(innerPadding))
+
+        }
     }
 }

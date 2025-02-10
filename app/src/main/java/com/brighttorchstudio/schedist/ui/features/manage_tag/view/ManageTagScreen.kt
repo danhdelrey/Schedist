@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.R
+import com.brighttorchstudio.schedist.core.navigation.AppScreens
 import com.brighttorchstudio.schedist.ui.features.manage_tag.view_model.ManageTagViewModel
 
 
@@ -127,7 +128,7 @@ fun ManageTagScreen(
                                 textStyle = MaterialTheme.typography.titleMedium,
                                 foregroundColor = Color.White,
                             ) {
-
+                                navController.navigate(AppScreens.UpdateTagScreen.createRoute(it))
                             }
                         }
                     }
