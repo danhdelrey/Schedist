@@ -101,6 +101,7 @@ fun ManageTagScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
+                .padding(horizontal = 10.dp)
         ) {
             when (uiState) {
                 is ManageTagViewModel.UiState.Loading -> {
