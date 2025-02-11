@@ -1,7 +1,9 @@
 package com.brighttorchstudio.schedist.core.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -48,6 +50,18 @@ fun AppNavigation() {
 
         composable(
             route = AppScreens.ManageTagScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(500)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    tween(500)
+                )
+            }
         ) {
             ManageTagScreen(navController = navController)
         }
@@ -56,7 +70,19 @@ fun AppNavigation() {
             route = AppScreens.UpdateTagScreen.route,
             arguments = listOf(
                 navArgument("tagJson") { type = NavType.StringType }
-            )
+            ),
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(500)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    tween(500)
+                )
+            }
         ) { backStackEntry ->
             val tagJson = backStackEntry.arguments?.getString("tagJson")
             val tag = if (tagJson.isNullOrEmpty()) {
