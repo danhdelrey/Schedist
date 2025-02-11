@@ -17,14 +17,31 @@ import com.brighttorchstudio.schedist.R
 
 object NotificationHelper {
 
+    fun createNotificationChannel(
+        verboseNotificationChannelName: String = "Nhiệm vụ cần làm",
+        verboseNotificationChannelDescription: String = "Thông báo nhắc nhở nhiệm vụ cần làm",
+        channelId: String = "NHIEM_VU",
+        context: Context,
+    ) {
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel(
+            channelId,
+            verboseNotificationChannelName,
+            importance
+        )
+        channel.description = verboseNotificationChannelDescription
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+
+        notificationManager?.createNotificationChannel(channel)
+    }
+
     fun pushNotification(
         id: Int,
         title: String?,
         description: String?,
+        channelId: String,
         context: Context,
-        verboseNotificationChannelName: String = "Nhiệm vụ cần làm",
-        verboseNotificationChannelDescription: String = "Thông báo nhắc nhở nhiệm vụ cần làm",
-        channelId: String = "NHIEM_VU",
     ) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -36,19 +53,6 @@ object NotificationHelper {
                 return
             }
         }
-
-        val importance = NotificationManager.IMPORTANCE_HIGH
-        val channel = NotificationChannel(
-            channelId,
-            verboseNotificationChannelName,
-            importance
-        )
-        channel.description = verboseNotificationChannelDescription
-
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-
-        notificationManager?.createNotificationChannel(channel)
 
         val pendingIntent: PendingIntent = createPendingIntent(context)
 
