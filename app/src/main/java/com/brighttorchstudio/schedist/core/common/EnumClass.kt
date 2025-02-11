@@ -19,7 +19,7 @@ enum class ImportanceLevel(val color: Color) {
     }
 }
 
-enum class BasicColorTagSet(val color: Color) {
+enum class TagColor(val color: Color) {
     BLUE_GRAY(Color(0xFF607D8B)),      // Blue Gray
     RED(Color(0xFFE91E63)),            // Red
     PINK(Color(0xFFF08080)),            // Light Coral (slightly different pink)

@@ -37,12 +37,12 @@ fun TagItem(
         Box(
             modifier = Modifier
                 .background(
-                    color = if (selected) Color(tag.color) else Color.Transparent,
+                    color = if (selected) tag.color.color else Color.Transparent,
                     shape = MaterialTheme.shapes.small
                 )
                 .border(
                     width = 1.dp,
-                    color = Color(tag.color),
+                    color = tag.color.color,
                     shape = MaterialTheme.shapes.small
                 )
                 .clickable(

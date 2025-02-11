@@ -1,10 +1,8 @@
 package com.brighttorchstudio.schedist.data.local_database
 
-import android.graphics.Color
 import androidx.room.TypeConverter
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
-import com.brighttorchstudio.schedist.data.local_database.tag.TagEntity
-import com.brighttorchstudio.schedist.data.tag.model.Tag
+import com.brighttorchstudio.schedist.core.common.TagColor
 import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -39,9 +37,19 @@ class Converter {
     }
 
     @TypeConverter
-    fun fromTagList(tagList: List<String>) : String = Json.encodeToString(tagList)
+    fun fromTagList(tagList: List<String>): String = Json.encodeToString(tagList)
 
     @TypeConverter
-    fun toTagList(tagList : String) : List<String> = Json.decodeFromString(tagList)
+    fun toTagList(tagList: String): List<String> = Json.decodeFromString(tagList)
+
+    @TypeConverter
+    fun fromTagColor(tagColor: TagColor): String {
+        return tagColor.name
+    }
+
+    @TypeConverter
+    fun toTagColor(tagColorName: String): TagColor {
+        return TagColor.valueOf(tagColorName)
+    }
 
 }
