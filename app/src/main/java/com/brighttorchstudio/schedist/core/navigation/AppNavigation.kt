@@ -59,7 +59,11 @@ fun AppNavigation() {
             )
         ) { backStackEntry ->
             val tagJson = backStackEntry.arguments?.getString("tagJson")
-            val tag = tagJson?.let { Json.decodeFromString<Tag>(it) }
+            val tag = if (tagJson.isNullOrEmpty()) {
+                null
+            } else {
+                Json.decodeFromString<Tag>(tagJson)
+            }
             UpdateTagScreen(
                 navController = navController,
                 tag = tag

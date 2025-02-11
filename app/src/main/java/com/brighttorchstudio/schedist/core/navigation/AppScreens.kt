@@ -12,8 +12,8 @@ sealed class AppScreens(val route: String) {
     object ProfileScreen : AppScreens("profile_screen")
     object ManageTagScreen : AppScreens("manage_tag_screen")
     object UpdateTagScreen : AppScreens("manage_tag_screen/update_tag_screen/{tagJson}") {
-        fun createRoute(tag: Tag): String {
-            val tagJson = Json.encodeToString(tag)
+        fun createRoute(tag: Tag?): String {
+            val tagJson = tag?.let { Json.encodeToString(it) } ?: ""
             return "manage_tag_screen/update_tag_screen/$tagJson"
         }
     }

@@ -85,7 +85,9 @@ fun ManageTagScreen(
                 TextButton(
                     modifier = Modifier
                         .padding(horizontal = 10.dp),
-                    onClick = {}
+                    onClick = {
+                        navController.navigate(AppScreens.UpdateTagScreen.createRoute(null))
+                    }
                 ) {
                     Icon(
                         modifier = Modifier.width(15.dp),
