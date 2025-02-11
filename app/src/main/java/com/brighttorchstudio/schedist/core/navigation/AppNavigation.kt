@@ -73,13 +73,13 @@ fun AppNavigation() {
             ),
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    AnimatedContentTransitionScope.SlideDirection.Right,
                     tween(500)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    AnimatedContentTransitionScope.SlideDirection.Left,
                     tween(500)
                 )
             }
