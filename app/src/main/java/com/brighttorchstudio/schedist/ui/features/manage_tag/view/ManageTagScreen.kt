@@ -16,10 +16,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -64,7 +65,7 @@ fun ManageTagScreen(
                         }
                     }
                 )
-                OutlinedTextField(
+                TextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 10.dp),
@@ -80,7 +81,13 @@ fun ManageTagScreen(
                     placeholder = {
                         Text("Tìm nhãn...")
                     },
-                    shape = MaterialTheme.shapes.extraLarge
+                    shape = MaterialTheme.shapes.extraLarge,
+                    colors = OutlinedTextFieldDefaults.colors().copy(
+                        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                    )
                 )
                 TextButton(
                     modifier = Modifier
