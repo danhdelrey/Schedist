@@ -57,7 +57,9 @@ fun ManageTagScreen(
                     },
                     navigationIcon = {
                         IconButton(
-                            onClick = {}
+                            onClick = {
+                                navController.popBackStack()
+                            }
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.chevron_left),
