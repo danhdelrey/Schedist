@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -139,6 +140,23 @@ fun ManageTagScreen(
                             ) {
                                 navController.navigate(AppScreens.UpdateTagScreen.createRoute(it))
                             }
+                        }
+                    } else {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding)
+                        ) {
+                            Text(
+                                text = "Danh sách nhãn trống",
+                                style = MaterialTheme.typography.titleLarge.copy(
+                                    color = MaterialTheme.colorScheme.outline
+                                ),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .width(200.dp)
+                            )
                         }
                     }
                 }

@@ -1,7 +1,5 @@
 package com.brighttorchstudio.schedist.core.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -59,11 +57,11 @@ fun BottomNavigationBar(
             selected = navController.currentDestination?.route == AppScreens.ProfileScreen.route,
             icon = {
                 Icon(
-                    Icons.Default.AccountCircle,
+                    painter = painterResource(R.drawable.user_circle),
                     contentDescription = null
                 )
             },
-            label = { Text("Hồ sơ") },
+            label = { Text("Cá nhân") },
             onClick = {
                 if (navController.currentDestination?.route != AppScreens.ProfileScreen.route) {
                     navController.navigate(AppScreens.ProfileScreen.route) {
