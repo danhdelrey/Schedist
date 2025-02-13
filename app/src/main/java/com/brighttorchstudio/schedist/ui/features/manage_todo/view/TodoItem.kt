@@ -152,6 +152,11 @@ fun TodoItem(
                             )
                         )
                     }
+                    if (todo.subtasks.isNotEmpty())
+                        Box(modifier = Modifier.padding(top=5.dp)){
+                            SubtaskList(todo = todo)
+                        }
+
                 }
             }
 

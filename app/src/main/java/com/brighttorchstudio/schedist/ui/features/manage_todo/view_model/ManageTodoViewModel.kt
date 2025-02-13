@@ -44,7 +44,9 @@ class ManageTodoViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             localTodoRepository.getTodos().collect { todos ->
-                _uiState.value = UiState.Success(todos)
+                    _uiState.value = UiState.Success(todos)
+
+
             }
         }
     }

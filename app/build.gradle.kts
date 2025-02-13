@@ -5,7 +5,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-
+    id ("kotlinx-serialization")
 }
 
 android {
@@ -80,6 +80,7 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:$work_version")
 
     implementation("androidx.core:core-splashscreen:1.0.0")
+
 }
 
 // Allow references to generated code

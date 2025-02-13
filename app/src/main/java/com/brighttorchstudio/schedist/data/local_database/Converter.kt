@@ -5,6 +5,7 @@ import androidx.room.TypeConverter
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
 import com.brighttorchstudio.schedist.data.local_database.tag.TagEntity
 import com.brighttorchstudio.schedist.data.tag.model.Tag
+import com.brighttorchstudio.schedist.data.todo.model.Subtask
 import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -44,4 +45,11 @@ class Converter {
     @TypeConverter
     fun toTagList(tagList : String) : List<String> = Json.decodeFromString(tagList)
 
+    @TypeConverter
+    fun fromSubtaskList(subtaskList: List<Subtask>) : String = Json.encodeToString(subtaskList)
+
+    @TypeConverter
+    fun toSubtaskList(subtaskList : String) : List<Subtask>{
+        return Json.decodeFromString(subtaskList)
+    }
 }

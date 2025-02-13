@@ -12,6 +12,7 @@ data class Todo(
     val importanceLevel: ImportanceLevel,
     val dateTime: LocalDateTime,
     val reminderEnabled: Boolean,
+    var subtasks : List<Subtask>
 ) {
 
     //phương thức tạo ra TodoEntity từ một Todo
@@ -23,6 +24,7 @@ data class Todo(
             importanceLevel = importanceLevel,
             dateTime = dateTime,
             reminderEnabled = reminderEnabled,
+            subtasks = subtasks
         )
     }
 
@@ -37,6 +39,7 @@ data class Todo(
                 importanceLevel = todoEntity.importanceLevel,
                 dateTime = todoEntity.dateTime,
                 reminderEnabled = todoEntity.reminderEnabled,
+                subtasks = todoEntity.subtasks
             )
         }
     }
