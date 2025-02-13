@@ -19,6 +19,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,6 +35,7 @@ import com.brighttorchstudio.schedist.core.helpers.DateTimeHelper
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.ui.features.complete_todo.view.CompleteTodoButton
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view_model.ManageTodoViewModel
+import com.brighttorchstudio.schedist.ui.shared_view.TodoProgressBar
 
 //Hiển thị một todo
 @OptIn(ExperimentalFoundationApi::class)
@@ -52,7 +54,10 @@ fun TodoItem(
     val isSelectionMode by viewModel.isSelectionMode.collectAsStateWithLifecycle()
     val selectedTodosForPerformingActions by viewModel.selectedTodosForPerformingActions.collectAsStateWithLifecycle()
 
-
+    var todoProgress by remember { mutableFloatStateOf(1f) }
+    if (todo.subtasks.isNotEmpty()){
+        todoProgress = viewModel.calculateTodoProgress(todo)
+    }
 
     Box(
         modifier = Modifier
@@ -77,7 +82,7 @@ fun TodoItem(
 
     ) {
         Column(modifier = Modifier.padding(vertical = 10.dp)) {
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxWidth(),) {
 
                 //khi ở trạng thái selection thì hiển thị Checkbox, còn không thì hiển thị CompleteTodoButton (radio button)
                 if (isSelectionMode) {
@@ -132,6 +137,11 @@ fun TodoItem(
                     )
                 }
             }
+            if (todo.subtasks.isNotEmpty() && !showTodoDetails)
+                Row(modifier = Modifier.padding(horizontal = 20.dp)){
+                    TodoProgressBar(todoProgress)
+                }
+
 
             //Animation lên xuống mượt mà khi ẩn/hiện chi tiết todo
             AnimatedVisibility(visible = showTodoDetails) {
@@ -153,9 +163,18 @@ fun TodoItem(
                         )
                     }
                     if (todo.subtasks.isNotEmpty())
-                        Box(modifier = Modifier.padding(top=5.dp)){
-                            SubtaskList(todo = todo)
+                        Column {
+                            TodoProgressBar(
+                                currentProgress = todoProgress,
+                                inDetailMode = true)
+
+                            Box(modifier = Modifier.padding(top=5.dp)){
+                                SubtaskList(
+                                    todo = todo,
+                                    onSubtaskStateChange = {todoProgress = viewModel.calculateTodoProgress(todo)})
+                            }
                         }
+
 
                 }
             }

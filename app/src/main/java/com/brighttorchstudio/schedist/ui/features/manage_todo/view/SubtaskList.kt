@@ -30,6 +30,7 @@ import com.brighttorchstudio.schedist.ui.features.edit_todo.view_model.EditTodoV
 fun SubtaskList(
     viewModel: EditTodoViewModel = hiltViewModel(),
     todo: Todo,
+    onSubtaskStateChange : () -> Unit
 ){
     var subtasks = todo.subtasks
     Box(modifier = Modifier
@@ -42,6 +43,7 @@ fun SubtaskList(
             subtasks.forEach{ subtask ->
                 key(subtask){
                     var subtaskState by remember { mutableStateOf(subtask.complete) }
+
                     LaunchedEffect(subtaskState) {
                         viewModel.setSubtaskList(subtasks)
                         viewModel.updateTodo(todo, Todo(
@@ -53,13 +55,15 @@ fun SubtaskList(
                             reminderEnabled = todo.reminderEnabled,
                             subtasks = emptyList(),
                         ))
+                        onSubtaskStateChange()
                     }
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically){
                         RadioButton(
-                            onClick = {subtaskState = !subtaskState
+                            onClick = {
+                                subtaskState = !subtaskState
                                 subtask.complete=subtaskState},
                             selected = subtaskState,
                             colors = RadioButtonColors(

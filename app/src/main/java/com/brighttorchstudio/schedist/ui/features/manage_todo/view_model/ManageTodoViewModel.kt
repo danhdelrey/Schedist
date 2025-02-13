@@ -1,5 +1,6 @@
 package com.brighttorchstudio.schedist.ui.features.manage_todo.view_model
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brighttorchstudio.schedist.data.todo.model.Todo
@@ -93,6 +94,14 @@ class ManageTodoViewModel @Inject constructor(
     fun exitSelectionMode() {
         _isSelectionMode.value = false
         _selectedTodosForPerformingActions.value = emptySet()
+    }
+
+    fun calculateTodoProgress(todo : Todo) : Float{
+        var countCompletedSubtasks = 0
+        todo.subtasks.forEach{
+            subtask -> if (subtask.complete) countCompletedSubtasks+=1
+        }
+        return (countCompletedSubtasks.toFloat()/todo.subtasks.size.toFloat())
     }
 
 
