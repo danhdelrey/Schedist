@@ -21,8 +21,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +39,8 @@ import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.common.TagColor
 import com.brighttorchstudio.schedist.data.tag.model.Tag
 import com.brighttorchstudio.schedist.ui.features.update_tag.view_model.UpdateTagViewModel
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -43,39 +49,63 @@ fun UpdateTagScreen(
     navController: NavHostController,
     tag: Tag? = null
 ) {
+
+    var selectedColor by remember { mutableStateOf(tag?.color?.color ?: Color.Transparent) }
+    var tagNameInput by remember { mutableStateOf("") }
+
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { },
-                actions = {
-                    IconButton(
-                        onClick = {}
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.check),
-                            contentDescription = "menu"
-                        )
+            Column {
+                TopAppBar(
+                    title = { },
+                    actions = {
+                        IconButton(
+                            onClick = {}
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.check),
+                                contentDescription = "menu"
+                            )
+                        }
+                        IconButton(
+                            onClick = {}
+                        ) {
+                            Icon(
+                                Icons.Default.MoreVert,
+                                contentDescription = "menu"
+                            )
+                        }
+                    },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {}
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.arrow_left),
+                                contentDescription = "menu"
+                            )
+                        }
+                    },
+                )
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp)
+                    ,
+                    value = tagNameInput,
+                    onValueChange = {
+                        tagNameInput = it
+                    },
+                    shape = CircleShape,
+                    colors = TextFieldDefaults.colors().copy(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor =  Color.Transparent
+                    ),
+                    placeholder = {
+                        Text("Nhap nhan...")
                     }
-                    IconButton(
-                        onClick = {}
-                    ) {
-                        Icon(
-                            Icons.Default.MoreVert,
-                            contentDescription = "menu"
-                        )
-                    }
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {}
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.arrow_left),
-                            contentDescription = "menu"
-                        )
-                    }
-                },
-            )
+                )
+            }
         }
     ) { innerPadding ->
         Column(
@@ -106,10 +136,12 @@ fun UpdateTagScreen(
                                 )
                                 .size(44.dp)
                                 .clickable(
-                                    onClick = {}
+                                    onClick = {
+                                        selectedColor = it.color
+                                    }
                                 )
                                 .border(
-                                    width = 4.dp,
+                                    width = if (selectedColor == it.color) 4.dp else 0.dp,
                                     color = MaterialTheme.colorScheme.primary,
                                     shape = CircleShape
                                 )
