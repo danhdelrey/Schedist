@@ -41,6 +41,8 @@ import com.brighttorchstudio.schedist.data.tag.model.Tag
 import com.brighttorchstudio.schedist.ui.features.update_tag.view_model.UpdateTagViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import java.util.UUID
+import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -50,8 +52,8 @@ fun UpdateTagScreen(
     tag: Tag? = null
 ) {
 
-    var selectedColor by remember { mutableStateOf(tag?.color?.color ?: Color.Transparent) }
-    var tagNameInput by remember { mutableStateOf("") }
+    var selectedColor by remember { mutableStateOf(tag?.color ?: TagColor.BLUE_GRAY) }
+    var tagNameInput by remember { mutableStateOf(tag?.name ?: "") }
 
     Scaffold(
         topBar = {
@@ -60,7 +62,21 @@ fun UpdateTagScreen(
                     title = { },
                     actions = {
                         IconButton(
-                            onClick = {}
+                            onClick = {
+                                if(tag != null){
+                                    //cap nhat tag
+                                }else{
+                                    viewModel.addTag(
+                                        Tag(
+                                            id = UUID.randomUUID().toString(),
+                                            name = tagNameInput,
+                                            color = selectedColor,
+                                        )
+                                    )
+                                    navController.popBackStack()
+                                }
+
+                            }
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.check),
@@ -137,11 +153,11 @@ fun UpdateTagScreen(
                                 .size(44.dp)
                                 .clickable(
                                     onClick = {
-                                        selectedColor = it.color
+                                        selectedColor = it
                                     }
                                 )
                                 .border(
-                                    width = if (selectedColor == it.color) 4.dp else 0.dp,
+                                    width = if (selectedColor.color == it.color) 4.dp else 0.dp,
                                     color = MaterialTheme.colorScheme.primary,
                                     shape = CircleShape
                                 )
