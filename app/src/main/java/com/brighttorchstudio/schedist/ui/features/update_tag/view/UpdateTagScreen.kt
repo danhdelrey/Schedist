@@ -80,7 +80,8 @@ fun UpdateTagScreen(
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.check),
-                                contentDescription = "menu"
+                                contentDescription = "menu",
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
                         IconButton(
@@ -128,10 +129,17 @@ fun UpdateTagScreen(
             modifier = Modifier
                 .padding(innerPadding)
         ) {
-            Text("Mau")
+            Text(
+                "Mau",
+                modifier = Modifier
+                    .padding(top = 10.dp, start = 10.dp, bottom = 10.dp),
+                style = MaterialTheme.typography.titleMedium
+            )
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+
                 ,
                 contentAlignment = Alignment.Center
 
