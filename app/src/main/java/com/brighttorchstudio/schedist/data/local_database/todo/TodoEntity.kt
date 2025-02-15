@@ -3,6 +3,7 @@ package com.brighttorchstudio.schedist.data.local_database.todo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.brighttorchstudio.schedist.core.common.ImportanceLevel
+import com.brighttorchstudio.schedist.data.todo.model.Subtask
 import java.time.LocalDateTime
 
 //Đại diện cho một bảng
@@ -17,6 +18,7 @@ data class TodoEntity(
     val importanceLevel: ImportanceLevel, //Đây không phải kiểu dữ liệu được Room hỗ trợ nên phải dùng một cái gì đó để biến nó thành kiểu dữ liệu được Room hỗ trợ
     val dateTime: LocalDateTime, //Đây không phải kiểu dữ liệu được Room hỗ trợ nên phải dùng một cái gì đó để biến nó thành kiểu dữ liệu được Room hỗ trợ
     val reminderEnabled: Boolean,
+    var subtasks : List<Subtask>
 )
 
 

@@ -1,15 +1,22 @@
 package com.brighttorchstudio.schedist.ui.features.edit_todo.view_model
 
+import android.util.Log
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
 import com.brighttorchstudio.schedist.data.notification.model.Notification
 import com.brighttorchstudio.schedist.data.notification.repository.NotificationRepository
+import com.brighttorchstudio.schedist.data.todo.model.Subtask
 import com.brighttorchstudio.schedist.data.todo.model.Todo
 import com.brighttorchstudio.schedist.data.todo.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,9 +29,16 @@ class EditTodoViewModel @Inject constructor(
     var todoAdded: Todo? = null //todo vừa mới được thêm, dùng cho việc hoàn tác thêm todo
     var oldTodo: Todo? = null //todo trước khi được sửa, dùng cho việc hoàn tác sửa todo
 
+    private val _subtaskList = MutableStateFlow(emptyList<Subtask>())
+    val subtaskList : StateFlow<List<Subtask>> = _subtaskList.asStateFlow()
+
+    private val _showAddSubtaskTextField = MutableStateFlow(false)
+    val showAddSubtaskTextField : StateFlow<Boolean> = _showAddSubtaskTextField.asStateFlow()
+
     fun addTodo(
         todo: Todo
     ) {
+        Log.d("myTag", todo.toString());
         viewModelScope.launch(Dispatchers.IO) {
 
             if (todo.reminderEnabled) {
@@ -37,9 +51,10 @@ class EditTodoViewModel @Inject constructor(
                     )
                 )
             }
-
+            todo.subtasks = _subtaskList.value
             localTodoRepository.addTodo(todo)
             todoAdded = todo
+            onCancelCLicked()
         }
     }
 
@@ -57,6 +72,7 @@ class EditTodoViewModel @Inject constructor(
         todo: Todo,
         newTodo: Todo
     ) {
+
         viewModelScope.launch(Dispatchers.IO) {
 
             if (newTodo.reminderEnabled) {
@@ -70,8 +86,10 @@ class EditTodoViewModel @Inject constructor(
                 )
             }
 
+            newTodo.subtasks = _subtaskList.value
             localTodoRepository.updateTodo(newTodo)
             oldTodo = todo
+            onCancelCLicked()
         }
     }
 
@@ -89,7 +107,7 @@ class EditTodoViewModel @Inject constructor(
                         )
                     )
                 }
-
+                Log.d("myTag", oldTodo.toString())
                 localTodoRepository.updateTodo(oldTodo!!)
                 oldTodo = null
             }
@@ -128,5 +146,42 @@ class EditTodoViewModel @Inject constructor(
                 todoAdded = null
             }
         )
+    }
+
+    fun setSubtaskList(subtask: List<Subtask>){
+        _subtaskList.value = subtask.map { it.copy() }
+
+    }
+
+    fun onCancelCLicked(){
+        _subtaskList.value = emptyList()
+        _showAddSubtaskTextField.value = false
+    }
+
+    /*fun onAddNewSubtaskClicked(){
+        if (_subtaskList.value.isEmpty() || _subtaskList.value.last().name.isNotEmpty()){
+            _subtaskList.value += Subtask(name="", complete = false)
+            _showAddSubtaskTextField.value = true}
+    }*/
+
+    fun addNewSubtask(subtask : Subtask){
+        _subtaskList.value+= subtask
+    }
+
+    fun removeSubtask(oldSubtask: Subtask){
+            _subtaskList.value-=oldSubtask
+
+    }
+
+    fun updateSubtaskName(newSubtaskName : String, index : Int){
+            _subtaskList.value[index].name = newSubtaskName
+
+    }
+
+    fun updateSubtaskState(newState : Boolean, index: Int){
+        Log.d("SubtaskTestingBefore",_subtaskList.value[index].toString())
+        _subtaskList.value[index].complete = newState
+
+        Log.d("SubtaskTestingAfter",_subtaskList.value[index].toString())
     }
 }
