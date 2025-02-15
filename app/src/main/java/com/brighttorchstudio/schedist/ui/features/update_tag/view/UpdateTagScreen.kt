@@ -149,29 +149,13 @@ fun UpdateTagScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     enumValues<TagColor>().forEach {
-                        Box(
-                            modifier = Modifier
-                                .clip(
-                                    shape = CircleShape
-                                )
-                                .background(
-                                    color = it.color
-
-                                )
-                                .size(44.dp)
-                                .clickable(
-                                    onClick = {
-                                        selectedColor = it
-                                    }
-                                )
-                                .border(
-                                    width = if (selectedColor.color == it.color) 4.dp else 0.dp,
-                                    color = MaterialTheme.colorScheme.primary,
-                                    shape = CircleShape
-                                )
-                        ) {
-
-                        }
+                        TagColorItem(
+                            tagColor = it,
+                            selected = selectedColor.color == it.color,
+                            onClick = {
+                                selectedColor = it
+                            }
+                        )
                     }
                 }
             }
