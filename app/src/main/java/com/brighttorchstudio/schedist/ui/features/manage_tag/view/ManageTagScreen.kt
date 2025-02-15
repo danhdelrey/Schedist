@@ -18,12 +18,16 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +40,8 @@ import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.navigation.AppScreens
 import com.brighttorchstudio.schedist.ui.features.manage_tag.view_model.ManageTagViewModel
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,8 +52,15 @@ fun ManageTagScreen(
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState =
+        remember { SnackbarHostState() } //cần thiết để scaffold hiển thị snackbar
+    var tagSearchInput by remember { mutableStateOf("") }
+
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
         topBar = {
             Column(
             ) {
@@ -72,8 +85,11 @@ fun ManageTagScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 10.dp),
-                    value = "",
-                    onValueChange = {},
+                    value = tagSearchInput,
+                    onValueChange = {
+                        tagSearchInput = it
+                        viewModel.findTagsByName("%$it%")
+                    },
                     leadingIcon = {
                         Icon(
                             Icons.Default.Search,

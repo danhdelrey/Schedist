@@ -1,7 +1,9 @@
 package com.brighttorchstudio.schedist.ui.features.update_tag.view_model
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.brighttorchstudio.schedist.core.helpers.UIComponentHelper
 import com.brighttorchstudio.schedist.data.tag.model.Tag
 import com.brighttorchstudio.schedist.data.tag.repository.TagRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,4 +26,20 @@ class UpdateTagViewModel @Inject constructor(
     }
 
 
+    fun showAddTagSnackbar(
+        snackbarHostState: SnackbarHostState,
+    ) {
+        UIComponentHelper.showSnackBar(
+            scope = viewModelScope,
+            snackbarHostState = snackbarHostState,
+            message = "Thêm nhiệm vụ mới thành công.",
+            actionLabel = "Hoàn tác",
+            onActionPerformed = {
+
+            },
+            onSnackbarDismiss = {
+
+            }
+        )
+    }
 }

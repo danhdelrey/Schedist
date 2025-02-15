@@ -16,4 +16,8 @@ interface TagDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTag(tag: TagEntity)
+
+    @Query("SELECT * FROM TagEntity WHERE name LIKE :tagName")
+    suspend fun getTagsByName(tagName: String): List<TagEntity>
+
 }

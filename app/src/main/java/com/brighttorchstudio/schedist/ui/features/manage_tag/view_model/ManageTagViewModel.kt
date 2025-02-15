@@ -66,8 +66,17 @@ class ManageTagViewModel @Inject constructor(
         }
     }
 
-    suspend fun findTagsByName(name: String) {
+    fun findTagsByName(tagName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.value = UiState.Loading
+            try {
+                val tagList = localTagRepository.getTagsByName(tagName)
+                _uiState.value = UiState.Success(tagList)
+            }catch (e: Exception){
+                _uiState.value = UiState.Error("Loi!!")
+            }
 
+        }
 
     }
 

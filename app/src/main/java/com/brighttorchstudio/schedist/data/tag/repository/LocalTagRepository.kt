@@ -1,6 +1,7 @@
 package com.brighttorchstudio.schedist.data.tag.repository
 
 import com.brighttorchstudio.schedist.data.local_database.tag.TagDao
+import com.brighttorchstudio.schedist.data.local_database.tag.TagEntity
 import com.brighttorchstudio.schedist.data.tag.model.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -21,6 +22,13 @@ class LocalTagRepository @Inject constructor(
 
     override suspend fun addTag(tag: Tag) {
         tagDao.addTag(tag.toEntity())
+    }
+
+    override suspend fun getTagsByName(tagName: String):List<Tag> {
+        val tagList = tagDao.getTagsByName(tagName)
+        return tagList.map {
+            Tag.fromEntity(it)
+        }.toList()
     }
 
 }
