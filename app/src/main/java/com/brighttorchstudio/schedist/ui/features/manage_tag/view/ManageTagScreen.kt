@@ -25,6 +25,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,14 +58,37 @@ fun ManageTagScreen(
         remember { SnackbarHostState() } //cần thiết để scaffold hiển thị snackbar
     var tagSearchInput by remember { mutableStateOf("") }
 
+    //hiển thị snackbar khi quay trở về screen này từ update tag screen
     val tagAdded =
         navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<String?>(
             key = "tagAdded",
             initialValue = null
         )?.collectAsStateWithLifecycle()?.value
-    tagAdded?.let {
-        viewModel.showAddedTagSnackbar(snackbarHostState, Json.decodeFromString<Tag>(it))
-        navController.currentBackStackEntry?.savedStateHandle?.remove<String>("tagAdded")
+    val tagUpdated =
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<String?>(
+            key = "tagUpdated",
+            initialValue = null
+        )?.collectAsStateWithLifecycle()?.value
+    val tagDeleted =
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<String?>(
+            key = "tagDeleted",
+            initialValue = null
+        )?.collectAsStateWithLifecycle()?.value
+
+    LaunchedEffect(Unit) {
+        tagAdded?.let {
+            viewModel.showAddedTagSnackbar(snackbarHostState, Json.decodeFromString<Tag>(it))
+            navController.currentBackStackEntry?.savedStateHandle?.remove<String>("tagAdded")
+        }
+        tagUpdated?.let {
+            viewModel.showUpdatedTagSnackbar(snackbarHostState, Json.decodeFromString<Tag>(it))
+            navController.currentBackStackEntry?.savedStateHandle?.remove<String>("tagUpdated")
+        }
+        tagDeleted?.let {
+            viewModel.showDeletedTagSnackbar(snackbarHostState, Json.decodeFromString<Tag>(it))
+            navController.currentBackStackEntry?.savedStateHandle?.remove<String>("tagDeleted")
+        }
+
     }
 
 
