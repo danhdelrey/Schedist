@@ -189,7 +189,6 @@ fun ManageTagScreen(
                                 selected = true,
                                 showLeadingIcon = true,
                                 textStyle = MaterialTheme.typography.titleMedium,
-                                foregroundColor = Color.White,
                             ) {
                                 navController.navigate(AppScreens.UpdateTagScreen.createRoute(it))
                             }

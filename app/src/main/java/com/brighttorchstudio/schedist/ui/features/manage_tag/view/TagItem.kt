@@ -25,7 +25,6 @@ fun TagItem(
     modifier: Modifier = Modifier,
     showLeadingIcon: Boolean = false,
     textStyle: TextStyle = MaterialTheme.typography.labelMedium,
-    foregroundColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     tag: Tag,
     selected: Boolean = false,
     onClick: () -> Unit
@@ -59,14 +58,14 @@ fun TagItem(
                     Icon(
                         painter = painterResource(R.drawable.tag),
                         contentDescription = null,
-                        tint = foregroundColor
+                        tint = if (selected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 Text(
                     text = tag.name,
                     modifier = Modifier.padding(8.dp),
                     style = textStyle,
-                    color = foregroundColor
+                    color = if (selected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }

@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,7 +49,7 @@ fun UpdateTagScreen(
     tag: Tag? = null
 ) {
 
-    var selectedColor by remember { mutableStateOf(tag?.color ?: TagColor.BLUE_GRAY) }
+    var selectedColor by remember { mutableStateOf(tag?.color ?: TagColor.CHARCOAL_GRAY) }
     var tagNameInput by remember { mutableStateOf(tag?.name ?: "") }
 
     Scaffold(
@@ -136,10 +138,21 @@ fun UpdateTagScreen(
                     shape = CircleShape,
                     colors = TextFieldDefaults.colors().copy(
                         focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedContainerColor = selectedColor.color,
+                        unfocusedContainerColor = selectedColor.color,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White
                     ),
                     placeholder = {
                         Text("Nhập tên nhãn tối đa 20 kí tự...")
+                    },
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(R.drawable.tag),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
                     },
                     maxLines = 1,
                 )
@@ -159,7 +172,8 @@ fun UpdateTagScreen(
 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
                 contentAlignment = Alignment.Center
 
             ) {
