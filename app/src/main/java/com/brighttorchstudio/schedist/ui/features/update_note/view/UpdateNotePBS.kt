@@ -234,7 +234,7 @@ fun UpdateNotePBS(
                             inputNoteTags.forEach { tag ->
                                 TagItem(
                                     tag = tag,
-                                    selected = false,
+                                    selected = true,
                                     onClick = {
                                         showTagPicker = true
                                     }

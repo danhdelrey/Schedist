@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationManagerCompat
+import com.brighttorchstudio.schedist.core.helpers.NotificationHelper
 
 @Composable
 fun RequestNotificationPermission() {
@@ -20,6 +21,10 @@ fun RequestNotificationPermission() {
         mutableStateOf(
             NotificationManagerCompat.from(context).areNotificationsEnabled()
         )
+    }
+
+    LaunchedEffect(Unit) {
+        NotificationHelper.createNotificationChannel(context = context)
     }
 
     val launcher = rememberLauncherForActivityResult(

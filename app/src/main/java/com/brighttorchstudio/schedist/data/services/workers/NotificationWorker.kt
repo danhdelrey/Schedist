@@ -20,7 +20,8 @@ class NotificationWorker(
             context = applicationContext,
             title = notificationTitle,
             description = notificationDescription,
-            id = notificationID.hashCode()
+            id = notificationID.hashCode(),
+            channelId = "NHIEM_VU"
         )
 
         return Result.success()

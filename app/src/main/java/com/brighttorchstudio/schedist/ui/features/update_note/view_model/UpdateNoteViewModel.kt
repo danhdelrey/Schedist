@@ -38,9 +38,9 @@ class UpdateNoteViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             if (note.tags.isNotEmpty()) {
                 localNoteWithTagsRepository.deleteNoteTagCrossRefsByNoteId(note.id)
-                newNote.tags.forEach {
-                    localNoteWithTagsRepository.addTagToNote(newNote.id, it.id)
-                }
+            }
+            newNote.tags.forEach {
+                localNoteWithTagsRepository.addTagToNote(newNote.id, it.id)
             }
             localNoteRepository.updateNote(newNote)
             oldNote = note

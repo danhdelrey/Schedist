@@ -8,11 +8,13 @@ import javax.inject.Inject
 
 class LocalTagRepository @Inject constructor(
     private val tagDao: TagDao
-) : TagRepository{
+) : TagRepository {
     override fun getTags(): Flow<List<Tag>> {
-        return tagDao.getTags().map{tags -> tags.map{
-            Tag.fromEntity(it)
-        }}
+        return tagDao.getTags().map { tags ->
+            tags.map {
+                Tag.fromEntity(it)
+            }
+        }
     }
 
     override suspend fun getTagById(tagId: String): Tag {
@@ -21,6 +23,17 @@ class LocalTagRepository @Inject constructor(
 
     override suspend fun addTag(tag: Tag) {
         tagDao.addTag(tag.toEntity())
+    }
+
+    override suspend fun deleteTag(tag: Tag) {
+        tagDao.deleteTag(tag.toEntity())
+    }
+
+    override suspend fun getTagsByName(tagName: String): List<Tag> {
+        val tagList = tagDao.getTagsByName("%$tagName%")
+        return tagList.map {
+            Tag.fromEntity(it)
+        }.toList()
     }
 
 }

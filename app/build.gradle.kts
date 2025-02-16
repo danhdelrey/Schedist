@@ -5,7 +5,10 @@ plugins {
     id("com.google.devtools.ksp")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+
     id ("kotlinx-serialization")
+    kotlin("plugin.serialization") version "2.1.10"
+
 }
 
 android {
