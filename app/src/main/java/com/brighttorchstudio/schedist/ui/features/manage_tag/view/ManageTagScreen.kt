@@ -40,7 +40,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.navigation.AppScreens
+import com.brighttorchstudio.schedist.data.tag.model.Tag
 import com.brighttorchstudio.schedist.ui.features.manage_tag.view_model.ManageTagViewModel
+import kotlinx.serialization.json.Json
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,26 +57,14 @@ fun ManageTagScreen(
         remember { SnackbarHostState() } //cần thiết để scaffold hiển thị snackbar
     var tagSearchInput by remember { mutableStateOf("") }
 
-    val tagAction =
-        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<String>(
-            key = "tagAction",
-            initialValue = ""
+    val tagAdded =
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<String?>(
+            key = "tagAdded",
+            initialValue = null
         )?.collectAsStateWithLifecycle()?.value
-    tagAction?.let {
-        when (tagAction) {
-            "add" -> {
-                viewModel.showAddedTagSnackbar(snackbarHostState)
-            }
-
-            "update" -> {
-                viewModel.showUpdatedTagSnackbar(snackbarHostState)
-            }
-
-            "delete" -> {
-                viewModel.showDeletedTagSnackbar(snackbarHostState)
-            }
-        }
-        navController.currentBackStackEntry?.savedStateHandle?.remove<String>("tagAction")
+    tagAdded?.let {
+        viewModel.showAddedTagSnackbar(snackbarHostState, Json.decodeFromString<Tag>(it))
+        navController.currentBackStackEntry?.savedStateHandle?.remove<String>("tagAdded")
     }
 
 

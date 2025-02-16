@@ -36,6 +36,7 @@ import com.brighttorchstudio.schedist.data.tag.model.Tag
 import com.brighttorchstudio.schedist.ui.features.manage_tag.view_model.ManageTagViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.ActionsDropdown
 import com.brighttorchstudio.schedist.ui.shared_view.TagColorItem
+import kotlinx.serialization.json.Json
 import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -66,22 +67,21 @@ fun UpdateTagScreen(
                                         )
                                     )
                                     navController.previousBackStackEntry?.savedStateHandle?.set(
-                                        "tagAction",
-                                        "update"
+                                        "tagUpdated",
+                                        Json.encodeToString(tag)
                                     )
                                     navController.popBackStack()
                                 } else {
-                                    viewModel.addTag(
-                                        Tag(
-                                            id = UUID.randomUUID().toString(),
-                                            name = tagNameInput,
-                                            color = selectedColor,
-                                        )
+                                    val newTag = Tag(
+                                        id = UUID.randomUUID().toString(),
+                                        name = tagNameInput,
+                                        color = selectedColor,
                                     )
+                                    viewModel.addTag(newTag)
 
                                     navController.previousBackStackEntry?.savedStateHandle?.set(
-                                        "tagAction",
-                                        "add"
+                                        "tagAdded",
+                                        Json.encodeToString(newTag)
                                     )
                                     navController.popBackStack()
                                 }
@@ -102,8 +102,8 @@ fun UpdateTagScreen(
                                 if (tag != null) {
                                     viewModel.deleteTag(tag)
                                     navController.previousBackStackEntry?.savedStateHandle?.set(
-                                        "tagAction",
-                                        "delete"
+                                        "tagDeleted",
+                                        Json.encodeToString(tag)
                                     )
                                     navController.popBackStack()
                                 } else {

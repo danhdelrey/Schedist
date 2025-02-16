@@ -56,7 +56,6 @@ class ManageTagViewModel @Inject constructor(
         tag: Tag
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            recentTag = tag
             localTagRepository.addTag(tag)
         }
     }
@@ -65,7 +64,6 @@ class ManageTagViewModel @Inject constructor(
         tag: Tag
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            recentTag = tag
             localTagRepository.deleteTag(tag)
         }
     }
@@ -74,85 +72,78 @@ class ManageTagViewModel @Inject constructor(
         tag: Tag
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            recentTag = tag
             localTagRepository.addTag(tag)
         }
     }
 
-    fun undoAddTag() {
-        viewModelScope.launch(Dispatchers.IO) {
-            recentTag?.let {
-                localTagRepository.deleteTag(it)
-                recentTag = null
-            }
-        }
+    fun undoAddTag(
+        tag: Tag
+    ) {
+        deleteTag(tag)
     }
 
-    fun undoDeleteTag() {
-        viewModelScope.launch(Dispatchers.IO) {
-            recentTag?.let {
-                localTagRepository.addTag(it)
-                recentTag = null
-            }
-        }
+    fun undoDeleteTag(
+        tag: Tag
+    ) {
+        addTag(tag)
     }
 
-    fun undoUpdateTag() {
-        viewModelScope.launch(Dispatchers.IO) {
-            recentTag?.let {
-                localTagRepository.addTag(it)
-                recentTag = null
-            }
-        }
+    fun undoUpdateTag(
+        tag: Tag
+    ) {
+        addTag(tag)
     }
 
     fun showAddedTagSnackbar(
         snackbarHostState: SnackbarHostState,
+        tag: Tag
     ) {
         UIComponentHelper.showSnackBar(
             scope = viewModelScope,
             snackbarHostState = snackbarHostState,
-            message = "Đã thêm nhãn '${recentTag?.name}'.",
+            message = "Đã thêm nhãn '${tag.name}'.",
             actionLabel = "Hoàn tác",
             onActionPerformed = {
-                undoAddTag()
+                undoAddTag(tag)
             },
             onSnackbarDismiss = {
-                recentTag = null
+
             }
         )
     }
 
     fun showUpdatedTagSnackbar(
         snackbarHostState: SnackbarHostState,
+        tag: Tag
     ) {
         UIComponentHelper.showSnackBar(
             scope = viewModelScope,
             snackbarHostState = snackbarHostState,
-            message = "Đã cập nhật nhãn '${recentTag?.name}'.",
+            message = "Đã cập nhật nhãn '${tag.name}'.",
             actionLabel = "Hoàn tác",
             onActionPerformed = {
-                undoUpdateTag()
+                undoUpdateTag(tag)
             },
             onSnackbarDismiss = {
-                recentTag = null
+
             }
         )
     }
 
     fun showDeletedTagSnackbar(
         snackbarHostState: SnackbarHostState,
+        tag: Tag
     ) {
         UIComponentHelper.showSnackBar(
             scope = viewModelScope,
             snackbarHostState = snackbarHostState,
-            message = "Đã xóa nhãn '${recentTag?.name}'.",
+            message = "Đã xóa nhãn '${tag.name}'.",
             actionLabel = "Hoàn tác",
             onActionPerformed = {
-                undoDeleteTag()
+                undoDeleteTag(tag)
             },
             onSnackbarDismiss = {
-                recentTag = null
+
             }
         )
     }
