@@ -131,7 +131,7 @@ fun UpdateTagScreen(
                         .padding(horizontal = 10.dp),
                     value = tagNameInput,
                     onValueChange = {
-                        tagNameInput = it
+                        if (it.length <= 20) tagNameInput = it
                     },
                     shape = CircleShape,
                     colors = TextFieldDefaults.colors().copy(
@@ -139,7 +139,7 @@ fun UpdateTagScreen(
                         unfocusedIndicatorColor = Color.Transparent
                     ),
                     placeholder = {
-                        Text("Nhập nhãn...")
+                        Text("Nhập tên nhãn tối đa 20 kí tự...")
                     },
                     maxLines = 1,
                 )

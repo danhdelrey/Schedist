@@ -55,7 +55,7 @@ fun ManageTagScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState =
-        remember { SnackbarHostState() } //cần thiết để scaffold hiển thị snackbar
+        remember { SnackbarHostState() }
     var tagSearchInput by remember { mutableStateOf("") }
 
     //hiển thị snackbar khi quay trở về screen này từ update tag screen
