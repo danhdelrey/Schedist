@@ -14,14 +14,61 @@ import javax.inject.Inject
 @HiltViewModel
 class UpdateTagViewModel @Inject constructor(
     private val localTagRepository: TagRepository
-) : ViewModel(){
+) : ViewModel() {
 
+    var recentTag: Tag? = null
 
     fun addTag(
         tag: Tag
-    ){
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
+            recentTag = tag
             localTagRepository.addTag(tag)
+        }
+    }
+
+    fun deleteTag(
+        tag: Tag
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            recentTag = tag
+            localTagRepository.deleteTag(tag)
+        }
+    }
+
+    fun updateTag(
+        tag: Tag
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            recentTag = tag
+            localTagRepository.addTag(tag)
+        }
+    }
+
+    fun undoAddTag() {
+        viewModelScope.launch(Dispatchers.IO) {
+            recentTag?.let {
+                localTagRepository.deleteTag(it)
+                recentTag = null
+            }
+        }
+    }
+
+    fun undoDeleteTag() {
+        viewModelScope.launch(Dispatchers.IO) {
+            recentTag?.let {
+                localTagRepository.addTag(it)
+                recentTag = null
+            }
+        }
+    }
+
+    fun undoUpdateTag() {
+        viewModelScope.launch(Dispatchers.IO) {
+            recentTag?.let {
+                localTagRepository.addTag(it)
+                recentTag = null
+            }
         }
     }
 

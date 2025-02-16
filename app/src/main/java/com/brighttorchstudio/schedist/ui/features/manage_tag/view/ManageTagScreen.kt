@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,8 +41,6 @@ import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.navigation.AppScreens
 import com.brighttorchstudio.schedist.ui.features.manage_tag.view_model.ManageTagViewModel
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,7 +87,7 @@ fun ManageTagScreen(
                     value = tagSearchInput,
                     onValueChange = {
                         tagSearchInput = it
-                        viewModel.findTagsByName("%$it%")
+                        viewModel.findTagsByName(it)
                     },
                     leadingIcon = {
                         Icon(

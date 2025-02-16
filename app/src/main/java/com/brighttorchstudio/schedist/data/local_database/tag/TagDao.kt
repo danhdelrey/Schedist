@@ -1,6 +1,7 @@
 package com.brighttorchstudio.schedist.data.local_database.tag
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -17,7 +18,10 @@ interface TagDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTag(tag: TagEntity)
 
-    @Query("SELECT * FROM TagEntity WHERE name LIKE :tagName")
+    @Delete
+    suspend fun deleteTag(tag: TagEntity)
+
+    @Query("SELECT * FROM TagEntity WHERE name LIKE :tagName ORDER BY name")
     suspend fun getTagsByName(tagName: String): List<TagEntity>
 
 }
