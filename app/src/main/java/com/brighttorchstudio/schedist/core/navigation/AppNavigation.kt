@@ -14,8 +14,8 @@ import com.brighttorchstudio.schedist.data.tag.model.Tag
 import com.brighttorchstudio.schedist.ui.features.manage_note.view.ManageNoteScreen
 import com.brighttorchstudio.schedist.ui.features.manage_profile.view.ManageProfileScreen
 import com.brighttorchstudio.schedist.ui.features.manage_tag.view.ManageTagScreen
+import com.brighttorchstudio.schedist.ui.features.manage_tag.view.UpdateTagScreen
 import com.brighttorchstudio.schedist.ui.features.manage_todo.view.ManageTodoScreen
-import com.brighttorchstudio.schedist.ui.features.update_tag.view.UpdateTagScreen
 import kotlinx.serialization.json.Json
 
 //Là điểm vào đầu tiên của ứng dụng

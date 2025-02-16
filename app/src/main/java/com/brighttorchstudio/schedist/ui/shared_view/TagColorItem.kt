@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.features.update_tag.view
+package com.brighttorchstudio.schedist.ui.shared_view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,7 +18,7 @@ fun TagColorItem(
     tagColor: TagColor,
     selected: Boolean = false,
     onClick: () -> Unit
-){
+) {
     Box(
         modifier = Modifier
             .clip(

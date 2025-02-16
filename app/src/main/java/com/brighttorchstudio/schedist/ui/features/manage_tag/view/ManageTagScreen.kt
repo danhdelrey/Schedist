@@ -55,6 +55,28 @@ fun ManageTagScreen(
         remember { SnackbarHostState() } //cần thiết để scaffold hiển thị snackbar
     var tagSearchInput by remember { mutableStateOf("") }
 
+    val tagAction =
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<String>(
+            key = "tagAction",
+            initialValue = ""
+        )?.collectAsStateWithLifecycle()?.value
+    tagAction?.let {
+        when (tagAction) {
+            "add" -> {
+                viewModel.showAddedTagSnackbar(snackbarHostState)
+            }
+
+            "update" -> {
+                viewModel.showUpdatedTagSnackbar(snackbarHostState)
+            }
+
+            "delete" -> {
+                viewModel.showDeletedTagSnackbar(snackbarHostState)
+            }
+        }
+        navController.currentBackStackEntry?.savedStateHandle?.remove<String>("tagAction")
+    }
+
 
     Scaffold(
         snackbarHost = {

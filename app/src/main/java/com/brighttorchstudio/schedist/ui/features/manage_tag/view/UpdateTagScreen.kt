@@ -1,4 +1,4 @@
-package com.brighttorchstudio.schedist.ui.features.update_tag.view
+package com.brighttorchstudio.schedist.ui.features.manage_tag.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,14 +33,15 @@ import androidx.navigation.NavHostController
 import com.brighttorchstudio.schedist.R
 import com.brighttorchstudio.schedist.core.common.TagColor
 import com.brighttorchstudio.schedist.data.tag.model.Tag
-import com.brighttorchstudio.schedist.ui.features.update_tag.view_model.UpdateTagViewModel
+import com.brighttorchstudio.schedist.ui.features.manage_tag.view_model.ManageTagViewModel
 import com.brighttorchstudio.schedist.ui.shared_view.ActionsDropdown
+import com.brighttorchstudio.schedist.ui.shared_view.TagColorItem
 import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun UpdateTagScreen(
-    viewModel: UpdateTagViewModel = hiltViewModel(),
+    viewModel: ManageTagViewModel = hiltViewModel(),
     navController: NavHostController,
     tag: Tag? = null
 ) {
@@ -64,6 +65,10 @@ fun UpdateTagScreen(
                                             color = selectedColor,
                                         )
                                     )
+                                    navController.previousBackStackEntry?.savedStateHandle?.set(
+                                        "tagAction",
+                                        "update"
+                                    )
                                     navController.popBackStack()
                                 } else {
                                     viewModel.addTag(
@@ -74,6 +79,10 @@ fun UpdateTagScreen(
                                         )
                                     )
 
+                                    navController.previousBackStackEntry?.savedStateHandle?.set(
+                                        "tagAction",
+                                        "add"
+                                    )
                                     navController.popBackStack()
                                 }
 
@@ -92,6 +101,10 @@ fun UpdateTagScreen(
                             onDeleteActionRequested = {
                                 if (tag != null) {
                                     viewModel.deleteTag(tag)
+                                    navController.previousBackStackEntry?.savedStateHandle?.set(
+                                        "tagAction",
+                                        "delete"
+                                    )
                                     navController.popBackStack()
                                 } else {
                                     navController.popBackStack()
