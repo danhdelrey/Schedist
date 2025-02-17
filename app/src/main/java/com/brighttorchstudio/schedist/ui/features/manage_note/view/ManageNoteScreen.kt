@@ -7,12 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -42,7 +38,7 @@ import com.brighttorchstudio.schedist.ui.shared_view.BottomActionBar
 fun ManageNoteScreen(
     viewModel: ManageNoteViewModel = hiltViewModel(),
     navController: NavHostController
-){
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val inSelectMode by viewModel.inSelectMode.collectAsStateWithLifecycle()
     val topBarText = if (!inSelectMode) {
@@ -58,11 +54,11 @@ fun ManageNoteScreen(
 
     val selectAllNotes by viewModel.selectAllNotes.collectAsStateWithLifecycle()
 
-    if (selectedNoteForUpdating!=null){
+    if (selectedNoteForUpdating != null) {
         UpdateNotePBS(
             note = selectedNoteForUpdating,
             snackbarHostState = snackbarHostState,
-            onDismiss = {viewModel.cancelNoteUpdate()}
+            onDismiss = { viewModel.cancelNoteUpdate() }
         )
     }
 
@@ -74,17 +70,16 @@ fun ManageNoteScreen(
         topBar = {
             TopAppBar(
                 actions = {
-                    if (inSelectMode){
+                    if (inSelectMode) {
                         if (!selectAllNotes)
                             TextButton(
-                                onClick = {viewModel.onSelectAllNotesClicked()}
+                                onClick = { viewModel.onSelectAllNotesClicked() }
                             ) {
                                 Text("Chọn tất cả")
                             }
-
                         else
                             TextButton(
-                                onClick = {viewModel.onDeselectAllNotesClicked()}
+                                onClick = { viewModel.onDeselectAllNotesClicked() }
                             ) {
                                 Text("Bỏ chọn tất cả")
                             }
@@ -93,22 +88,22 @@ fun ManageNoteScreen(
 
                 title = { Text(topBarText) },
                 navigationIcon = {
-                    if (inSelectMode){
+                    if (inSelectMode) {
                         TextButton(
-                            onClick = {viewModel.exitSelectMode()}
+                            onClick = { viewModel.exitSelectMode() }
                         ) {
                             Text("Quay lại")
                         }
                     }
-                    else
-                        IconButton(
-                            onClick = {}
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Menu,
-                                contentDescription = "menu"
-                            )
-                        }
+//                    else
+//                        IconButton(
+//                            onClick = {}
+//                        ) {
+//                            Icon(
+//                                imageVector = Icons.Filled.Menu,
+//                                contentDescription = "menu"
+//                            )
+//                        }
                 }
             )
         },
@@ -118,86 +113,83 @@ fun ManageNoteScreen(
         },
 
         bottomBar = {
-            if (inSelectMode){
+            if (inSelectMode) {
                 BottomActionBar(
                     action1 = {
                         DeleteNoteButton(
                             toBeDeletedNoteList = selectedNotesForPerformingAction.toList(),
-                            onDeletedNote = {viewModel.exitSelectMode()},
+                            onDeletedNote = { viewModel.exitSelectMode() },
                             snackBarHostState = snackbarHostState,
                             deleteAllNote = selectAllNotes
                         )
                     }
 
                 )
-            }
-            else{
+            } else {
                 BottomNavigationBar(navController)
             }
         }
 
-    ) {
-        innerPadding ->
-            when(uiState){
-                is ManageNoteViewModel.UiState.Loading -> {
+    ) { innerPadding ->
+        when (uiState) {
+            is ManageNoteViewModel.UiState.Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            is ManageNoteViewModel.UiState.Success -> {
+                val noteList = (uiState as ManageNoteViewModel.UiState.Success).notes
+                if (noteList.isEmpty()) {
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding)
                     ) {
-                        CircularProgressIndicator()
-                    }
-                }
-
-                is ManageNoteViewModel.UiState.Success -> {
-                    val noteList = (uiState as ManageNoteViewModel.UiState.Success).notes
-                    if (noteList.isEmpty()){
-                        Box(
-                            contentAlignment = Alignment.Center,
+                        Text(
+                            text = "Chạm vào biểu tượng + để thêm ghi chú mới.",
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                color = MaterialTheme.colorScheme.outline
+                            ),
+                            textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                        ) {
-                            Text(
-                                text = "Chạm vào biểu tượng + để thêm ghi chú mới.",
-                                style = MaterialTheme.typography.titleLarge.copy(
-                                    color = MaterialTheme.colorScheme.outline
-                                ),
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .width(200.dp)
-                            )
-                        }
+                                .width(200.dp)
+                        )
                     }
-                    else{
-                        Box(
-                            contentAlignment = Alignment.TopCenter,
-                            modifier = Modifier
-                                .verticalScroll(rememberScrollState())
-                                .padding(innerPadding)
-                                .fillMaxSize()
-                        ) {
-                            Column() {
-                                noteList.forEach { note ->
-                                    NoteItem(note)
-                                }
+                } else {
+                    Box(
+                        contentAlignment = Alignment.TopCenter,
+                        modifier = Modifier
+                            .verticalScroll(rememberScrollState())
+                            .padding(innerPadding)
+                            .fillMaxSize()
+                    ) {
+                        Column() {
+                            noteList.forEach { note ->
+                                NoteItem(note)
                             }
                         }
                     }
                 }
+            }
 
-                is ManageNoteViewModel.UiState.Error -> {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    ) {
-                        CircularProgressIndicator()
-                    }
+            is ManageNoteViewModel.UiState.Error -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                ) {
+                    CircularProgressIndicator()
                 }
             }
+        }
 
     }
 
