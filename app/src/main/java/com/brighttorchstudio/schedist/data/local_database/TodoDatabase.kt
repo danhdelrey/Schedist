@@ -20,7 +20,7 @@ import com.brighttorchstudio.schedist.data.local_database.todo.TodoEntity
         TagEntity::class,
         NoteTagCrossRefEntity::class
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converter::class) //Cho Room biết sử dụng lớp Converter để chuyển đổi các kiểu dữ liệu mà nó không hỗ trợ
 abstract class TodoDatabase : RoomDatabase() {

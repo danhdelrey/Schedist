@@ -6,7 +6,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 
-    id ("kotlinx-serialization")
+    id("kotlinx-serialization")
     kotlin("plugin.serialization") version "2.1.10"
 
 }
@@ -19,7 +19,7 @@ android {
         applicationId = "com.brighttorchstudio.schedist"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
+        versionCode = 5
         versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
